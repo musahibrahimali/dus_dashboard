@@ -1,0 +1,118 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:dus_dashboard/index.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+
+class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const NavigationAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<AppController>(
+        init: AppController(),
+        builder: (AppController appController) {
+          return GetBuilder<AdminController>(
+              init: AdminController(),
+              builder: (AdminController adminController) {
+                return AppBar(
+                  title: const NavigationTitle(),
+                  centerTitle: false,
+                  elevation: 10,
+                  actions: <Widget>[
+                    /// [DropdownButtonHideUnderline] is used to hide the underline of the dropdown button
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<LanguageModel>(
+                        isExpanded: true,
+                        hint: Text(
+                          appController.defaultLanguage.language,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14.0,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: appController.kLanguages
+                            .map((LanguageModel item) => DropdownMenuItem<LanguageModel>(
+                                  value: item,
+                                  child: Text(
+                                    item.language,
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: appController.defaultLanguage,
+                        onChanged: (LanguageModel? value) {
+                          appController.changeLanguage(value!);
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          height: double.infinity,
+                          width: 150.0,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                    const Gap(10.0),
+                    SelectionArea(
+                      child: Text(
+                        adminController.activeAdmin?.userName ?? adminController.activeAdmin?.firstName ?? "anonymous",
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: PopupMenuButton<void>(
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<void>>[
+                          if (!(adminController.activeAdmin == null))
+                            PopupMenuItem(
+                              child: const ListTile(
+                                leading: Icon(LineAwesomeIcons.user_circle),
+                                title: Text('Profile'),
+                              ),
+                              onTap: () {
+                                // Sign out logic
+                              },
+                            ),
+                          if ((adminController.activeAdmin == null))
+                            PopupMenuItem(
+                              child: const ListTile(
+                                leading: Icon(LineAwesomeIcons.alternate_sign_in),
+                                title: Text('Sign in'),
+                              ),
+                              onTap: () {
+                                // Sign in logic
+                                const RegisterAdminRoute().go(context);
+                              },
+                            ),
+                          if (!(adminController.activeAdmin == null))
+                            PopupMenuItem(
+                              child: const ListTile(
+                                leading: Icon(LineAwesomeIcons.alternate_sign_out),
+                                title: Text('Sign out'),
+                              ),
+                              onTap: () {
+                                // Sign out logic
+                              },
+                            ),
+                        ],
+                        child: const Icon(
+                          LineAwesomeIcons.user_circle,
+                          size: 30.0,
+                        ),
+                      ),
+                    ),
+                    const Gap(8.0),
+                  ],
+                );
+              });
+        });
+  }
+
+  @override
+  Size get preferredSize => AppBar().preferredSize;
+}

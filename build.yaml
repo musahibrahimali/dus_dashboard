@@ -1,0 +1,11 @@
+# build.yaml
+
+targets:
+  $default:
+    builders:
+      graphql_codegen:
+        options:
+          clients:
+            - graphql_flutter
+          exclude:
+            - gql
