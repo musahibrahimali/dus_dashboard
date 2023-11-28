@@ -28,7 +28,7 @@ class AdminController extends GetxController {
 
   /// fetch all admins [AdminModel]
   void fetchAdmins() async {
-    dartz.Either<Failure, List<AdminModel>> response = await AdminRepository.instance.getAllAdmins();
+    dartz.Either<Failure, List<AdminModel>> response = await AdminRepository.instance.getAdmins();
     response.fold(
       (Failure failure) {
         _admins.value = [];

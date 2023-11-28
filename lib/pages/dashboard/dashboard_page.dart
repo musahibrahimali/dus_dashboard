@@ -26,17 +26,14 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   void initState() {
     /// fetch admins
-    adminRepository.testFetch();
-    // adminController.getAdminProfile();
-    // adminRepository.getAllAdmins();
+    adminController.getAdminProfile();
+    adminController.fetchAdmins();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final ResponsiveBreakpointsData responsive = ResponsiveBreakpoints.of(context);
-
-    adminController.getAdminProfile();
 
     return ContentView(
       child: Column(

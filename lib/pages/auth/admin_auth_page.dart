@@ -239,7 +239,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                 };
                 // debugPrint("variables: $variables");
                 dartz.Either<Failure, String> response = await adminRepository.registerAdmin(
-                  variables: variables,
+                  data: variables,
                 );
                 if (!mounted) return;
                 response.fold(
@@ -391,8 +391,8 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                   "password": _formKey.currentState?.fields['password']?.value,
                 };
                 // debugPrint("variables: $variables");
-                dartz.Either<Failure, String> response = await adminRepository.loginAdmin(
-                  variables: variables,
+                dartz.Either<Failure, String> response = await adminRepository.logInAdmin(
+                  data: variables,
                 );
                 if (!mounted) return;
                 response.fold(
