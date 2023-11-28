@@ -12,6 +12,7 @@ HelperFunctions helperFunctions = HelperFunctions.instance;
 
 AdminController adminController = AdminController.instance;
 AppController appController = AppController.instance;
+HttpRequestHelper httpRequestHelper = HttpRequestHelper.instance;
 Future<SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
 // Create storage
 const FlutterSecureStorage storage = FlutterSecureStorage();

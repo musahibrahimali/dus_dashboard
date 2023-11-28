@@ -1,48 +1,33 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 class AdminRepository {
   AdminRepository._();
-  static final AdminRepository _instance = AdminRepository._();
+
+  static final _instance = AdminRepository._();
   static AdminRepository get instance => _instance;
 
-  static final ValueNotifier<GraphQLClient> client = graphqlClient;
-
-  Future<void> testFetch() async {
-    final QueryResult<Query$SayHello> result = await client.value.query$SayHello();
-    debugPrint("response: ${result.parsedData?.sayHello.message}");
-  }
-
-  /// [createAdmin] is used to create an admin
   Future<Either<Failure, String>> registerAdmin({
-    required Map<String, dynamic> variables,
+    required Map<String, dynamic> data,
   }) async {
     try {
-      QueryResult<Mutation$CreateAdmin> response = await client.value.mutate$CreateAdmin(
-        Options$Mutation$CreateAdmin(
-          variables: Variables$Mutation$CreateAdmin(
-            createAdminInput: Input$CreateAdminInput(
-              email: variables['email'],
-              firstName: variables['firstName'],
-              lastName: variables['lastName'],
-              userName: variables['userName'],
-              password: variables['password'],
-              phone: variables['phone'],
-            ),
-          ),
-        ),
+      Map<String, dynamic> response = await httpRequestHelper.postRequest(
+        path: ApiEndPoint.registerAdminEndPoint,
+        data: data,
+        builder: (data) => data,
       );
       debugPrint("Response from helper post data: $response");
-      if (response.parsedData?.createAdmin.access_token == null) {
+      if (!response['success']) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      return Right(response.parsedData!.createAdmin.access_token.toString());
+      return Right(response['data']['access_token'].toString());
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
@@ -50,31 +35,26 @@ class AdminRepository {
     }
   }
 
-  /// [loginAdmin] is used to login an admin
-  /// this returns a jwt token in [String] format
-  Future<Either<Failure, String>> loginAdmin({
-    required Map<String, dynamic> variables,
+  Future<Either<Failure, String>> logInAdmin({
+    required Map<String, dynamic> data,
   }) async {
     try {
-      QueryResult<Mutation$LoginAdmin> response = await client.value.mutate$LoginAdmin(
-        Options$Mutation$LoginAdmin(
-          variables: Variables$Mutation$LoginAdmin(
-            loginAdminInput: Input$LoginAdminInput(
-              email: variables['email'],
-              password: variables['password'],
-            ),
-          ),
-        ),
+      Map<String, dynamic> response = await httpRequestHelper.postRequest(
+        path: ApiEndPoint.loginAdminEndPoint,
+        data: data,
+        builder: (data) => data,
       );
-      debugPrint("Response from helper post data: $response");
-      if (response.parsedData?.loginAdmin.access_token == null) {
+      // debugPrint("response admin login: $response");
+      // debugPrint("response admin login: ${response['data']["message"]}");
+      if (response['success'] == false) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      return Right(response.parsedData!.loginAdmin.access_token.toString());
+      // debugPrint("access_token: ${response['data']['access_token']}");
+      return Right(response['data']['access_token'].toString());
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
@@ -82,76 +62,28 @@ class AdminRepository {
     }
   }
 
-  /// get all admins from the server [getAllAdmins]
-  Future<Either<Failure, List<AdminModel>>> getAllAdmins() async {
-    try {
-      QueryResult<Query$GetAdmins> response = await AdminRepository.client.value.query$GetAdmins(
-        Options$Query$GetAdmins(),
-      );
-      debugPrint("response: ${response.parsedData?.getAdmins}");
-      if (response.parsedData?.getAdmins == null) {
-        return Left(
-          ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
-          ),
-        );
-      }
-      Map<String, dynamic> responseData = response.parsedData!.toJson();
-      List<AdminModel> admins = responseData.values.map((e) => AdminModel.fromJson(e)).toList();
-      return Right(admins);
-    } catch (e) {
-      debugPrint(e.toString());
-      final errorMessage = HttpExceptions.errorMessage(e);
-      return Left(ServerFailure(message: errorMessage));
-    }
-  }
-
-  /// get admin by profile [getAdminProfile]
-  Future<Either<Failure, AdminModel>> getAdminProfile() async {
-    try {
-      QueryResult<Query$GetAdminProfile> response = await AdminRepository.client.value.query$GetAdminProfile(
-        Options$Query$GetAdminProfile(),
-      );
-      debugPrint("response: ${response.parsedData?.getAdminProfile}");
-      if (response.parsedData?.getAdminProfile == null) {
-        return Left(
-          ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
-          ),
-        );
-      }
-      Map<String, dynamic> data = response.parsedData!.getAdminProfile.toJson();
-      return Right(AdminModel.fromJson(data));
-    } catch (e) {
-      debugPrint(e.toString());
-      final errorMessage = HttpExceptions.errorMessage(e);
-      return Left(ServerFailure(message: errorMessage));
-    }
-  }
-
-  /// get admin by id [getAdminById]
-  Future<Either<Failure, AdminModel>> getAdminById({
+  Future<Either<Failure, AdminModel>> updateAdmin({
+    required Map<String, dynamic> data,
     required String id,
   }) async {
     try {
-      QueryResult<Query$GetAdminById> response = await AdminRepository.client.value.query$GetAdminById(
-        Options$Query$GetAdminById(
-          variables: Variables$Query$GetAdminById(
-            getAdminByIdId: id,
-          ),
-          fetchPolicy: FetchPolicy.networkOnly,
-        ),
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      Map<String, dynamic> response = await httpRequestHelper.patchRequest(
+        path: ApiEndPoint.updateAdminEndPoint(id: id),
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        data: data,
+        builder: (data) => data,
       );
-      debugPrint("response: ${response.data?['getAdminById']}");
-      if (response.data?['getAdminById'] == null) {
+      if (!response['success']) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      Map<String, dynamic> data = response.parsedData!.getAdminById.toJson();
-      return Right(AdminModel.fromJson(data));
+      return Right(AdminModel.fromJson(response['data']));
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
@@ -159,37 +91,29 @@ class AdminRepository {
     }
   }
 
-  /// update admin [updateAdmin]
-  Future<Either<Failure, AdminModel>> updateAdmin({
-    required Map<String, dynamic> variables,
-  }) async {
+  Future<Either<Failure, AdminModel>> getAdminProfile() async {
     try {
-      QueryResult<Mutation$UpdateAdmin> response = await AdminRepository.client.value.mutate$UpdateAdmin(
-        Options$Mutation$UpdateAdmin(
-          variables: Variables$Mutation$UpdateAdmin(
-            updateAdminInput: Input$UpdateAdminInput(
-              email: variables['email'],
-              firstName: variables['firstName'],
-              lastName: variables['lastName'],
-              userName: variables['userName'],
-              phone: variables['phone'],
-              role: variables['role'],
-              isAdmin: variables['isAdmin'],
-            ),
-            updateAdminId: variables['id'],
-          ),
-        ),
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      // debugPrint("access token >>>> $accessToken");
+      Map<String, dynamic> response = await httpRequestHelper.getRequest(
+        path: ApiEndPoint.profileAdminEndPoint,
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        builder: (data) => data,
       );
-      debugPrint("response: ${response.parsedData?.updateAdmin}");
-      if (response.parsedData?.updateAdmin == null) {
+      // debugPrint("response $response");
+      if (!response['success']) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      Map<String, dynamic> data = response.parsedData!.updateAdmin.toJson();
-      return Right(AdminModel.fromJson(data));
+      AdminModel adminModel = AdminModel.fromJson(response['data']);
+      // debugPrint("admin model $adminModel");
+      adminController.updateAdmin(adminModel);
+      return Right(adminModel);
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
@@ -197,28 +121,26 @@ class AdminRepository {
     }
   }
 
-  /// update admin avatar [updateAdminAvatar]
-  Future<Either<Failure, bool>> updateAdminAvatar({
-    required Map<String, dynamic> variables,
-  }) async {
+  /// get employee by id
+  Future<Either<Failure, AdminModel>> getAdmin({required String id}) async {
     try {
-      QueryResult<Mutation$UpdateAdminAvatar> response = await AdminRepository.client.value.mutate$UpdateAdminAvatar(
-        Options$Mutation$UpdateAdminAvatar(
-          variables: Variables$Mutation$UpdateAdminAvatar(
-            updateAdminAvatarId: variables['id'],
-            avatar: variables['avatar'],
-          ),
-        ),
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      Map<String, dynamic> response = await httpRequestHelper.getRequest(
+        path: ApiEndPoint.getEmployeeEndpoint(id: id),
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        builder: (data) => data,
       );
-      debugPrint("response: ${response.parsedData?.updateAdminAvatar}");
-      if (response.parsedData?.updateAdminAvatar == null) {
+      if (!response['success']) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      return Right(response.parsedData!.updateAdminAvatar);
+      AdminModel adminModel = AdminModel.fromJson(response['data']);
+      return Right(adminModel);
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
@@ -226,77 +148,48 @@ class AdminRepository {
     }
   }
 
-  /// delete admin avatar [deleteAdminAvatar]
-  Future<Either<Failure, bool>> deleteAdminAvatar({
-    required Map<String, dynamic> variables,
-  }) async {
+  /// Get all admins
+  Future<Either<Failure, List<AdminModel>>> getAdmins() async {
     try {
-      QueryResult<Mutation$DeleteAdminAvatar> response = await AdminRepository.client.value.mutate$DeleteAdminAvatar(
-        Options$Mutation$DeleteAdminAvatar(
-          variables: Variables$Mutation$DeleteAdminAvatar(
-            deleteAvatarId: variables['id'],
-          ),
-        ),
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      Map<String, dynamic> response = await httpRequestHelper.getRequest(
+        path: ApiEndPoint.getAdminsEndPoint,
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        builder: (data) {
+          Map<String, dynamic> responseData = data;
+          if (responseData['success']) {
+            List<Map<String, dynamic>> respData = [];
+            for (Map<String, dynamic> value in responseData['data']) {
+              respData.add(value);
+            }
+            return {
+              "data": respData,
+              "success": responseData['success'],
+            };
+          }
+          return data;
+        },
       );
-      debugPrint("response: ${response.parsedData?.deleteAdminAvatar}");
-      if (response.parsedData?.deleteAdminAvatar == null) {
+      // debugPrint("response: $response");
+      if (!response['success']) {
         return Left(
           ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
+            message: response['data']['message'].toString(),
           ),
         );
       }
-      return Right(response.parsedData!.deleteAdminAvatar);
-    } catch (e) {
-      debugPrint(e.toString());
-      final errorMessage = HttpExceptions.errorMessage(e);
-      return Left(ServerFailure(message: errorMessage));
-    }
-  }
+      List<AdminModel> admins = <AdminModel>[];
 
-  /// logout admin [logoutAdmin]
-  Future<Either<Failure, bool>> logoutAdmin() async {
-    try {
-      QueryResult<Query$LogoutAdmin> response = await AdminRepository.client.value.query$LogoutAdmin(
-        Options$Query$LogoutAdmin(),
-      );
-      debugPrint("response: ${response.parsedData?.logoutAdmin}");
-      if (response.parsedData?.logoutAdmin == null) {
-        return Left(
-          ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
-          ),
-        );
+      // debugPrint("response: ${response['data']}");
+      for (Map<String, dynamic> element in response['data']) {
+        AdminModel adminModel = AdminModel.fromJson(element);
+        // debugPrint("response: $adminModel");
+        admins.add(adminModel);
       }
-      return Right(response.parsedData!.logoutAdmin);
-    } catch (e) {
-      debugPrint(e.toString());
-      final errorMessage = HttpExceptions.errorMessage(e);
-      return Left(ServerFailure(message: errorMessage));
-    }
-  }
-
-  /// delete admin [deleteAdmin]
-  Future<Either<Failure, bool>> deleteAdmin({
-    required Map<String, dynamic> variables,
-  }) async {
-    try {
-      QueryResult<Mutation$DeleteAdmin> response = await AdminRepository.client.value.mutate$DeleteAdmin(
-        Options$Mutation$DeleteAdmin(
-          variables: Variables$Mutation$DeleteAdmin(
-            deleteAdminId: variables['id'],
-          ),
-        ),
-      );
-      debugPrint("response: ${response.parsedData?.deleteAdmin}");
-      if (response.parsedData?.deleteAdmin == null) {
-        return Left(
-          ServerFailure(
-            message: response.exception?.graphqlErrors[0].message.toString(),
-          ),
-        );
-      }
-      return Right(response.parsedData!.deleteAdmin);
+      // debugPrint("data : ${adminController.admins}");
+      return Right(admins);
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);
