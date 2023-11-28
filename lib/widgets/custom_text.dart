@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,7 +37,7 @@ class CustomText extends StatelessWidget {
         horizontal: horizontalMargin ?? 5.0,
         vertical: verticalMargin ?? 5.0,
       ),
-      child: Text(
+      child: AutoSizeText(
         text,
         textAlign: textAlign ?? TextAlign.start,
         overflow: overflow,

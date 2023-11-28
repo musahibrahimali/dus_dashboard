@@ -1,37 +1,12 @@
 mutation CreateCustomer($createCustomerInput: CreateCustomerInput!) {
   createCustomer(createCustomerInput: $createCustomerInput) {
-    id
-    email
-    firstName
-    lastName
-    social
-    avatar
-    isAdmin
-    createdAt
-    updatedAt
+    access_token
   }
 }
 
 mutation LoginCustomer($loginCustomerInput: LoginCustomerInput!) {
   loginCustomer(loginCustomerInput: $loginCustomerInput) {
-    id
-    email
-    firstName
-    lastName
-    phone
-    role
-    social
-    userName
-    avatar
-    cart {
-      id
-      quantity
-      createdAt
-      updatedAt
-    }
-    isAdmin
-    createdAt
-    updatedAt
+    access_token
   }
 }
 

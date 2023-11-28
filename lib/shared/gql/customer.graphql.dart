@@ -268,63 +268,7 @@ const documentNodeMutationCreateCustomer = DocumentNode(definitions: [
         directives: [],
         selectionSet: SelectionSetNode(selections: [
           FieldNode(
-            name: NameNode(value: 'id'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'email'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'firstName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'lastName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'social'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'avatar'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'isAdmin'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'createdAt'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'updatedAt'),
+            name: NameNode(value: 'access_token'),
             alias: null,
             arguments: [],
             directives: [],
@@ -564,84 +508,28 @@ class Mutation$CreateCustomer$Widget
 
 class Mutation$CreateCustomer$createCustomer {
   Mutation$CreateCustomer$createCustomer({
-    required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    this.social,
-    this.avatar,
-    this.isAdmin,
-    this.createdAt,
-    this.updatedAt,
-    this.$__typename = 'GCustomer',
+    required this.access_token,
+    this.$__typename = 'CustomerAuthResponse',
   });
 
   factory Mutation$CreateCustomer$createCustomer.fromJson(
       Map<String, dynamic> json) {
-    final l$id = json['id'];
-    final l$email = json['email'];
-    final l$firstName = json['firstName'];
-    final l$lastName = json['lastName'];
-    final l$social = json['social'];
-    final l$avatar = json['avatar'];
-    final l$isAdmin = json['isAdmin'];
-    final l$createdAt = json['createdAt'];
-    final l$updatedAt = json['updatedAt'];
+    final l$access_token = json['access_token'];
     final l$$__typename = json['__typename'];
     return Mutation$CreateCustomer$createCustomer(
-      id: (l$id as String),
-      email: (l$email as String),
-      firstName: (l$firstName as String),
-      lastName: (l$lastName as String),
-      social: (l$social as String?),
-      avatar: (l$avatar as String?),
-      isAdmin: (l$isAdmin as bool?),
-      createdAt: (l$createdAt as String?),
-      updatedAt: (l$updatedAt as String?),
+      access_token: (l$access_token as String),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final String id;
-
-  final String email;
-
-  final String firstName;
-
-  final String lastName;
-
-  final String? social;
-
-  final String? avatar;
-
-  final bool? isAdmin;
-
-  final String? createdAt;
-
-  final String? updatedAt;
+  final String access_token;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
-    final l$email = email;
-    _resultData['email'] = l$email;
-    final l$firstName = firstName;
-    _resultData['firstName'] = l$firstName;
-    final l$lastName = lastName;
-    _resultData['lastName'] = l$lastName;
-    final l$social = social;
-    _resultData['social'] = l$social;
-    final l$avatar = avatar;
-    _resultData['avatar'] = l$avatar;
-    final l$isAdmin = isAdmin;
-    _resultData['isAdmin'] = l$isAdmin;
-    final l$createdAt = createdAt;
-    _resultData['createdAt'] = l$createdAt;
-    final l$updatedAt = updatedAt;
-    _resultData['updatedAt'] = l$updatedAt;
+    final l$access_token = access_token;
+    _resultData['access_token'] = l$access_token;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -649,26 +537,10 @@ class Mutation$CreateCustomer$createCustomer {
 
   @override
   int get hashCode {
-    final l$id = id;
-    final l$email = email;
-    final l$firstName = firstName;
-    final l$lastName = lastName;
-    final l$social = social;
-    final l$avatar = avatar;
-    final l$isAdmin = isAdmin;
-    final l$createdAt = createdAt;
-    final l$updatedAt = updatedAt;
+    final l$access_token = access_token;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
-      l$email,
-      l$firstName,
-      l$lastName,
-      l$social,
-      l$avatar,
-      l$isAdmin,
-      l$createdAt,
-      l$updatedAt,
+      l$access_token,
       l$$__typename,
     ]);
   }
@@ -682,49 +554,9 @@ class Mutation$CreateCustomer$createCustomer {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
-      return false;
-    }
-    final l$email = email;
-    final lOther$email = other.email;
-    if (l$email != lOther$email) {
-      return false;
-    }
-    final l$firstName = firstName;
-    final lOther$firstName = other.firstName;
-    if (l$firstName != lOther$firstName) {
-      return false;
-    }
-    final l$lastName = lastName;
-    final lOther$lastName = other.lastName;
-    if (l$lastName != lOther$lastName) {
-      return false;
-    }
-    final l$social = social;
-    final lOther$social = other.social;
-    if (l$social != lOther$social) {
-      return false;
-    }
-    final l$avatar = avatar;
-    final lOther$avatar = other.avatar;
-    if (l$avatar != lOther$avatar) {
-      return false;
-    }
-    final l$isAdmin = isAdmin;
-    final lOther$isAdmin = other.isAdmin;
-    if (l$isAdmin != lOther$isAdmin) {
-      return false;
-    }
-    final l$createdAt = createdAt;
-    final lOther$createdAt = other.createdAt;
-    if (l$createdAt != lOther$createdAt) {
-      return false;
-    }
-    final l$updatedAt = updatedAt;
-    final lOther$updatedAt = other.updatedAt;
-    if (l$updatedAt != lOther$updatedAt) {
+    final l$access_token = access_token;
+    final lOther$access_token = other.access_token;
+    if (l$access_token != lOther$access_token) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -756,15 +588,7 @@ abstract class CopyWith$Mutation$CreateCustomer$createCustomer<TRes> {
       _CopyWithStubImpl$Mutation$CreateCustomer$createCustomer;
 
   TRes call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? social,
-    String? avatar,
-    bool? isAdmin,
-    String? createdAt,
-    String? updatedAt,
+    String? access_token,
     String? $__typename,
   });
 }
@@ -783,37 +607,13 @@ class _CopyWithImpl$Mutation$CreateCustomer$createCustomer<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
-    Object? email = _undefined,
-    Object? firstName = _undefined,
-    Object? lastName = _undefined,
-    Object? social = _undefined,
-    Object? avatar = _undefined,
-    Object? isAdmin = _undefined,
-    Object? createdAt = _undefined,
-    Object? updatedAt = _undefined,
+    Object? access_token = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$CreateCustomer$createCustomer(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        email: email == _undefined || email == null
-            ? _instance.email
-            : (email as String),
-        firstName: firstName == _undefined || firstName == null
-            ? _instance.firstName
-            : (firstName as String),
-        lastName: lastName == _undefined || lastName == null
-            ? _instance.lastName
-            : (lastName as String),
-        social: social == _undefined ? _instance.social : (social as String?),
-        avatar: avatar == _undefined ? _instance.avatar : (avatar as String?),
-        isAdmin: isAdmin == _undefined ? _instance.isAdmin : (isAdmin as bool?),
-        createdAt: createdAt == _undefined
-            ? _instance.createdAt
-            : (createdAt as String?),
-        updatedAt: updatedAt == _undefined
-            ? _instance.updatedAt
-            : (updatedAt as String?),
+        access_token: access_token == _undefined || access_token == null
+            ? _instance.access_token
+            : (access_token as String),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -827,15 +627,7 @@ class _CopyWithStubImpl$Mutation$CreateCustomer$createCustomer<TRes>
   TRes _res;
 
   call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? social,
-    String? avatar,
-    bool? isAdmin,
-    String? createdAt,
-    String? updatedAt,
+    String? access_token,
     String? $__typename,
   }) =>
       _res;
@@ -1103,127 +895,7 @@ const documentNodeMutationLoginCustomer = DocumentNode(definitions: [
         directives: [],
         selectionSet: SelectionSetNode(selections: [
           FieldNode(
-            name: NameNode(value: 'id'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'email'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'firstName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'lastName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'phone'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'role'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'social'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'userName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'avatar'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'cart'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'id'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'quantity'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'createdAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'updatedAt'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
-          ),
-          FieldNode(
-            name: NameNode(value: 'isAdmin'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'createdAt'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'updatedAt'),
+            name: NameNode(value: 'access_token'),
             alias: null,
             arguments: [],
             directives: [],
@@ -1462,115 +1134,28 @@ class Mutation$LoginCustomer$Widget
 
 class Mutation$LoginCustomer$loginCustomer {
   Mutation$LoginCustomer$loginCustomer({
-    required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    this.phone,
-    this.role,
-    this.social,
-    this.userName,
-    this.avatar,
-    this.cart,
-    this.isAdmin,
-    this.createdAt,
-    this.updatedAt,
-    this.$__typename = 'GCustomer',
+    required this.access_token,
+    this.$__typename = 'CustomerAuthResponse',
   });
 
   factory Mutation$LoginCustomer$loginCustomer.fromJson(
       Map<String, dynamic> json) {
-    final l$id = json['id'];
-    final l$email = json['email'];
-    final l$firstName = json['firstName'];
-    final l$lastName = json['lastName'];
-    final l$phone = json['phone'];
-    final l$role = json['role'];
-    final l$social = json['social'];
-    final l$userName = json['userName'];
-    final l$avatar = json['avatar'];
-    final l$cart = json['cart'];
-    final l$isAdmin = json['isAdmin'];
-    final l$createdAt = json['createdAt'];
-    final l$updatedAt = json['updatedAt'];
+    final l$access_token = json['access_token'];
     final l$$__typename = json['__typename'];
     return Mutation$LoginCustomer$loginCustomer(
-      id: (l$id as String),
-      email: (l$email as String),
-      firstName: (l$firstName as String),
-      lastName: (l$lastName as String),
-      phone: (l$phone as String?),
-      role: (l$role as String?),
-      social: (l$social as String?),
-      userName: (l$userName as String?),
-      avatar: (l$avatar as String?),
-      cart: (l$cart as List<dynamic>?)
-          ?.map((e) => Mutation$LoginCustomer$loginCustomer$cart.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
-      isAdmin: (l$isAdmin as bool?),
-      createdAt: (l$createdAt as String?),
-      updatedAt: (l$updatedAt as String?),
+      access_token: (l$access_token as String),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final String id;
-
-  final String email;
-
-  final String firstName;
-
-  final String lastName;
-
-  final String? phone;
-
-  final String? role;
-
-  final String? social;
-
-  final String? userName;
-
-  final String? avatar;
-
-  final List<Mutation$LoginCustomer$loginCustomer$cart>? cart;
-
-  final bool? isAdmin;
-
-  final String? createdAt;
-
-  final String? updatedAt;
+  final String access_token;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
-    final l$email = email;
-    _resultData['email'] = l$email;
-    final l$firstName = firstName;
-    _resultData['firstName'] = l$firstName;
-    final l$lastName = lastName;
-    _resultData['lastName'] = l$lastName;
-    final l$phone = phone;
-    _resultData['phone'] = l$phone;
-    final l$role = role;
-    _resultData['role'] = l$role;
-    final l$social = social;
-    _resultData['social'] = l$social;
-    final l$userName = userName;
-    _resultData['userName'] = l$userName;
-    final l$avatar = avatar;
-    _resultData['avatar'] = l$avatar;
-    final l$cart = cart;
-    _resultData['cart'] = l$cart?.map((e) => e.toJson()).toList();
-    final l$isAdmin = isAdmin;
-    _resultData['isAdmin'] = l$isAdmin;
-    final l$createdAt = createdAt;
-    _resultData['createdAt'] = l$createdAt;
-    final l$updatedAt = updatedAt;
-    _resultData['updatedAt'] = l$updatedAt;
+    final l$access_token = access_token;
+    _resultData['access_token'] = l$access_token;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1578,34 +1163,10 @@ class Mutation$LoginCustomer$loginCustomer {
 
   @override
   int get hashCode {
-    final l$id = id;
-    final l$email = email;
-    final l$firstName = firstName;
-    final l$lastName = lastName;
-    final l$phone = phone;
-    final l$role = role;
-    final l$social = social;
-    final l$userName = userName;
-    final l$avatar = avatar;
-    final l$cart = cart;
-    final l$isAdmin = isAdmin;
-    final l$createdAt = createdAt;
-    final l$updatedAt = updatedAt;
+    final l$access_token = access_token;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
-      l$email,
-      l$firstName,
-      l$lastName,
-      l$phone,
-      l$role,
-      l$social,
-      l$userName,
-      l$avatar,
-      l$cart == null ? null : Object.hashAll(l$cart.map((v) => v)),
-      l$isAdmin,
-      l$createdAt,
-      l$updatedAt,
+      l$access_token,
       l$$__typename,
     ]);
   }
@@ -1619,80 +1180,9 @@ class Mutation$LoginCustomer$loginCustomer {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
-      return false;
-    }
-    final l$email = email;
-    final lOther$email = other.email;
-    if (l$email != lOther$email) {
-      return false;
-    }
-    final l$firstName = firstName;
-    final lOther$firstName = other.firstName;
-    if (l$firstName != lOther$firstName) {
-      return false;
-    }
-    final l$lastName = lastName;
-    final lOther$lastName = other.lastName;
-    if (l$lastName != lOther$lastName) {
-      return false;
-    }
-    final l$phone = phone;
-    final lOther$phone = other.phone;
-    if (l$phone != lOther$phone) {
-      return false;
-    }
-    final l$role = role;
-    final lOther$role = other.role;
-    if (l$role != lOther$role) {
-      return false;
-    }
-    final l$social = social;
-    final lOther$social = other.social;
-    if (l$social != lOther$social) {
-      return false;
-    }
-    final l$userName = userName;
-    final lOther$userName = other.userName;
-    if (l$userName != lOther$userName) {
-      return false;
-    }
-    final l$avatar = avatar;
-    final lOther$avatar = other.avatar;
-    if (l$avatar != lOther$avatar) {
-      return false;
-    }
-    final l$cart = cart;
-    final lOther$cart = other.cart;
-    if (l$cart != null && lOther$cart != null) {
-      if (l$cart.length != lOther$cart.length) {
-        return false;
-      }
-      for (int i = 0; i < l$cart.length; i++) {
-        final l$cart$entry = l$cart[i];
-        final lOther$cart$entry = lOther$cart[i];
-        if (l$cart$entry != lOther$cart$entry) {
-          return false;
-        }
-      }
-    } else if (l$cart != lOther$cart) {
-      return false;
-    }
-    final l$isAdmin = isAdmin;
-    final lOther$isAdmin = other.isAdmin;
-    if (l$isAdmin != lOther$isAdmin) {
-      return false;
-    }
-    final l$createdAt = createdAt;
-    final lOther$createdAt = other.createdAt;
-    if (l$createdAt != lOther$createdAt) {
-      return false;
-    }
-    final l$updatedAt = updatedAt;
-    final lOther$updatedAt = other.updatedAt;
-    if (l$updatedAt != lOther$updatedAt) {
+    final l$access_token = access_token;
+    final lOther$access_token = other.access_token;
+    if (l$access_token != lOther$access_token) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1724,27 +1214,9 @@ abstract class CopyWith$Mutation$LoginCustomer$loginCustomer<TRes> {
       _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer;
 
   TRes call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? role,
-    String? social,
-    String? userName,
-    String? avatar,
-    List<Mutation$LoginCustomer$loginCustomer$cart>? cart,
-    bool? isAdmin,
-    String? createdAt,
-    String? updatedAt,
+    String? access_token,
     String? $__typename,
   });
-  TRes cart(
-      Iterable<Mutation$LoginCustomer$loginCustomer$cart>? Function(
-              Iterable<
-                  CopyWith$Mutation$LoginCustomer$loginCustomer$cart<
-                      Mutation$LoginCustomer$loginCustomer$cart>>?)
-          _fn);
 }
 
 class _CopyWithImpl$Mutation$LoginCustomer$loginCustomer<TRes>
@@ -1761,64 +1233,17 @@ class _CopyWithImpl$Mutation$LoginCustomer$loginCustomer<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
-    Object? email = _undefined,
-    Object? firstName = _undefined,
-    Object? lastName = _undefined,
-    Object? phone = _undefined,
-    Object? role = _undefined,
-    Object? social = _undefined,
-    Object? userName = _undefined,
-    Object? avatar = _undefined,
-    Object? cart = _undefined,
-    Object? isAdmin = _undefined,
-    Object? createdAt = _undefined,
-    Object? updatedAt = _undefined,
+    Object? access_token = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$LoginCustomer$loginCustomer(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        email: email == _undefined || email == null
-            ? _instance.email
-            : (email as String),
-        firstName: firstName == _undefined || firstName == null
-            ? _instance.firstName
-            : (firstName as String),
-        lastName: lastName == _undefined || lastName == null
-            ? _instance.lastName
-            : (lastName as String),
-        phone: phone == _undefined ? _instance.phone : (phone as String?),
-        role: role == _undefined ? _instance.role : (role as String?),
-        social: social == _undefined ? _instance.social : (social as String?),
-        userName:
-            userName == _undefined ? _instance.userName : (userName as String?),
-        avatar: avatar == _undefined ? _instance.avatar : (avatar as String?),
-        cart: cart == _undefined
-            ? _instance.cart
-            : (cart as List<Mutation$LoginCustomer$loginCustomer$cart>?),
-        isAdmin: isAdmin == _undefined ? _instance.isAdmin : (isAdmin as bool?),
-        createdAt: createdAt == _undefined
-            ? _instance.createdAt
-            : (createdAt as String?),
-        updatedAt: updatedAt == _undefined
-            ? _instance.updatedAt
-            : (updatedAt as String?),
+        access_token: access_token == _undefined || access_token == null
+            ? _instance.access_token
+            : (access_token as String),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-  TRes cart(
-          Iterable<Mutation$LoginCustomer$loginCustomer$cart>? Function(
-                  Iterable<
-                      CopyWith$Mutation$LoginCustomer$loginCustomer$cart<
-                          Mutation$LoginCustomer$loginCustomer$cart>>?)
-              _fn) =>
-      call(
-          cart: _fn(_instance.cart
-              ?.map((e) => CopyWith$Mutation$LoginCustomer$loginCustomer$cart(
-                    e,
-                    (i) => i,
-                  )))?.toList());
 }
 
 class _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer<TRes>
@@ -1828,205 +1253,7 @@ class _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer<TRes>
   TRes _res;
 
   call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? role,
-    String? social,
-    String? userName,
-    String? avatar,
-    List<Mutation$LoginCustomer$loginCustomer$cart>? cart,
-    bool? isAdmin,
-    String? createdAt,
-    String? updatedAt,
-    String? $__typename,
-  }) =>
-      _res;
-  cart(_fn) => _res;
-}
-
-class Mutation$LoginCustomer$loginCustomer$cart {
-  Mutation$LoginCustomer$loginCustomer$cart({
-    required this.id,
-    required this.quantity,
-    required this.createdAt,
-    required this.updatedAt,
-    this.$__typename = 'GCart',
-  });
-
-  factory Mutation$LoginCustomer$loginCustomer$cart.fromJson(
-      Map<String, dynamic> json) {
-    final l$id = json['id'];
-    final l$quantity = json['quantity'];
-    final l$createdAt = json['createdAt'];
-    final l$updatedAt = json['updatedAt'];
-    final l$$__typename = json['__typename'];
-    return Mutation$LoginCustomer$loginCustomer$cart(
-      id: (l$id as String),
-      quantity: (l$quantity as int),
-      createdAt: (l$createdAt as String),
-      updatedAt: (l$updatedAt as String),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final String id;
-
-  final int quantity;
-
-  final String createdAt;
-
-  final String updatedAt;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
-    final l$quantity = quantity;
-    _resultData['quantity'] = l$quantity;
-    final l$createdAt = createdAt;
-    _resultData['createdAt'] = l$createdAt;
-    final l$updatedAt = updatedAt;
-    _resultData['updatedAt'] = l$updatedAt;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$id = id;
-    final l$quantity = quantity;
-    final l$createdAt = createdAt;
-    final l$updatedAt = updatedAt;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$id,
-      l$quantity,
-      l$createdAt,
-      l$updatedAt,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (!(other is Mutation$LoginCustomer$loginCustomer$cart) ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
-      return false;
-    }
-    final l$quantity = quantity;
-    final lOther$quantity = other.quantity;
-    if (l$quantity != lOther$quantity) {
-      return false;
-    }
-    final l$createdAt = createdAt;
-    final lOther$createdAt = other.createdAt;
-    if (l$createdAt != lOther$createdAt) {
-      return false;
-    }
-    final l$updatedAt = updatedAt;
-    final lOther$updatedAt = other.updatedAt;
-    if (l$updatedAt != lOther$updatedAt) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Mutation$LoginCustomer$loginCustomer$cart
-    on Mutation$LoginCustomer$loginCustomer$cart {
-  CopyWith$Mutation$LoginCustomer$loginCustomer$cart<
-          Mutation$LoginCustomer$loginCustomer$cart>
-      get copyWith => CopyWith$Mutation$LoginCustomer$loginCustomer$cart(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Mutation$LoginCustomer$loginCustomer$cart<TRes> {
-  factory CopyWith$Mutation$LoginCustomer$loginCustomer$cart(
-    Mutation$LoginCustomer$loginCustomer$cart instance,
-    TRes Function(Mutation$LoginCustomer$loginCustomer$cart) then,
-  ) = _CopyWithImpl$Mutation$LoginCustomer$loginCustomer$cart;
-
-  factory CopyWith$Mutation$LoginCustomer$loginCustomer$cart.stub(TRes res) =
-      _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer$cart;
-
-  TRes call({
-    String? id,
-    int? quantity,
-    String? createdAt,
-    String? updatedAt,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Mutation$LoginCustomer$loginCustomer$cart<TRes>
-    implements CopyWith$Mutation$LoginCustomer$loginCustomer$cart<TRes> {
-  _CopyWithImpl$Mutation$LoginCustomer$loginCustomer$cart(
-    this._instance,
-    this._then,
-  );
-
-  final Mutation$LoginCustomer$loginCustomer$cart _instance;
-
-  final TRes Function(Mutation$LoginCustomer$loginCustomer$cart) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? id = _undefined,
-    Object? quantity = _undefined,
-    Object? createdAt = _undefined,
-    Object? updatedAt = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$LoginCustomer$loginCustomer$cart(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        quantity: quantity == _undefined || quantity == null
-            ? _instance.quantity
-            : (quantity as int),
-        createdAt: createdAt == _undefined || createdAt == null
-            ? _instance.createdAt
-            : (createdAt as String),
-        updatedAt: updatedAt == _undefined || updatedAt == null
-            ? _instance.updatedAt
-            : (updatedAt as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer$cart<TRes>
-    implements CopyWith$Mutation$LoginCustomer$loginCustomer$cart<TRes> {
-  _CopyWithStubImpl$Mutation$LoginCustomer$loginCustomer$cart(this._res);
-
-  TRes _res;
-
-  call({
-    String? id,
-    int? quantity,
-    String? createdAt,
-    String? updatedAt,
+    String? access_token,
     String? $__typename,
   }) =>
       _res;

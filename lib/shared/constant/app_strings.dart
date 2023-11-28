@@ -1,16 +1,17 @@
 class AppStrings {
   AppStrings._();
 
-  static final AppStrings _instance = AppStrings._();
-  static AppStrings get instance => _instance;
+  static final AppStrings instance = AppStrings._();
 
-  static String get projectName => "Dynasty Urban Style";
-  static String get appTitle => "DUS DASHBOARD";
-  static String get appName => "DUS DASHBOARD";
-  static String get dashboardTitle => "Dashboard";
-  static String get dashboardSummary => "A summary of key data and insights of $projectName.";
-  static String get monthlySalesChartName => "Monthly Sales";
-  static String get percentageSalesTitle => "Percentage increase in sales";
-  static String get monthProfitTitle => "Profit This Month";
-  static String get monthSalesTitle => "Total Sales This Month";
+  String get projectName => "Dynasty Urban Style";
+  String get appTitle => "DUS DASHBOARD";
+  String get appName => "DUS DASHBOARD";
+  String get dashboardTitle => "Dashboard";
+  String get dashboardSummary => "A summary of key data and insights of $projectName.";
+  String get monthlySalesChartName => "Monthly Sales";
+  String get percentageSalesTitle => "Percentage increase in sales";
+  String get monthProfitTitle => "Profit This Month";
+  String get monthSalesTitle => "Total Sales This Month";
+
+  String get accessTokenKey => "access_token";
 }

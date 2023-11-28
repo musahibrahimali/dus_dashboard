@@ -265,35 +265,7 @@ const documentNodeMutationCreateAdmin = DocumentNode(definitions: [
         directives: [],
         selectionSet: SelectionSetNode(selections: [
           FieldNode(
-            name: NameNode(value: 'email'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'firstName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'lastName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'phone'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'userName'),
+            name: NameNode(value: 'access_token'),
             alias: null,
             arguments: [],
             directives: [],
@@ -528,55 +500,27 @@ class Mutation$CreateAdmin$Widget
 
 class Mutation$CreateAdmin$createAdmin {
   Mutation$CreateAdmin$createAdmin({
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    this.phone,
-    this.userName,
-    this.$__typename = 'AdminResolverResponse',
+    required this.access_token,
+    this.$__typename = 'AdminAuthResponse',
   });
 
   factory Mutation$CreateAdmin$createAdmin.fromJson(Map<String, dynamic> json) {
-    final l$email = json['email'];
-    final l$firstName = json['firstName'];
-    final l$lastName = json['lastName'];
-    final l$phone = json['phone'];
-    final l$userName = json['userName'];
+    final l$access_token = json['access_token'];
     final l$$__typename = json['__typename'];
     return Mutation$CreateAdmin$createAdmin(
-      email: (l$email as String),
-      firstName: (l$firstName as String),
-      lastName: (l$lastName as String),
-      phone: (l$phone as String?),
-      userName: (l$userName as String?),
+      access_token: (l$access_token as String),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final String email;
-
-  final String firstName;
-
-  final String lastName;
-
-  final String? phone;
-
-  final String? userName;
+  final String access_token;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$email = email;
-    _resultData['email'] = l$email;
-    final l$firstName = firstName;
-    _resultData['firstName'] = l$firstName;
-    final l$lastName = lastName;
-    _resultData['lastName'] = l$lastName;
-    final l$phone = phone;
-    _resultData['phone'] = l$phone;
-    final l$userName = userName;
-    _resultData['userName'] = l$userName;
+    final l$access_token = access_token;
+    _resultData['access_token'] = l$access_token;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -584,18 +528,10 @@ class Mutation$CreateAdmin$createAdmin {
 
   @override
   int get hashCode {
-    final l$email = email;
-    final l$firstName = firstName;
-    final l$lastName = lastName;
-    final l$phone = phone;
-    final l$userName = userName;
+    final l$access_token = access_token;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$email,
-      l$firstName,
-      l$lastName,
-      l$phone,
-      l$userName,
+      l$access_token,
       l$$__typename,
     ]);
   }
@@ -609,29 +545,9 @@ class Mutation$CreateAdmin$createAdmin {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$email = email;
-    final lOther$email = other.email;
-    if (l$email != lOther$email) {
-      return false;
-    }
-    final l$firstName = firstName;
-    final lOther$firstName = other.firstName;
-    if (l$firstName != lOther$firstName) {
-      return false;
-    }
-    final l$lastName = lastName;
-    final lOther$lastName = other.lastName;
-    if (l$lastName != lOther$lastName) {
-      return false;
-    }
-    final l$phone = phone;
-    final lOther$phone = other.phone;
-    if (l$phone != lOther$phone) {
-      return false;
-    }
-    final l$userName = userName;
-    final lOther$userName = other.userName;
-    if (l$userName != lOther$userName) {
+    final l$access_token = access_token;
+    final lOther$access_token = other.access_token;
+    if (l$access_token != lOther$access_token) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -662,11 +578,7 @@ abstract class CopyWith$Mutation$CreateAdmin$createAdmin<TRes> {
       _CopyWithStubImpl$Mutation$CreateAdmin$createAdmin;
 
   TRes call({
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? userName,
+    String? access_token,
     String? $__typename,
   });
 }
@@ -685,26 +597,13 @@ class _CopyWithImpl$Mutation$CreateAdmin$createAdmin<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? email = _undefined,
-    Object? firstName = _undefined,
-    Object? lastName = _undefined,
-    Object? phone = _undefined,
-    Object? userName = _undefined,
+    Object? access_token = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$CreateAdmin$createAdmin(
-        email: email == _undefined || email == null
-            ? _instance.email
-            : (email as String),
-        firstName: firstName == _undefined || firstName == null
-            ? _instance.firstName
-            : (firstName as String),
-        lastName: lastName == _undefined || lastName == null
-            ? _instance.lastName
-            : (lastName as String),
-        phone: phone == _undefined ? _instance.phone : (phone as String?),
-        userName:
-            userName == _undefined ? _instance.userName : (userName as String?),
+        access_token: access_token == _undefined || access_token == null
+            ? _instance.access_token
+            : (access_token as String),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -718,11 +617,7 @@ class _CopyWithStubImpl$Mutation$CreateAdmin$createAdmin<TRes>
   TRes _res;
 
   call({
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? userName,
+    String? access_token,
     String? $__typename,
   }) =>
       _res;
@@ -988,42 +883,7 @@ const documentNodeMutationLoginAdmin = DocumentNode(definitions: [
         directives: [],
         selectionSet: SelectionSetNode(selections: [
           FieldNode(
-            name: NameNode(value: 'id'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'email'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'firstName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'lastName'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'phone'),
-            alias: null,
-            arguments: [],
-            directives: [],
-            selectionSet: null,
-          ),
-          FieldNode(
-            name: NameNode(value: 'role'),
+            name: NameNode(value: 'access_token'),
             alias: null,
             arguments: [],
             directives: [],
@@ -1257,62 +1117,27 @@ class Mutation$LoginAdmin$Widget
 
 class Mutation$LoginAdmin$loginAdmin {
   Mutation$LoginAdmin$loginAdmin({
-    required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    this.phone,
-    this.role,
-    this.$__typename = 'AdminResolverResponse',
+    required this.access_token,
+    this.$__typename = 'AdminAuthResponse',
   });
 
   factory Mutation$LoginAdmin$loginAdmin.fromJson(Map<String, dynamic> json) {
-    final l$id = json['id'];
-    final l$email = json['email'];
-    final l$firstName = json['firstName'];
-    final l$lastName = json['lastName'];
-    final l$phone = json['phone'];
-    final l$role = json['role'];
+    final l$access_token = json['access_token'];
     final l$$__typename = json['__typename'];
     return Mutation$LoginAdmin$loginAdmin(
-      id: (l$id as String),
-      email: (l$email as String),
-      firstName: (l$firstName as String),
-      lastName: (l$lastName as String),
-      phone: (l$phone as String?),
-      role: (l$role as String?),
+      access_token: (l$access_token as String),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final String id;
-
-  final String email;
-
-  final String firstName;
-
-  final String lastName;
-
-  final String? phone;
-
-  final String? role;
+  final String access_token;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$id = id;
-    _resultData['id'] = l$id;
-    final l$email = email;
-    _resultData['email'] = l$email;
-    final l$firstName = firstName;
-    _resultData['firstName'] = l$firstName;
-    final l$lastName = lastName;
-    _resultData['lastName'] = l$lastName;
-    final l$phone = phone;
-    _resultData['phone'] = l$phone;
-    final l$role = role;
-    _resultData['role'] = l$role;
+    final l$access_token = access_token;
+    _resultData['access_token'] = l$access_token;
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -1320,20 +1145,10 @@ class Mutation$LoginAdmin$loginAdmin {
 
   @override
   int get hashCode {
-    final l$id = id;
-    final l$email = email;
-    final l$firstName = firstName;
-    final l$lastName = lastName;
-    final l$phone = phone;
-    final l$role = role;
+    final l$access_token = access_token;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$id,
-      l$email,
-      l$firstName,
-      l$lastName,
-      l$phone,
-      l$role,
+      l$access_token,
       l$$__typename,
     ]);
   }
@@ -1347,34 +1162,9 @@ class Mutation$LoginAdmin$loginAdmin {
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
-      return false;
-    }
-    final l$email = email;
-    final lOther$email = other.email;
-    if (l$email != lOther$email) {
-      return false;
-    }
-    final l$firstName = firstName;
-    final lOther$firstName = other.firstName;
-    if (l$firstName != lOther$firstName) {
-      return false;
-    }
-    final l$lastName = lastName;
-    final lOther$lastName = other.lastName;
-    if (l$lastName != lOther$lastName) {
-      return false;
-    }
-    final l$phone = phone;
-    final lOther$phone = other.phone;
-    if (l$phone != lOther$phone) {
-      return false;
-    }
-    final l$role = role;
-    final lOther$role = other.role;
-    if (l$role != lOther$role) {
+    final l$access_token = access_token;
+    final lOther$access_token = other.access_token;
+    if (l$access_token != lOther$access_token) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -1405,12 +1195,7 @@ abstract class CopyWith$Mutation$LoginAdmin$loginAdmin<TRes> {
       _CopyWithStubImpl$Mutation$LoginAdmin$loginAdmin;
 
   TRes call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? role,
+    String? access_token,
     String? $__typename,
   });
 }
@@ -1429,27 +1214,13 @@ class _CopyWithImpl$Mutation$LoginAdmin$loginAdmin<TRes>
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? id = _undefined,
-    Object? email = _undefined,
-    Object? firstName = _undefined,
-    Object? lastName = _undefined,
-    Object? phone = _undefined,
-    Object? role = _undefined,
+    Object? access_token = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$LoginAdmin$loginAdmin(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        email: email == _undefined || email == null
-            ? _instance.email
-            : (email as String),
-        firstName: firstName == _undefined || firstName == null
-            ? _instance.firstName
-            : (firstName as String),
-        lastName: lastName == _undefined || lastName == null
-            ? _instance.lastName
-            : (lastName as String),
-        phone: phone == _undefined ? _instance.phone : (phone as String?),
-        role: role == _undefined ? _instance.role : (role as String?),
+        access_token: access_token == _undefined || access_token == null
+            ? _instance.access_token
+            : (access_token as String),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
@@ -1463,12 +1234,7 @@ class _CopyWithStubImpl$Mutation$LoginAdmin$loginAdmin<TRes>
   TRes _res;
 
   call({
-    String? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? phone,
-    String? role,
+    String? access_token,
     String? $__typename,
   }) =>
       _res;

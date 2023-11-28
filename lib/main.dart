@@ -67,7 +67,7 @@ class App extends StatelessWidget {
                       GlobalWidgetsLocalizations.delegate,
                     ],
                     supportedLocales: FormBuilderLocalizations.supportedLocales,
-                    title: AppStrings.appTitle,
+                    title: appStrings.appTitle,
                     routeInformationParser: router.routeInformationParser,
                     routerDelegate: router.routerDelegate,
                     routeInformationProvider: router.routeInformationProvider,

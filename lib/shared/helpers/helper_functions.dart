@@ -1,3 +1,4 @@
+import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -156,5 +157,22 @@ class HelperFunctions {
       return time.toString();
     }
     return dateTimeString;
+  }
+
+  Future<void> storeValue({required String key, required String value}) async {
+    // Write value
+    await storage.write(key: key, value: value);
+  }
+
+  Future<String?> readValue({required String key}) async {
+    // Read value
+    String? value = await storage.read(key: key);
+    // debugPrint("access_token from storage $value");
+    return value;
+  }
+
+  Future<void> deleteValue({required String key}) async {
+    // delete value
+    await storage.delete(key: key);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:dus_dashboard/shared/graphql/graphql_endpoint.dart';
+import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -9,23 +9,31 @@ class GraphQLHelper {
   static final GraphQLHelper _instance = GraphQLHelper._();
   static GraphQLHelper get instance => _instance;
 
-  /// Create a custom [http.Client]
+  // static final myClient = BrowserClient();
   static final myClient = http.Client();
+  // var myClient = BrowserClient()..withCredentials = true;
 
   ValueNotifier<GraphQLClient> getClient() {
     final HttpLink httpLink = HttpLink(
       GraphQLApiEndPoint.backendHttpLink,
       httpClient: myClient,
+      defaultHeaders: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, OPTIONS, DELETE, HEAD",
+        "Access-Control-Allow-Headers": "Origin, Content-Type, Accept, Authorization, X-Request-With",
+        "x-apollo-operation-name": "_dynasty_urban_style_request",
+        "Access-Control-Allow-Credentials": "true",
+        "apollo-require-preflight": "true",
+      },
     );
 
     // Enable withCredentials for the HttpLink
     final Link link = httpLink.concat(
       AuthLink(
         getToken: () async {
-          // Implement your logic to retrieve authentication token here
-          // You can use packages like shared_preferences or get_it to manage tokens
-          // final token = await myTokenManager.getToken();
-          return "Bearer "; // $token
+          final token = await helperFunctions.readValue(key: appStrings.accessTokenKey);
+          return "Bearer $token";
         },
       ),
     );
@@ -37,11 +45,6 @@ class GraphQLHelper {
         cache: GraphQLCache(
           store: HiveStore(),
         ),
-        defaultPolicies: DefaultPolicies(
-          watchQuery: Policies(fetch: FetchPolicy.networkOnly),
-          query: Policies(fetch: FetchPolicy.networkOnly),
-          mutate: Policies(fetch: FetchPolicy.networkOnly),
-        ),
         link: link,
       ),
     );
@@ -49,35 +52,3 @@ class GraphQLHelper {
     return client;
   }
 }
-
-// import 'package:dus_dashboard/index.dart';
-// import 'package:graphql/client.dart';
-// import 'package:http/http.dart' as http;
-//
-// class GraphQLHelper {
-//   GraphQLHelper._();
-//
-//   static final GraphQLHelper _instance = GraphQLHelper._();
-//   static GraphQLHelper get instance => _instance;
-//
-//   /// [getClient] is used to get a client
-//   static final myClient = http.Client();
-//
-//   GraphQLClient getClient() {
-//     final HttpLink httpLink = HttpLink(
-//       ProjectConstants.backendHttpLink,
-//       httpClient: myClient,
-//     );
-//     final Link link = httpLink;
-//
-//     return GraphQLClient(
-//       cache: GraphQLCache(),
-//       defaultPolicies: DefaultPolicies(
-//         watchQuery: Policies(fetch: FetchPolicy.networkOnly),
-//         query: Policies(fetch: FetchPolicy.networkOnly),
-//         mutate: Policies(fetch: FetchPolicy.networkOnly),
-//       ),
-//       link: link,
-//     );
-//   }
-// }

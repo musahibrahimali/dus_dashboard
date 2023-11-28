@@ -47,7 +47,7 @@ class _ScaffoldWithNavigationRail extends StatelessWidget {
                     margin: EdgeInsets.zero,
                     child: Center(
                       child: Text(
-                        AppStrings.appTitle,
+                        appStrings.appTitle,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w900,
                           fontSize: 26.0,
@@ -111,7 +111,7 @@ class _ScaffoldWithDrawer extends StatelessWidget {
               margin: EdgeInsets.zero,
               child: Center(
                 child: Text(
-                  AppStrings.appTitle,
+                  appStrings.appTitle,
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w900,
                     fontSize: 26.0,
