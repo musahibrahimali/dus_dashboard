@@ -26,8 +26,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   void initState() {
     /// fetch admins
-    adminRepository.getAdminProfile();
-    adminRepository.getAllAdmins();
+    adminRepository.testFetch();
+    // adminController.getAdminProfile();
+    // adminRepository.getAllAdmins();
     super.initState();
   }
 
@@ -35,13 +36,15 @@ class _DashBoardPageState extends State<DashBoardPage> {
   Widget build(BuildContext context) {
     final ResponsiveBreakpointsData responsive = ResponsiveBreakpoints.of(context);
 
+    adminController.getAdminProfile();
+
     return ContentView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           PageHeader(
-            title: AppStrings.dashboardTitle.toUpperCase(),
-            description: AppStrings.dashboardSummary,
+            title: appStrings.dashboardTitle.toUpperCase(),
+            description: appStrings.dashboardSummary,
           ),
           const Gap(16.0),
           if (responsive.isMobile)
@@ -66,7 +69,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                     children: <Widget>[
                       const Gap(16.0),
                       Text(
-                        AppStrings.monthSalesTitle,
+                        appStrings.monthSalesTitle,
                         style: GoogleFonts.poppins(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w400,
@@ -91,7 +94,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                     children: <Widget>[
                       const Gap(16.0),
                       Text(
-                        AppStrings.monthProfitTitle,
+                        appStrings.monthProfitTitle,
                         style: GoogleFonts.poppins(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w400,
@@ -116,7 +119,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                     children: <Widget>[
                       const Gap(16.0),
                       Text(
-                        AppStrings.percentageSalesTitle,
+                        appStrings.percentageSalesTitle,
                         style: GoogleFonts.poppins(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w400,

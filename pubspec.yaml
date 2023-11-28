@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^10.4.3
   permission_handler_web: ^0.0.2
   flutter_dropzone: ^3.0.6
+  flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.7
   lottie: ^2.6.0
   http: ^1.1.0
@@ -78,6 +79,7 @@ dependencies:
   syncfusion_flutter_datagrid: ^22.2.10
   syncfusion_flutter_barcodes: ^22.2.10
   syncfusion_flutter_datagrid_export: ^22.2.10
+  auto_size_text: ^3.0.0
 
   flutter_web_plugins:
     sdk: flutter

@@ -1,21 +1,12 @@
 mutation CreateAdmin($createAdminInput: CreateAdminInput!) {
   createAdmin(createAdminInput: $createAdminInput) {
-    email
-    firstName
-    lastName
-    phone
-    userName
+    access_token
   }
 }
 
 mutation LoginAdmin($loginAdminInput: LoginAdminInput!) {
   loginAdmin(loginAdminInput: $loginAdminInput) {
-    id
-    email
-    firstName
-    lastName
-    phone
-    role
+    access_token
   }
 }
 

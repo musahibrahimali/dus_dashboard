@@ -18,7 +18,7 @@ class NavigationTitle extends StatelessWidget {
         child: GestureDetector(
           onTap: () => context.go(routerInitialLocation),
           child: Text(
-            AppStrings.appTitle,
+            appStrings.appTitle,
             style: theme.textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.w700,
             ),

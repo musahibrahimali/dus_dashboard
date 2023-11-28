@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,7 @@ class AdminController extends GetxController {
   final _activeAdmin = Rxn<AdminModel>();
 
   /// numberOfAdmins is the number of admins [int]
-  final _numberOfAdmins = Rxn<int>(0);
+  final _numberOfAdmins = Rx<int>(0);
 
   // update active [AdminModel]
   void updateAdmin(AdminModel adminModel) {
@@ -22,27 +23,40 @@ class AdminController extends GetxController {
   /// reset active [AdminModel]
   void resetAdmin() {
     _activeAdmin.value = null;
+    update();
   }
 
   /// fetch all admins [AdminModel]
   void fetchAdmins() async {
-    List<AdminModel>? response = await AdminRepository.instance.getAllAdmins();
-    if (response != null) {
-      _admins.value = admins;
-      _numberOfAdmins.value = _admins.length;
-    }
+    dartz.Either<Failure, List<AdminModel>> response = await AdminRepository.instance.getAllAdmins();
+    response.fold(
+      (Failure failure) {
+        _admins.value = [];
+      },
+      (List<AdminModel> admins) {
+        _admins.value = admins;
+        _numberOfAdmins.value = _admins.length;
+      },
+    );
+    update();
   }
 
   /// get admin [AdminModel] profile
   void getAdminProfile() async {
-    AdminModel? response = await AdminRepository.instance.getAdminProfile();
-    if (response != null) {
-      _activeAdmin.value = response;
-    }
+    dartz.Either<Failure, AdminModel> response = await AdminRepository.instance.getAdminProfile();
+    response.fold(
+      (Failure failure) {
+        _activeAdmin.value = null;
+      },
+      (AdminModel adminModel) {
+        _activeAdmin.value = adminModel;
+      },
+    );
+    update();
   }
 
   /// [getters]
-  int get numberOfAdmins => _numberOfAdmins.value ?? 0;
+  int get numberOfAdmins => _numberOfAdmins.value;
   AdminModel? get activeAdmin => _activeAdmin.value;
   List<AdminModel> get admins => _admins;
 }

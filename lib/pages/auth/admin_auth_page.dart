@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -33,7 +34,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
           shadowColor: Colors.black12,
           child: Container(
             // height: MediaQuery.of(context).size.height * 0.7,
-            width: MediaQuery.of(context).size.width * 0.25,
+            width: !_isRegister ? MediaQuery.of(context).size.width * 0.25 : MediaQuery.of(context).size.width * 0.50,
             padding: const EdgeInsets.symmetric(
               horizontal: 20.0,
               vertical: 20.0,
@@ -61,145 +62,168 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
             fontWeight: FontWeight.w600,
             letterSpacing: 1.5,
           ),
-          const Gap(20.0),
-          FormBuilderTextField(
-            name: 'first_name',
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
-              labelText: 'First Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
+          const Gap(30.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FormBuilderTextField(
+                      name: 'first_name',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: const InputDecoration(
+                        labelText: 'First Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const Gap(10.0),
+                    FormBuilderTextField(
+                      name: 'last_name',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: const InputDecoration(
+                        labelText: 'Last Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const Gap(10.0),
+                    FormBuilderTextField(
+                      name: 'user_name',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: const InputDecoration(
+                        labelText: 'User Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const Gap(10.0),
+                    FormBuilderTextField(
+                      name: 'phone_number',
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.numeric(),
+                      ]),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-            ]),
+              const Gap(20.0),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FormBuilderTextField(
+                      name: 'email',
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.email(),
+                      ]),
+                    ),
+                    const Gap(10.0),
+                    FormBuilderTextField(
+                      name: 'password',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                        suffix: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordVisible ? LineAwesomeIcons.eye_slash : LineAwesomeIcons.eye,
+                          ),
+                        ),
+                      ),
+                      obscureText: !_isPasswordVisible,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(6),
+                      ]),
+                    ),
+                    const Gap(10.0),
+                    FormBuilderTextField(
+                      name: 'confirm_password',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.continueAction,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        suffixIcon: (_formKey.currentState?.fields['confirm_password']?.hasError ?? false)
+                            ? const Icon(LineAwesomeIcons.info_circle, color: Colors.red)
+                            : const Icon(LineAwesomeIcons.check_circle, color: Colors.green),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      obscureText: !_isPasswordVisible,
+                      validator: (String? value) => _formKey.currentState?.fields['password']?.value != value ? 'No coinciden' : null,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'last_name',
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
-              labelText: 'Last Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-            ]),
-          ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'user_name',
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
-              labelText: 'User Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-            ]),
-          ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'phone_number',
-            keyboardType: TextInputType.phone,
-            textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
-              labelText: 'Phone Number',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.numeric(),
-            ]),
-          ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'email',
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-              FormBuilderValidators.email(),
-            ]),
-          ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'password',
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.continueAction,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-              suffix: InkWell(
-                onTap: () {
-                  setState(() {
-                    _isPasswordVisible = !_isPasswordVisible;
-                  });
-                },
-                child: Icon(
-                  _isPasswordVisible ? LineAwesomeIcons.eye_slash : LineAwesomeIcons.eye,
-                ),
-              ),
-            ),
-            obscureText: !_isPasswordVisible,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-              FormBuilderValidators.minLength(6),
-            ]),
-          ),
-          const Gap(10.0),
-          FormBuilderTextField(
-            name: 'confirm_password',
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.continueAction,
-            decoration: InputDecoration(
-              labelText: 'Confirm Password',
-              suffixIcon: (_formKey.currentState?.fields['confirm_password']?.hasError ?? false)
-                  ? const Icon(LineAwesomeIcons.info_circle, color: Colors.red)
-                  : const Icon(LineAwesomeIcons.check_circle, color: Colors.green),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-            ),
-            obscureText: !_isPasswordVisible,
-            validator: (String? value) => _formKey.currentState?.fields['password']?.value != value ? 'No coinciden' : null,
-          ),
+
           const Gap(50.0),
           CustomButton(
-            height: 50.0,
-            width: MediaQuery.of(context).size.width * 0.08,
+            height: 55.0,
+            width: MediaQuery.of(context).size.width * 0.18,
             buttonColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
               bool? isFormValid = _formKey.currentState?.saveAndValidate();
@@ -214,27 +238,32 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                   "phone": _formKey.currentState?.fields['phone_number']?.value,
                 };
                 // debugPrint("variables: $variables");
-                AdminModel? response = await adminRepository.createAdmin(
+                dartz.Either<Failure, String> response = await adminRepository.registerAdmin(
                   variables: variables,
                 );
                 if (!mounted) return;
-                if (response == null) {
-                  debugPrint("response $response");
-                  notificationService.showErrorNotification(
-                    context: context,
-                    title: "Error",
-                    message: response.toString(),
-                  );
-                } else {
-                  /// clear form
-                  _formKey.currentState?.reset();
-                  const DashboardRoute().go(context);
-                  notificationService.showErrorNotification(
-                    context: context,
-                    title: "Error",
-                    message: "Welcome ${response.userName ?? response.firstName}",
-                  );
-                }
+                response.fold(
+                  (Failure error) {
+                    debugPrint("response $response");
+                    notificationService.showErrorNotification(
+                      context: context,
+                      title: "Error",
+                      message: error.message.toString(),
+                    );
+                  },
+                  (String accessToken) async {
+                    /// clear form
+                    _formKey.currentState?.reset();
+                    await helperFunctions.storeValue(key: "access_token", value: accessToken);
+                    if (!mounted) return;
+                    const DashboardRoute().go(context);
+                    notificationService.showErrorNotification(
+                      context: context,
+                      title: "Error",
+                      message: "Login Successful",
+                    );
+                  },
+                );
               }
             },
             child: CustomText(
@@ -362,27 +391,33 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                   "password": _formKey.currentState?.fields['password']?.value,
                 };
                 // debugPrint("variables: $variables");
-                AdminModel? response = await adminRepository.loginAdmin(
+                dartz.Either<Failure, String> response = await adminRepository.loginAdmin(
                   variables: variables,
                 );
                 if (!mounted) return;
-                if (response == null) {
-                  debugPrint("failure $response");
-                  notificationService.showErrorNotification(
-                    context: context,
-                    title: "Error",
-                    message: response.toString(),
-                  );
-                } else {
-                  /// clear form
-                  _formKey.currentState?.reset();
-                  const DashboardRoute().go(context);
-                  notificationService.showErrorNotification(
-                    context: context,
-                    title: "Error",
-                    message: "Welcome ${response.userName ?? response.firstName}",
-                  );
-                }
+                response.fold(
+                  (Failure failure) {
+                    // debugPrint("Failure >>>>>> ${failure.message}");
+                    notificationService.showErrorNotification(
+                      context: context,
+                      title: "Error",
+                      message: failure.message.isNotEmpty ? failure.message.toString() : "There was an Error, try again later",
+                    );
+                    return;
+                  },
+                  (String accessToken) async {
+                    /// clear form
+                    _formKey.currentState?.reset();
+                    await helperFunctions.storeValue(key: "access_token", value: accessToken);
+                    if (!mounted) return;
+                    const DashboardRoute().go(context);
+                    notificationService.showSuccessNotification(
+                      context: context,
+                      title: "Error",
+                      message: "Login Successfully",
+                    );
+                  },
+                );
               }
             },
             child: CustomText(

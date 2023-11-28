@@ -24,7 +24,7 @@ class MainChart extends StatelessWidget {
       series: <ChartSeries>[
         // Initialize line series
         ColumnSeries<ChartData, String>(
-          name: AppStrings.monthlySalesChartName,
+          name: appStrings.monthlySalesChartName,
           dataSource: chartData,
           xValueMapper: (ChartData data, _) => data.x,
           yValueMapper: (ChartData data, _) => data.y,
