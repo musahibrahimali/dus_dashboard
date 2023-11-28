@@ -8,13 +8,11 @@
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    final ValueNotifier<GraphQLClient> client = GraphQLHelper.instance.getClient();
     // Build our app and trigger a frame.
-    await tester.pumpWidget(App(client: client));
+    await tester.pumpWidget(const App());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

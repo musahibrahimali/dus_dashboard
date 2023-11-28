@@ -6,20 +6,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// [initHiveForFlutter] is required for Hive to work in Flutter
-  await initHiveForFlutter();
-
-  final ValueNotifier<GraphQLClient> client = GraphQLHelper.instance.getClient();
-
   /// set url strategy
   usePathUrlStrategy();
-  runApp(App(client: client));
+  runApp(const App());
 
   /// setup data layer
   Get.lazyPut(() => AppController());
@@ -34,8 +28,7 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-  final ValueNotifier<GraphQLClient> client;
-  const App({super.key, required this.client});
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,25 +49,20 @@ class App extends StatelessWidget {
                   name: DESKTOP,
                 ),
               ],
-              child: GraphQLProvider(
-                client: client,
-                child: CacheProvider(
-                  child: GetMaterialApp.router(
-                    debugShowCheckedModeBanner: false,
-                    localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-                      FormBuilderLocalizations.delegate,
-                      ...GlobalMaterialLocalizations.delegates,
-                      GlobalWidgetsLocalizations.delegate,
-                    ],
-                    supportedLocales: FormBuilderLocalizations.supportedLocales,
-                    title: appStrings.appTitle,
-                    routeInformationParser: router.routeInformationParser,
-                    routerDelegate: router.routerDelegate,
-                    routeInformationProvider: router.routeInformationProvider,
-                    theme: theme,
-                    darkTheme: darkTheme,
-                  ),
-                ),
+              child: GetMaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+                  FormBuilderLocalizations.delegate,
+                  ...GlobalMaterialLocalizations.delegates,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: FormBuilderLocalizations.supportedLocales,
+                title: appStrings.appTitle,
+                routeInformationParser: router.routeInformationParser,
+                routerDelegate: router.routerDelegate,
+                routeInformationProvider: router.routeInformationProvider,
+                theme: theme,
+                darkTheme: darkTheme,
               ),
             );
           },
