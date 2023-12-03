@@ -1,3 +1,4 @@
+import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 
 class SummaryCard extends StatelessWidget {
@@ -23,7 +24,7 @@ class SummaryCard extends StatelessWidget {
           verticalOffset: 48.0,
           preferBelow: false,
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary,
+            color: theme.extension<CustomColors>()!.brandSurface,
             borderRadius: BorderRadius.circular(8.0),
           ),
           padding: const EdgeInsets.all(16.0),

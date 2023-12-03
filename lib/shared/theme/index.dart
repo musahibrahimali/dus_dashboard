@@ -1,3 +1,3 @@
-export 'app_theme.dart';
-export 'brand_colors.dart';
-export 'brand_gradients.dart';
+export 'color_schemes.g.dart';
+export 'custom_color.g.dart';
+export 'custom_gradients.dart';

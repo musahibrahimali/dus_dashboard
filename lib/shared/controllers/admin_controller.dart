@@ -10,6 +10,7 @@ class AdminController extends GetxController {
 
   /// activeAdmin is the current active admin [AdminModel]
   final _activeAdmin = Rxn<AdminModel>();
+  final _isAdminLoggedIn = false.obs;
 
   /// numberOfAdmins is the number of admins [int]
   final _numberOfAdmins = Rx<int>(0);
@@ -17,18 +18,20 @@ class AdminController extends GetxController {
   // update active [AdminModel]
   void updateAdmin(AdminModel adminModel) {
     _activeAdmin.value = adminModel;
+    _isAdminLoggedIn.value = true;
     update();
   }
 
   /// reset active [AdminModel]
   void resetAdmin() {
     _activeAdmin.value = null;
+    _isAdminLoggedIn.value = false;
     update();
   }
 
   /// fetch all admins [AdminModel]
   void fetchAdmins() async {
-    dartz.Either<Failure, List<AdminModel>> response = await AdminRepository.instance.getAdmins();
+    dartz.Either<Failure, List<AdminModel>> response = await AdminRepo.instance.getAdmins();
     response.fold(
       (Failure failure) {
         _admins.value = [];
@@ -43,7 +46,7 @@ class AdminController extends GetxController {
 
   /// get admin [AdminModel] profile
   void getAdminProfile() async {
-    dartz.Either<Failure, AdminModel> response = await AdminRepository.instance.getAdminProfile();
+    dartz.Either<Failure, AdminModel> response = await AdminRepo.instance.getAdminProfile();
     response.fold(
       (Failure failure) {
         _activeAdmin.value = null;
@@ -59,4 +62,5 @@ class AdminController extends GetxController {
   int get numberOfAdmins => _numberOfAdmins.value;
   AdminModel? get activeAdmin => _activeAdmin.value;
   List<AdminModel> get admins => _admins;
+  bool get isLoggedIn => _isAdminLoggedIn.value;
 }

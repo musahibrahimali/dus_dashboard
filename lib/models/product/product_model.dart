@@ -11,7 +11,7 @@ class ProductModel with _$ProductModel {
     required String name,
     required String description,
     required PriceModel price,
-    required List<String> image,
+    required List<String> images,
     required String depo,
     required String category,
     List<String>? cart,

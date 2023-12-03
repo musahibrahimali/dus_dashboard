@@ -5,16 +5,34 @@ class Assets {
   static const String animationConnectionError = 'assets/animation/connection_error.json';
   static const String animationErrorNotFound = 'assets/animation/error_not_found.json';
   static const String animationNotFound = 'assets/animation/not_found.json';
+  static const String assetsImagesDynastyEngraved = 'assets/images/dynasty_engraved.jpg';
   static const String flagsFr = 'assets/flags/fr.png';
   static const String flagsGb = 'assets/flags/gb.png';
   static const String flagsGh = 'assets/flags/gh.png';
   static const String flagsUs = 'assets/flags/us.png';
-  static const String graphqlSchema = 'assets/graphql/schema.graphql';
   static const String imagesAccount = 'assets/images/account.png';
+  static const String imagesCard = 'assets/images/card.png';
+  static const String imagesDynastyEngraved = 'assets/images/dynasty-engraved.jpg';
+  static const String imagesDynastyUrbanColoured = 'assets/images/dynasty-urban-coloured.jpg';
+  static const String imagesDynastyUrbanRoad = 'assets/images/dynasty_urban_road.jpg';
+  static const String imagesDynastyUrbanStyleColoured = 'assets/images/dynasty-urban-style-coloured.jpg';
+  static const String imagesDynastyUrbanStyleShiny = 'assets/images/dynasty_urban_style_shiny.jpg';
+  static const String imagesEnglish = 'assets/images/english.png';
+  static const String imagesErrorImage = 'assets/images/error_image.jpg';
+  static const String imagesFrench = 'assets/images/french.png';
+  static const String imagesIcon = 'assets/images/icon.png';
+  static const String imagesLogo = 'assets/images/logo.png';
+  static const String imagesMan = 'assets/images/man.jpeg';
+  static const String imagesNhana = 'assets/images/nhana.jpg';
+  static const String imagesPhoto1 = 'assets/images/photo1.jpg';
+  static const String imagesPhoto2 = 'assets/images/photo2.jpg';
+  static const String imagesPhoto3 = 'assets/images/photo3.jpg';
+  static const String imagesPhoto4 = 'assets/images/photo4.jpg';
+  static const String imagesPhoto5 = 'assets/images/photo5.jpg';
+  static const String imagesPhoto6 = 'assets/images/photo6.jpg';
   static const String svgCyclePart1 = 'assets/svg/cycle_part_1.svg';
   static const String svgCyclePart2 = 'assets/svg/cycle_part_2.svg';
   static const String svgErrorText = 'assets/svg/error_text.svg';
   static const String svgGroup64 = 'assets/svg/Group_64.svg';
   static const String svgLine = 'assets/svg/line.svg';
-
 }

@@ -23,13 +23,11 @@ class NotificationService {
       title: AutoSizeText(
         title.toTitleCase(),
         style: GoogleFonts.montserrat(
-          color: BrandColors.kColorDarkBlue,
           fontWeight: FontWeight.w900,
         ),
       ),
       description: CustomText(
         message.toTitleCase(),
-        color: BrandColors.kLightBlue,
         maxLines: 5,
       ),
     ).show(context);
@@ -49,13 +47,11 @@ class NotificationService {
       title: AutoSizeText(
         title.toTitleCase(),
         style: GoogleFonts.poppins(
-          color: BrandColors.kErrorColor,
           fontWeight: FontWeight.w900,
         ),
       ),
       description: CustomText(
         message.toTitleCase(),
-        color: BrandColors.kBrandYellowColor,
         maxLines: 5,
       ),
     ).show(context);
@@ -75,13 +71,11 @@ class NotificationService {
       title: AutoSizeText(
         title.toTitleCase(),
         style: GoogleFonts.poppins(
-          color: BrandColors.kColorDarkGreen,
           fontWeight: FontWeight.w900,
         ),
       ),
       description: CustomText(
         message.toTitleCase(),
-        color: BrandColors.kColorLightGreen,
         maxLines: 5,
       ),
     ).show(context);

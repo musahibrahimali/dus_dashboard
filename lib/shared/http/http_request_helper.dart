@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dus_dashboard/index.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -242,7 +243,7 @@ class HttpRequestHelper {
     required String path,
     required String method,
     Map<String, dynamic>? fields,
-    List<http.MultipartFile>? files,
+    List<PlatformFile>? files,
     Map<String, String>? headers,
     Encoding? encoding,
     required T Function(dynamic data) builder,
@@ -253,7 +254,7 @@ class HttpRequestHelper {
       List<http.MultipartFile> images = <http.MultipartFile>[];
       if (files != null && files.isNotEmpty) {
         for (int i = 0; i < files.length; i++) {
-          http.MultipartFile file = files[i];
+          PlatformFile file = files[i];
           // debugPrint("file : $file");
           // Uint8List? bytes = file.bytes;
           // images.add(
@@ -266,8 +267,8 @@ class HttpRequestHelper {
           images.add(
             await http.MultipartFile.fromPath(
               "images",
-              file.filename!,
-              filename: file.filename,
+              file.path!,
+              filename: file.name,
             ),
           );
         }

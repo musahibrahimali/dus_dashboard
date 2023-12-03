@@ -3,5 +3,6 @@ export 'dashboard/index.dart';
 export 'employee/index.dart';
 export 'error/index.dart';
 export 'product/index.dart';
+export 'profile/index.dart';
 export 'sales/index.dart';
 export 'user/index.dart';

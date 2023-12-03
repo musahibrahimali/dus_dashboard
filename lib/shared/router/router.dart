@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 part 'router.g.dart';
 
 const routerInitialLocation = '/';
+const routerSalesLocation = '/sales';
 const routerDashboardLocation = '/dashboard';
 const routerAuthAdminLocation = '/auth';
 const routerUsersLocation = '/users';
@@ -15,6 +16,7 @@ const routerEmployeesLocation = '/employees';
 const routerEmployeeLocation = ':id';
 const routerProductsLocation = '/products';
 const routerProductLocation = ':id';
+const routerProfileLocation = '/profile';
 
 /// [GoRouter] for the entire app
 final router = GoRouter(
@@ -29,6 +31,15 @@ final router = GoRouter(
 /// wrapper for the entire app
 @TypedStatefulShellRoute<ShellRouteData>(
   branches: <TypedStatefulShellBranch<StatefulShellBranchData>>[
+    /// Sales Route
+    TypedStatefulShellBranch(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<SalesRoute>(
+          path: routerSalesLocation,
+        ),
+      ],
+    ),
+
     /// Dashboard Route
     TypedStatefulShellBranch(
       routes: <TypedRoute<RouteData>>[
@@ -80,11 +91,20 @@ final router = GoRouter(
       ],
     ),
 
-    /// Register Admin Route
+    /// Admin Auth Route
     TypedStatefulShellBranch(
       routes: <TypedRoute<RouteData>>[
-        TypedGoRoute<RegisterAdminRoute>(
+        TypedGoRoute<AdminAuthRoute>(
           path: routerAuthAdminLocation,
+        ),
+      ],
+    ),
+
+    /// Profile Route
+    TypedStatefulShellBranch(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<ProfilePageRoute>(
+          path: routerProfileLocation,
         ),
       ],
     ),
@@ -107,6 +127,16 @@ class ShellRouteData extends StatefulShellRouteData {
   }
 }
 
+/// [SalesRoute] for the dashboard
+class SalesRoute extends GoRouteData {
+  const SalesRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SalesPage();
+  }
+}
+
 /// [DashboardRoute] for the dashboard
 class DashboardRoute extends GoRouteData {
   const DashboardRoute();
@@ -118,12 +148,12 @@ class DashboardRoute extends GoRouteData {
 }
 
 /// [AdminAuthPage] for the dashboard
-class RegisterAdminRoute extends GoRouteData {
-  const RegisterAdminRoute();
+class AdminAuthRoute extends GoRouteData {
+  const AdminAuthRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AdminAuthPage();
+    return const DetermineAuthPage();
   }
 }
 
@@ -168,8 +198,8 @@ class ProductPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final user = dummyUsers.firstWhereOrNull((e) => e.userId == id);
-    return user == null ? const NotFoundPage() : ProductPage(product: user);
+    final product = productsController.getProduct(id: id);
+    return product == null ? const NotFoundPage() : ProductPage(product: product);
   }
 }
 
@@ -193,5 +223,15 @@ class EmployeePageRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     final employee = dummyUsers.firstWhereOrNull((e) => e.userId == id);
     return employee == null ? const NotFoundPage() : EmployeePage(employee: employee);
+  }
+}
+
+/// [ProfilePage] for the active admin [adminController.activeAdmin]
+class ProfilePageRoute extends GoRouteData {
+  const ProfilePageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ProfilePage();
   }
 }

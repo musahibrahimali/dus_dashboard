@@ -1,4 +1,3 @@
-import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -63,7 +62,7 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: splashColor,
-        backgroundColor: buttonColor,
+        backgroundColor: buttonColor ?? Theme.of(context).colorScheme.primary,
         shape: shape ??
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -82,30 +81,28 @@ class CustomButton extends StatelessWidget {
         constraints: BoxConstraints(
           minHeight: minHeight ?? 50.0,
         ),
-        decoration: buttonColor == null
-            ? BoxDecoration(
-                borderRadius: gradientBorderRadius ?? BorderRadius.circular(25.0),
-                gradient: gradientColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: shadowColor ?? Colors.black12,
-                    blurRadius: spreadRadius ?? 8.0,
-                    spreadRadius: 5.0,
-                    offset: Offset(
-                      xOffset ?? 5.5,
-                      yOffset ?? 8.0,
-                    ),
-                  )
-                ],
-              )
-            : null,
+        decoration: BoxDecoration(
+          borderRadius: gradientBorderRadius ?? BorderRadius.circular(25.0),
+          gradient: gradientColor,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: shadowColor ?? Colors.black12,
+              blurRadius: spreadRadius ?? 8.0,
+              spreadRadius: 5.0,
+              offset: Offset(
+                xOffset ?? 5.5,
+                yOffset ?? 8.0,
+              ),
+            )
+          ],
+        ),
         child: Center(
           child: child ??
               Text(
                 text!,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
-                  color: textColor ?? BrandColors.kColorWhiteAccent,
+                  color: textColor ?? Theme.of(context).colorScheme.onPrimary,
                   fontWeight: fontWeight ?? FontWeight.w500,
                   fontSize: fontSize ?? 12.0,
                   letterSpacing: letterSpacing ?? 1.0,

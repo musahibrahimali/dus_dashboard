@@ -12,28 +12,31 @@ class CustomerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ContentView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            user.name,
-            style: theme.textTheme.headlineMedium!.copyWith(
-              fontWeight: FontWeight.w700,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              user.name,
+              style: theme.textTheme.headlineMedium!.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          Text('role: ${user.role}'),
-          SelectionArea(
-            child: Text('userId: ${user.userId}'),
-          ),
-          const Gap(16),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.navigate_before),
-            label: const Text('Back'),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-        ],
+            Text('role: ${user.role}'),
+            SelectionArea(
+              child: Text('userId: ${user.userId}'),
+            ),
+            const Gap(16),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.navigate_before),
+              label: const Text('Back'),
+              onPressed: () {
+                context.pop();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

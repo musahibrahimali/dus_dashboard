@@ -13,21 +13,15 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
-  /// [SummaryCard] cards
-  List<SummaryCard> summaryCards = const <SummaryCard>[
-    SummaryCard(title: 'Total Sales', value: '\$125,000'),
-    SummaryCard(title: 'Sales Rate', value: '52.3%'),
-    SummaryCard(title: 'Total Products', value: '1,200'),
-    SummaryCard(title: 'Total Users', value: '12,000'),
-    SummaryCard(title: 'Total Admins', value: '12,000'),
-    SummaryCard(title: 'Total Employees', value: '12,000'),
-  ];
-
   @override
   void initState() {
-    /// fetch admins
+    /// fetch admins, customers, products, employees
     adminController.getAdminProfile();
     adminController.fetchAdmins();
+    helperMethods.getCustomers();
+    helperMethods.getEmployees();
+    helperMethods.getProducts();
+
     super.initState();
   }
 
@@ -35,109 +29,131 @@ class _DashBoardPageState extends State<DashBoardPage> {
   Widget build(BuildContext context) {
     final ResponsiveBreakpointsData responsive = ResponsiveBreakpoints.of(context);
 
-    return ContentView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          PageHeader(
-            title: appStrings.dashboardTitle.toUpperCase(),
-            description: appStrings.dashboardSummary,
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 10.0,
           ),
-          const Gap(16.0),
-          if (responsive.isMobile)
-            ...summaryCards
-          else
-            Row(
-              children: summaryCards.map<Widget>((SummaryCard card) => Expanded(child: card)).intersperse(const Gap(16.0)).toList(),
-            ),
-          const Gap(16.0),
-          const Expanded(
-            child: MainChart(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              PageHeader(
+                title: appStrings.dashboardTitle.toUpperCase(),
+                description: appStrings.dashboardSummary,
+              ),
+              const Gap(16.0),
+              if (responsive.isMobile)
+                ...<SummaryCard>[
+                  const SummaryCard(title: 'Total Sales', value: 'GH¢ 0.0'),
+                  const SummaryCard(title: 'Sales Rate', value: '52.3%'),
+                  SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
+                  SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
+                  SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
+                  SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
+                ].map<Widget>((SummaryCard card) => card).intersperse(const Gap(16.0)).toList()
+              else
+                Row(
+                  children: <SummaryCard>[
+                    const SummaryCard(title: 'Total Sales', value: '\$125,000'),
+                    const SummaryCard(title: 'Sales Rate', value: '52.3%'),
+                    SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
+                    SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
+                    SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
+                    SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
+                  ].map<Widget>((SummaryCard card) => Expanded(child: card)).intersperse(const Gap(16.0)).toList(),
+                ),
+              const Gap(16.0),
+              const Expanded(
+                child: MainChart(),
+              ),
+
+              /// Bottom card
+              Card(
+                shadowColor: Colors.black12,
+                child: Row(
+                  children: <Widget>[
+                    /// Total sales this month
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          const Gap(16.0),
+                          Text(
+                            appStrings.monthSalesTitle,
+                            style: GoogleFonts.poppins(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const Gap(8.0),
+                          Text(
+                            '\$125,000',
+                            style: GoogleFonts.poppins(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Gap(16.0),
+                        ],
+                      ),
+                    ),
+
+                    /// Profit this month
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          const Gap(16.0),
+                          Text(
+                            appStrings.monthProfitTitle,
+                            style: GoogleFonts.poppins(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const Gap(8.0),
+                          Text(
+                            '\$125,000',
+                            style: GoogleFonts.poppins(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Gap(16.0),
+                        ],
+                      ),
+                    ),
+
+                    /// Percentage increase in sales
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          const Gap(16.0),
+                          Text(
+                            appStrings.percentageSalesTitle,
+                            style: GoogleFonts.poppins(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const Gap(8.0),
+                          Text(
+                            '52.3%',
+                            style: GoogleFonts.poppins(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Gap(16.0),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-
-          /// Bottom card
-          Card(
-            shadowColor: Colors.black12,
-            child: Row(
-              children: <Widget>[
-                /// Total sales this month
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      const Gap(16.0),
-                      Text(
-                        appStrings.monthSalesTitle,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const Gap(8.0),
-                      Text(
-                        '\$125,000',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Gap(16.0),
-                    ],
-                  ),
-                ),
-
-                /// Profit this month
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      const Gap(16.0),
-                      Text(
-                        appStrings.monthProfitTitle,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const Gap(8.0),
-                      Text(
-                        '\$125,000',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Gap(16.0),
-                    ],
-                  ),
-                ),
-
-                /// Percentage increase in sales
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      const Gap(16.0),
-                      Text(
-                        appStrings.percentageSalesTitle,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const Gap(8.0),
-                      Text(
-                        '52.3%',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Gap(16.0),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

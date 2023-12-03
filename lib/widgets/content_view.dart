@@ -1,22 +1,71 @@
+import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
+import 'package:go_router/go_router.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class ContentView extends StatelessWidget {
-  const ContentView({super.key, required this.child});
+  const ContentView({
+    super.key,
+    required this.child,
+  });
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: ResponsiveBreakpoints.of(context).isMobile
-            ? const EdgeInsets.all(16.0)
-            : const EdgeInsets.symmetric(
-                horizontal: 32.0,
-                vertical: 20.0,
+    final theme = Theme.of(context);
+    final brandColors = theme.extension<CustomColors>()!;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            /// back button
+            Positioned(
+              top: 0.0,
+              right: 0.0,
+              left: 0.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: brandColors.brandSurface!.withOpacity(0.2),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: brandColors.brandSurface,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(32.0),
+                            bottomRight: Radius.circular(32.0),
+                          ),
+                        ),
+                        child: Icon(
+                          LineAwesomeIcons.angle_left,
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                      onTap: () {
+                        context.pop();
+                      },
+                    ),
+                  ],
+                ),
               ),
-        child: child,
+            ),
+
+            /// child content
+            Positioned.fill(
+              top: 60.0,
+              child: child,
+            ),
+          ],
+        ),
       ),
     );
   }

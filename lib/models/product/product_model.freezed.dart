@@ -24,7 +24,7 @@ mixin _$ProductModel {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   PriceModel get price => throw _privateConstructorUsedError;
-  List<String> get image => throw _privateConstructorUsedError;
+  List<String> get images => throw _privateConstructorUsedError;
   String get depo => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
   List<String>? get cart => throw _privateConstructorUsedError;
@@ -55,7 +55,7 @@ abstract class $ProductModelCopyWith<$Res> {
       String name,
       String description,
       PriceModel price,
-      List<String> image,
+      List<String> images,
       String depo,
       String category,
       List<String>? cart,
@@ -89,7 +89,7 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
     Object? name = null,
     Object? description = null,
     Object? price = null,
-    Object? image = null,
+    Object? images = null,
     Object? depo = null,
     Object? category = null,
     Object? cart = freezed,
@@ -120,9 +120,9 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as PriceModel,
-      image: null == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
       depo: null == depo
           ? _value.depo
@@ -197,7 +197,7 @@ abstract class _$$_ProductModelCopyWith<$Res>
       String name,
       String description,
       PriceModel price,
-      List<String> image,
+      List<String> images,
       String depo,
       String category,
       List<String>? cart,
@@ -230,7 +230,7 @@ class __$$_ProductModelCopyWithImpl<$Res>
     Object? name = null,
     Object? description = null,
     Object? price = null,
-    Object? image = null,
+    Object? images = null,
     Object? depo = null,
     Object? category = null,
     Object? cart = freezed,
@@ -261,9 +261,9 @@ class __$$_ProductModelCopyWithImpl<$Res>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as PriceModel,
-      image: null == image
-          ? _value._image
-          : image // ignore: cast_nullable_to_non_nullable
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
       depo: null == depo
           ? _value.depo
@@ -325,7 +325,7 @@ class _$_ProductModel implements _ProductModel {
       required this.name,
       required this.description,
       required this.price,
-      required final List<String> image,
+      required final List<String> images,
       required this.depo,
       required this.category,
       final List<String>? cart,
@@ -338,7 +338,7 @@ class _$_ProductModel implements _ProductModel {
       final List<String>? sizes,
       this.createdAt,
       this.updatedAt})
-      : _image = image,
+      : _images = images,
         _cart = cart,
         _colors = colors,
         _sizes = sizes;
@@ -354,12 +354,12 @@ class _$_ProductModel implements _ProductModel {
   final String description;
   @override
   final PriceModel price;
-  final List<String> _image;
+  final List<String> _images;
   @override
-  List<String> get image {
-    if (_image is EqualUnmodifiableListView) return _image;
+  List<String> get images {
+    if (_images is EqualUnmodifiableListView) return _images;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_image);
+    return EqualUnmodifiableListView(_images);
   }
 
   @override
@@ -413,7 +413,7 @@ class _$_ProductModel implements _ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, image: $image, depo: $depo, category: $category, cart: $cart, cartId: $cartId, brand: $brand, rating: $rating, numReviews: $numReviews, numInStock: $numInStock, colors: $colors, sizes: $sizes, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, images: $images, depo: $depo, category: $category, cart: $cart, cartId: $cartId, brand: $brand, rating: $rating, numReviews: $numReviews, numInStock: $numInStock, colors: $colors, sizes: $sizes, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -426,7 +426,7 @@ class _$_ProductModel implements _ProductModel {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.price, price) || other.price == price) &&
-            const DeepCollectionEquality().equals(other._image, _image) &&
+            const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.depo, depo) || other.depo == depo) &&
             (identical(other.category, category) ||
                 other.category == category) &&
@@ -454,7 +454,7 @@ class _$_ProductModel implements _ProductModel {
       name,
       description,
       price,
-      const DeepCollectionEquality().hash(_image),
+      const DeepCollectionEquality().hash(_images),
       depo,
       category,
       const DeepCollectionEquality().hash(_cart),
@@ -488,7 +488,7 @@ abstract class _ProductModel implements ProductModel {
       required final String name,
       required final String description,
       required final PriceModel price,
-      required final List<String> image,
+      required final List<String> images,
       required final String depo,
       required final String category,
       final List<String>? cart,
@@ -514,7 +514,7 @@ abstract class _ProductModel implements ProductModel {
   @override
   PriceModel get price;
   @override
-  List<String> get image;
+  List<String> get images;
   @override
   String get depo;
   @override
