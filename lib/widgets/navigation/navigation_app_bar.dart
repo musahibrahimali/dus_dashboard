@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                               onTap: () {
                                 // Sign out logic
+                                const AdminAuthRoute().go(context);
                               },
                             ),
                           if ((adminController.activeAdmin == null))
@@ -86,7 +88,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                               onTap: () {
                                 // Sign in logic
-                                const RegisterAdminRoute().go(context);
+                                const AdminAuthRoute().go(context);
                               },
                             ),
                           if (!(adminController.activeAdmin == null))
@@ -100,9 +102,38 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                               },
                             ),
                         ],
-                        child: const Icon(
-                          LineAwesomeIcons.user_circle,
-                          size: 30.0,
+                        child: Obx(
+                          () => ClipRRect(
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: CachedNetworkImage(
+                              width: 38.0,
+                              height: 38.0,
+                              imageUrl: adminController.activeAdmin?.avatar ?? "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+                              fit: BoxFit.cover,
+                              placeholder: (BuildContext context, String url) => Container(
+                                width: 38.0,
+                                height: 38.0,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(Assets.imagesAccount),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (BuildContext context, String url, dynamic dynamic) {
+                                return Container(
+                                  width: 38.0,
+                                  height: 38.0,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(Assets.imagesAccount),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ),

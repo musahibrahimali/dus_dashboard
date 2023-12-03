@@ -8,10 +8,10 @@ class CustomersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ContentView(
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const PageHeader(
             title: 'Users',
             description: 'List of users who can sign in to this dashboard.',

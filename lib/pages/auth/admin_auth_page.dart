@@ -4,7 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+
+/// determine which page to show based on if the user is logged in or not
+class DetermineAuthPage extends StatelessWidget {
+  const DetermineAuthPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => adminController.isLoggedIn ? const ProfilePage() : const AdminAuthPage(),
+    );
+  }
+}
 
 class AdminAuthPage extends StatefulWidget {
   const AdminAuthPage({super.key});
@@ -34,9 +47,9 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
           shadowColor: Colors.black12,
           child: Container(
             // height: MediaQuery.of(context).size.height * 0.7,
-            width: !_isRegister ? MediaQuery.of(context).size.width * 0.25 : MediaQuery.of(context).size.width * 0.50,
+            width: !_isRegister ? MediaQuery.of(context).size.width * 0.30 : MediaQuery.of(context).size.width * 0.50,
             padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
+              horizontal: 40.0,
               vertical: 20.0,
             ),
             child: _isRegister ? _registerForm() : _loginForm(),
@@ -213,6 +226,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       ),
                       obscureText: !_isPasswordVisible,
                       validator: (String? value) => _formKey.currentState?.fields['password']?.value != value ? 'No coinciden' : null,
+                      onSubmitted: (value) => _registerLogic(),
                     ),
                   ],
                 ),
@@ -225,47 +239,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
             height: 55.0,
             width: MediaQuery.of(context).size.width * 0.18,
             buttonColor: Theme.of(context).colorScheme.primary,
-            onPressed: () async {
-              bool? isFormValid = _formKey.currentState?.saveAndValidate();
-              if (isFormValid == true) {
-                // debugPrint(_formKey.currentState?.value.toString());
-                Map<String, dynamic> variables = {
-                  "email": _formKey.currentState?.fields['email']?.value,
-                  "firstName": _formKey.currentState?.fields['first_name']?.value,
-                  "lastName": _formKey.currentState?.fields['last_name']?.value,
-                  "userName": _formKey.currentState?.fields['user_name']?.value,
-                  "password": _formKey.currentState?.fields['password']?.value,
-                  "phone": _formKey.currentState?.fields['phone_number']?.value,
-                };
-                // debugPrint("variables: $variables");
-                dartz.Either<Failure, String> response = await adminRepository.registerAdmin(
-                  data: variables,
-                );
-                if (!mounted) return;
-                response.fold(
-                  (Failure error) {
-                    debugPrint("response $response");
-                    notificationService.showErrorNotification(
-                      context: context,
-                      title: "Error",
-                      message: error.message.toString(),
-                    );
-                  },
-                  (String accessToken) async {
-                    /// clear form
-                    _formKey.currentState?.reset();
-                    await helperFunctions.storeValue(key: "access_token", value: accessToken);
-                    if (!mounted) return;
-                    const DashboardRoute().go(context);
-                    notificationService.showErrorNotification(
-                      context: context,
-                      title: "Error",
-                      message: "Login Successful",
-                    );
-                  },
-                );
-              }
-            },
+            onPressed: () => _registerLogic(),
             child: CustomText(
               'Signup'.toUpperCase(),
               color: Theme.of(context).colorScheme.onPrimary,
@@ -348,7 +322,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
               FormBuilderValidators.email(),
             ]),
           ),
-          const Gap(10.0),
+          const Gap(25.0),
           FormBuilderTextField(
             name: 'password',
             keyboardType: TextInputType.text,
@@ -376,50 +350,14 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
               FormBuilderValidators.required(),
               FormBuilderValidators.minLength(6),
             ]),
+            onSubmitted: (value) => _loginLogic(),
           ),
           const Gap(20.0),
           CustomButton(
             height: 50.0,
-            width: MediaQuery.of(context).size.width * 0.08,
+            width: MediaQuery.of(context).size.width * 0.14,
             buttonColor: Theme.of(context).colorScheme.primary,
-            onPressed: () async {
-              bool? isFormValid = _formKey.currentState?.saveAndValidate();
-              if (isFormValid == true) {
-                // debugPrint(_formKey.currentState?.value.toString());
-                Map<String, dynamic> variables = {
-                  "email": _formKey.currentState?.fields['email']?.value,
-                  "password": _formKey.currentState?.fields['password']?.value,
-                };
-                // debugPrint("variables: $variables");
-                dartz.Either<Failure, String> response = await adminRepository.logInAdmin(
-                  data: variables,
-                );
-                if (!mounted) return;
-                response.fold(
-                  (Failure failure) {
-                    // debugPrint("Failure >>>>>> ${failure.message}");
-                    notificationService.showErrorNotification(
-                      context: context,
-                      title: "Error",
-                      message: failure.message.isNotEmpty ? failure.message.toString() : "There was an Error, try again later",
-                    );
-                    return;
-                  },
-                  (String accessToken) async {
-                    /// clear form
-                    _formKey.currentState?.reset();
-                    await helperFunctions.storeValue(key: "access_token", value: accessToken);
-                    if (!mounted) return;
-                    const DashboardRoute().go(context);
-                    notificationService.showSuccessNotification(
-                      context: context,
-                      title: "Error",
-                      message: "Login Successfully",
-                    );
-                  },
-                );
-              }
-            },
+            onPressed: () => _loginLogic(),
             child: CustomText(
               'Sign In'.toUpperCase(),
               color: Theme.of(context).colorScheme.onPrimary,
@@ -466,5 +404,83 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
         ],
       ),
     );
+  }
+
+  _registerLogic() async {
+    bool? isFormValid = _formKey.currentState?.saveAndValidate();
+    if (isFormValid == true) {
+      // debugPrint(_formKey.currentState?.value.toString());
+      Map<String, dynamic> variables = {
+        "email": _formKey.currentState?.fields['email']?.value,
+        "firstName": _formKey.currentState?.fields['first_name']?.value,
+        "lastName": _formKey.currentState?.fields['last_name']?.value,
+        "userName": _formKey.currentState?.fields['user_name']?.value,
+        "password": _formKey.currentState?.fields['password']?.value,
+        "phone": _formKey.currentState?.fields['phone_number']?.value,
+      };
+      // debugPrint("variables: $variables");
+      dartz.Either<Failure, String> response = await adminRepo.registerAdmin(
+        data: variables,
+      );
+      if (!mounted) return;
+      response.fold(
+        (Failure error) {
+          debugPrint("response $response");
+          notificationService.showErrorNotification(
+            context: context,
+            title: "Error",
+            message: error.message.toString(),
+          );
+        },
+        (String accessToken) async {
+          /// clear form
+          _formKey.currentState?.reset();
+          await helperFunctions.storeValue(key: "access_token", value: accessToken);
+          if (!mounted) return;
+          const DashboardRoute().go(context);
+          notificationService.showErrorNotification(
+            context: context,
+            title: "Error",
+            message: "Login Successful",
+          );
+        },
+      );
+    }
+  }
+
+  _loginLogic() async {
+    bool? isFormValid = _formKey.currentState?.saveAndValidate();
+    if (isFormValid == true) {
+      Map<String, dynamic> variables = {
+        "email": _formKey.currentState?.fields['email']?.value,
+        "password": _formKey.currentState?.fields['password']?.value,
+      };
+      dartz.Either<Failure, String> response = await adminRepo.logInAdmin(
+        data: variables,
+      );
+      if (!mounted) return;
+      response.fold(
+        (Failure failure) {
+          notificationService.showErrorNotification(
+            context: context,
+            title: "Error",
+            message: failure.message.isNotEmpty ? failure.message.toString() : "There was an Error, try again later",
+          );
+          return;
+        },
+        (String accessToken) async {
+          /// clear form
+          _formKey.currentState?.reset();
+          await helperFunctions.storeValue(key: "access_token", value: accessToken);
+          if (!mounted) return;
+          const DashboardRoute().go(context);
+          notificationService.showSuccessNotification(
+            context: context,
+            title: "Error",
+            message: "Login Successfully",
+          );
+        },
+      );
+    }
   }
 }

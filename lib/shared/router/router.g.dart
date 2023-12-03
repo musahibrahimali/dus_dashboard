@@ -16,6 +16,14 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
+              path: '/sales',
+              factory: $SalesRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
               path: '/',
               factory: $DashboardRouteExtension._fromState,
             ),
@@ -67,7 +75,15 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
           routes: [
             GoRouteData.$route(
               path: '/auth',
-              factory: $RegisterAdminRouteExtension._fromState,
+              factory: $AdminAuthRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/profile',
+              factory: $ProfilePageRouteExtension._fromState,
             ),
           ],
         ),
@@ -77,6 +93,23 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
 extension $ShellRouteDataExtension on ShellRouteData {
   static ShellRouteData _fromState(GoRouterState state) =>
       const ShellRouteData();
+}
+
+extension $SalesRouteExtension on SalesRoute {
+  static SalesRoute _fromState(GoRouterState state) => const SalesRoute();
+
+  String get location => GoRouteData.$location(
+        '/sales',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $DashboardRouteExtension on DashboardRoute {
@@ -208,12 +241,30 @@ extension $EmployeePageRouteExtension on EmployeePageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $RegisterAdminRouteExtension on RegisterAdminRoute {
-  static RegisterAdminRoute _fromState(GoRouterState state) =>
-      const RegisterAdminRoute();
+extension $AdminAuthRouteExtension on AdminAuthRoute {
+  static AdminAuthRoute _fromState(GoRouterState state) =>
+      const AdminAuthRoute();
 
   String get location => GoRouteData.$location(
         '/auth',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ProfilePageRouteExtension on ProfilePageRoute {
+  static ProfilePageRoute _fromState(GoRouterState state) =>
+      const ProfilePageRoute();
+
+  String get location => GoRouteData.$location(
+        '/profile',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -1,7 +1,8 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dus_dashboard/index.dart';
+import 'package:dus_dashboard/shared/services/index.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -10,21 +11,13 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ServiceInitializers.instance.initializeServices();
 
   /// set url strategy
   usePathUrlStrategy();
+
+  /// set up the app
   runApp(const App());
-
-  /// setup data layer
-  Get.lazyPut(() => AppController());
-  Get.lazyPut(() => AdminController());
-
-  /// Device Orientation Preference
-  /// [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
-  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
 }
 
 class App extends StatelessWidget {
@@ -32,11 +25,38 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
+    return DynamicColorBuilder(
+      builder: (
+        ColorScheme? lightDynamic,
+        ColorScheme? darkDynamic,
+      ) {
+        ColorScheme lightScheme;
+        ColorScheme darkScheme;
+
+        if (lightDynamic != null && darkDynamic != null) {
+          lightScheme = lightDynamic.harmonized();
+          lightCustomColors = lightCustomColors.harmonized(lightScheme);
+
+          // Repeat for the dark color scheme.
+          darkScheme = darkDynamic.harmonized();
+          darkCustomColors = darkCustomColors.harmonized(darkScheme);
+        } else {
+          // Otherwise, use fallback schemes.
+          lightScheme = lightColorScheme;
+          darkScheme = darkColorScheme;
+        }
+
         return AdaptiveTheme(
-          light: AppTheme.light,
-          dark: AppTheme.dark,
+          light: ThemeData(
+            useMaterial3: true,
+            colorScheme: lightScheme,
+            extensions: [lightCustomColors],
+          ),
+          dark: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkScheme,
+            extensions: [darkCustomColors],
+          ),
           initial: AdaptiveThemeMode.light,
           builder: (ThemeData theme, ThemeData darkTheme) {
             return ResponsiveBreakpoints(
@@ -51,6 +71,16 @@ class App extends StatelessWidget {
               ],
               child: GetMaterialApp.router(
                 debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  useMaterial3: true,
+                  colorScheme: lightScheme,
+                  extensions: [lightCustomColors],
+                ),
+                darkTheme: ThemeData(
+                  useMaterial3: true,
+                  colorScheme: darkScheme,
+                  extensions: [darkCustomColors],
+                ),
                 localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
                   FormBuilderLocalizations.delegate,
                   ...GlobalMaterialLocalizations.delegates,
@@ -61,8 +91,6 @@ class App extends StatelessWidget {
                 routeInformationParser: router.routeInformationParser,
                 routerDelegate: router.routerDelegate,
                 routeInformationProvider: router.routeInformationProvider,
-                theme: theme,
-                darkTheme: darkTheme,
               ),
             );
           },

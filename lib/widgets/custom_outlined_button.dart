@@ -26,10 +26,12 @@ class CustomOutlineButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        foregroundColor: color ?? BrandColors.kPrimaryColor,
-        side: BorderSide(color: color ?? BrandColors.kPrimaryColor),
+        foregroundColor: color ?? Theme.of(context).colorScheme.background,
+        side: BorderSide(
+          color: color ?? Colors.grey.shade400,
+        ),
         textStyle: GoogleFonts.poppins(
-          color: color ?? BrandColors.kPrimaryColor,
+          color: color ?? Colors.black,
           letterSpacing: letterSpacing ?? 1.5,
           fontSize: fontSize ?? 16.0,
         ),
@@ -48,7 +50,7 @@ class CustomOutlineButton extends StatelessWidget {
             title ?? "CLOSE",
             style: GoogleFonts.montserrat(
               fontSize: fontSize ?? 16.0,
-              color: color ?? BrandColors.kBrandGreenColor,
+              color: color ?? Theme.of(context).extension<CustomColors>()!.brandSurface,
             ),
           ),
         ),

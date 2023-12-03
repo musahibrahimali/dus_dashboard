@@ -149,6 +149,28 @@ class _NavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    List<NavigationRailDestination> navItems = <NavigationRailDestination>[];
+
+    for (final item in NavigationItem.values) {
+      // // show the auth if the admin is not logged in
+      if (item == NavigationItem.auth && adminController.isLoggedIn) {
+        navItems.add(
+          NavigationRailDestination(
+            icon: const Icon(LineAwesomeIcons.user_shield),
+            label: Text('Profile'.toUpperCase()),
+          ),
+        );
+      } else {
+        navItems.add(
+          NavigationRailDestination(
+            icon: Icon(item.iconData),
+            label: Text(item.label.toUpperCase()),
+          ),
+        );
+      }
+    }
+
     return NavigationRail(
       extended: expand,
       selectedIndex: navigationShell.currentIndex,
@@ -162,13 +184,7 @@ class _NavigationRail extends StatelessWidget {
           initialLocation: index == navigationShell.currentIndex,
         );
       },
-      destinations: <NavigationRailDestination>[
-        for (final item in NavigationItem.values)
-          NavigationRailDestination(
-            icon: Icon(item.iconData),
-            label: Text(item.label.toUpperCase()),
-          ),
-      ],
+      destinations: navItems,
     );
   }
 }

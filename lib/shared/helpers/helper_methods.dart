@@ -1,0 +1,227 @@
+import 'package:dartz/dartz.dart' as dartz;
+import 'package:dus_dashboard/index.dart';
+import 'package:file_picker/file_picker.dart';
+
+class HelperMethods {
+  HelperMethods._();
+
+  static final _instance = HelperMethods._();
+  static HelperMethods get instance => _instance;
+
+  /// register admin
+  Future<dartz.Either<Failure, String>> registerAdmin({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+    required String phoneNumber,
+    required String displayName,
+  }) async {
+    Map<String, dynamic> data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "password": password,
+      "displayName": displayName,
+      "phone": phoneNumber,
+    };
+    dartz.Either<Failure, String> response = await adminRepo.registerAdmin(data: data);
+    return response;
+  }
+
+  /// login admin
+  Future<dartz.Either<Failure, String>> loginAdmin({
+    required String email,
+    required String password,
+  }) async {
+    Map<String, dynamic> data = {
+      "email": email,
+      "password": password,
+    };
+    return await adminRepo.logInAdmin(data: data);
+  }
+
+  /// login admin
+  Future<dartz.Either<Failure, AdminModel>> getAdminProfile() async {
+    return await adminRepo.getAdminProfile();
+  }
+
+  /// get all the admins
+  Future<dartz.Either<Failure, List<AdminModel>>> getAdmins() async {
+    return await adminRepo.getAdmins();
+  }
+
+  /// get admin by id
+  Future<dartz.Either<Failure, AdminModel>> getAdmin({required String id}) async {
+    return await adminRepo.getAdmin(id: id);
+  }
+
+  /// get employee with id
+  Future<dartz.Either<Failure, EmployeeModel>> createEmployee({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String designation,
+    required String phoneNumber,
+  }) async {
+    Map<String, dynamic> data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "designation": designation,
+      "phoneNumber": phoneNumber,
+    };
+    return await employeeRepo.registerEmployee(data: data);
+  }
+
+  /// get employee with id
+  Future<dartz.Either<Failure, EmployeeModel>> updateEmployee({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String designation,
+    required String phoneNumber,
+  }) async {
+    Map<String, dynamic> data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "designation": designation,
+      "phoneNumber": phoneNumber,
+    };
+    return await employeeRepo.updateEmployee(data: data, id: id);
+  }
+
+  /// clock in employee
+  Future<dartz.Either<Failure, EmployeeModel>> clockInEmployee({
+    required String id,
+  }) async {
+    Map<String, dynamic> data = {
+      "startTime": DateTime.now().toString(),
+    };
+    return await employeeRepo.clockInEmployee(data: data, id: id);
+  }
+
+  /// clock out employee
+  Future<dartz.Either<Failure, EmployeeModel>> clockOutEmployee({
+    required String id,
+    required String attendanceId,
+  }) async {
+    Map<String, dynamic> data = {
+      "closeTime": DateTime.now(),
+    };
+    return await employeeRepo.clockOutEmployee(
+      data: data,
+      id: id,
+      attendanceId: attendanceId,
+    );
+  }
+
+  /// get all the employees
+  Future<dartz.Either<Failure, List<EmployeeModel>>> getEmployees() async {
+    return await employeeRepo.getEmployees();
+  }
+
+  /// get employee with id
+  Future<dartz.Either<Failure, EmployeeModel>> getEmployee({required String id}) async {
+    return await employeeRepo.getEmployee(id: id);
+  }
+
+  /// create product
+  Future<dartz.Either<Failure, ProductModel>> createProduct({
+    required String name,
+    required String description,
+    required double price,
+    required String currency,
+    required String depo,
+    required String brand,
+    required String numberInStock,
+    required String category,
+    required List<PlatformFile> images,
+    List<String>? colors,
+    List<String>? sizes,
+  }) async {
+    Map<String, dynamic> data = {
+      "name": name,
+      "description": description,
+      "price": '{"amount": $price, "currency": "${currency.toString()}"}',
+      "depo": depo,
+      "category": category,
+      "brand": brand,
+      "colors": colors,
+      "sizes": sizes,
+      "numInStock": int.parse(numberInStock),
+    };
+    dartz.Either<Failure, ProductModel> response = await productRepo.createProduct(
+      data: data,
+      files: images,
+    );
+    return response;
+  }
+
+  /// update product
+  Future<dartz.Either<Failure, ProductModel>> updateProduct({
+    required String id,
+    String? name,
+    String? description,
+    double? price,
+    String? currency,
+    String? depo,
+    String? brand,
+    String? numberInStock,
+    String? category,
+    List<PlatformFile>? images,
+    List<String>? colors,
+    List<String>? sizes,
+  }) async {
+    Map<String, dynamic> data = {
+      "name": name,
+      "description": description,
+      "price": '{"amount": $price, "currency": "${currency.toString()}"}',
+      "depo": depo,
+      "category": category,
+      "brand": brand,
+      "colors": colors,
+      "sizes": sizes,
+      "numInStock": int.parse(numberInStock ?? "0"),
+    };
+    dartz.Either<Failure, ProductModel> response = await productRepo.updateProduct(
+      id: id,
+      data: data,
+      files: images,
+    );
+    // debugPrint("response from helperMethods: $response");
+    return response;
+  }
+
+  /// get all the products
+  Future<dartz.Either<Failure, List<ProductModel>>> getProducts() async {
+    return await productRepo.getProducts();
+  }
+
+  /// get product with id
+  Future<dartz.Either<Failure, ProductModel>> getProduct({required String id}) async {
+    return await productRepo.getProduct(id: id);
+  }
+
+  /// delete product with id
+  Future<dartz.Either<Failure, bool>> deleteProduct({required String id}) async {
+    return await productRepo.deleteProduct(id: id);
+  }
+
+  /// get all the customers
+  Future<dartz.Either<Failure, List<CustomerModel>>> getCustomers() async {
+    return await customerRepo.getCustomers();
+  }
+
+  /// get customer with id
+  Future<dartz.Either<Failure, CustomerModel>> getCustomer({required String id}) async {
+    return await customerRepo.getCustomer(id: id);
+  }
+
+  /// delete customer with id
+  Future<dartz.Either<Failure, bool>> deleteCustomer({required String id}) async {
+    return await customerRepo.deleteCustomer(id: id);
+  }
+}
