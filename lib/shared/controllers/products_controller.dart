@@ -6,11 +6,13 @@ class ProductsController extends GetxController {
   static final ProductsController _instance = Get.find();
   static ProductsController get instance => _instance;
 
-  final _showDeleteButton = false.obs;
-
   final _allProducts = <ProductModel>[].obs;
   final _filteredProducts = <ProductModel>[].obs;
   final TextEditingController _searchTextController = TextEditingController();
+
+  final _menProducts = 0.obs;
+  final _womenProducts = 0.obs;
+  final _kidsProducts = 0.obs;
 
   searchProduct(String value) {
     if (value.isEmpty) {
@@ -28,7 +30,17 @@ class ProductsController extends GetxController {
     if (value.isEmpty) {
       _filteredProducts.value = _allProducts.toList();
     } else {
-      _filteredProducts.value = _allProducts.where((product) => product.name.contains(value)).where((product) => product.depo.contains(value)).toList();
+      _filteredProducts.value = _allProducts.where((product) => product.name.toLowerCase().contains(value.toLowerCase())).toList();
+    }
+    update();
+  }
+
+  /// filter by depo
+  void filterProductsByDepo(String value) {
+    if (value.isEmpty) {
+      _filteredProducts.value = _allProducts.toList();
+    } else {
+      _filteredProducts.value = _allProducts.where((product) => product.depo.toLowerCase().contains(value.toLowerCase())).toList();
     }
     update();
   }
@@ -39,8 +51,10 @@ class ProductsController extends GetxController {
 
   addProducts({required List<ProductModel> products}) {
     resetProductsList();
+
     _allProducts.addAll(products);
     _filteredProducts.addAll(products);
+    countProducts();
     update();
   }
 
@@ -66,14 +80,31 @@ class ProductsController extends GetxController {
     _allProducts.addAll(products);
   }
 
-  updateDeleteButtonVisibility({required bool value}) {
-    _showDeleteButton.value = value;
+  countProducts() {
+    _womenProducts.value = 0;
+    _menProducts.value = 0;
+    _kidsProducts.value = 0;
+
+    /// Get and update the number of men, women and kid products
+    for (ProductModel product in _allProducts) {
+      if (product.depo.toLowerCase().contains("Kids".toLowerCase())) {
+        _kidsProducts.value++;
+      }
+      if (product.depo.toLowerCase().contains("Men".toLowerCase())) {
+        _menProducts.value++;
+      }
+      if (product.depo.toLowerCase().contains("Women".toLowerCase())) {
+        _womenProducts.value++;
+      }
+    }
     update();
   }
 
   List<ProductModel> get products => _allProducts;
   int get numberOfProducts => _allProducts.length;
+  int get numberOfKidProducts => _kidsProducts.value;
+  int get numberOfMenProducts => _menProducts.value;
+  int get numberOfWomenProducts => _womenProducts.value;
   List<ProductModel> get filteredProducts => _filteredProducts;
   TextEditingController get searchTextController => _searchTextController;
-  bool get showDeleteButton => _showDeleteButton.value;
 }

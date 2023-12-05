@@ -1,7 +1,6 @@
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -18,15 +17,16 @@ class _ProductsPageState extends State<ProductsPage> {
   bool _showGridView = true;
   bool _showListView = false;
   bool _showAddProductForm = false;
+  bool _showDeleteButton = false;
 
   @override
   void initState() {
     _showAddProductForm = false;
     _showGridView = true;
     _showListView = false;
+    _showDeleteButton = false;
 
     helperMethods.getProducts();
-    productsController.filterProducts(""); // filter products by empty string
 
     super.initState();
   }
@@ -36,6 +36,7 @@ class _ProductsPageState extends State<ProductsPage> {
     _showAddProductForm = false;
     _showGridView = true;
     _showListView = false;
+    _showDeleteButton = false;
     super.dispose();
   }
 
@@ -48,14 +49,12 @@ class _ProductsPageState extends State<ProductsPage> {
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          setState(() {
-            _showListView = false;
-            _showGridView = false;
-            _showAddProductForm = true;
-          });
-
           if (adminController.isLoggedIn && adminController.activeAdmin != null) {
-            /// pass
+            setState(() {
+              _showListView = false;
+              _showGridView = false;
+              _showAddProductForm = true;
+            });
           } else {
             /// if user is not an admin or not logged in
             /// redirect to admin auth page
@@ -167,15 +166,23 @@ class _ProductsPageState extends State<ProductsPage> {
                   /// container on the right side of the app bar
                   Row(
                     children: <Widget>[
-                      // add a switch to toggle between show product delete button or not
-                      Obx(
-                        () => Tooltip(
+                      /// toggle between show product delete button or not
+                      if (productsController.products.isNotEmpty)
+                        Tooltip(
                           message: "Show delete button on Products",
                           child: Switch(
-                            value: productsController.showDeleteButton,
+                            value: _showDeleteButton,
                             onChanged: (bool value) {
-                              productsController.updateDeleteButtonVisibility(value: value);
-                              setState(() {});
+                              setState(() {
+                                _showListView = false;
+                                _showGridView = true;
+                                _showAddProductForm = false;
+                                if (value) {
+                                  _showDeleteButton = true;
+                                } else {
+                                  _showDeleteButton = false;
+                                }
+                              });
                             },
                             activeColor: brandColors.gold,
                             activeTrackColor: brandColors.goldContainer,
@@ -183,7 +190,6 @@ class _ProductsPageState extends State<ProductsPage> {
                             inactiveTrackColor: Colors.grey.shade300,
                           ),
                         ),
-                      ),
 
                       const Gap(10.0),
 
@@ -233,7 +239,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   if (_showListView) {
                     return const ProductListView();
                   } else if (_showGridView) {
-                    return const ProductGridView();
+                    return ProductGridView(showDeleteButton: _showDeleteButton);
                   } else if (_showAddProductForm) {
                     return const AddProduct();
                   } else {

@@ -271,6 +271,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                   _formKey.currentState?.reset();
                   setState(() {
                     _isRegister = false;
+                    _isPasswordVisible = false;
                   });
                 },
                 child: CustomText(
@@ -389,6 +390,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                   _formKey.currentState?.reset();
                   setState(() {
                     _isRegister = true;
+                    _isPasswordVisible = false;
                   });
                 },
                 child: CustomText(
@@ -436,13 +438,9 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
           /// clear form
           _formKey.currentState?.reset();
           await helperFunctions.storeValue(key: "access_token", value: accessToken);
+          await helperMethods.getAdminProfile();
           if (!mounted) return;
           const DashboardRoute().go(context);
-          notificationService.showErrorNotification(
-            context: context,
-            title: "Error",
-            message: "Login Successful",
-          );
         },
       );
     }

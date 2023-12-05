@@ -19,7 +19,7 @@ class AdminRepo {
         data: data,
         builder: (data) => data,
       );
-      debugPrint("Response from helper post data: $response");
+      // debugPrint("Response from helper post data: $response");
       if (!response['success']) {
         return Left(
           ServerFailure(
@@ -102,7 +102,7 @@ class AdminRepo {
         },
         builder: (data) => data,
       );
-      // debugPrint("response $response");
+      debugPrint("response $response");
       if (!response['success']) {
         return Left(
           ServerFailure(
@@ -111,7 +111,7 @@ class AdminRepo {
         );
       }
       AdminModel adminModel = AdminModel.fromJson(response['data']);
-      // debugPrint("admin model $adminModel");
+      debugPrint("admin model $adminModel");
       adminController.updateAdmin(adminModel);
       return Right(adminModel);
     } catch (e) {
@@ -190,6 +190,63 @@ class AdminRepo {
       }
       // debugPrint("data : ${adminController.admins}");
       return Right(admins);
+    } catch (e) {
+      debugPrint(e.toString());
+      final errorMessage = HttpExceptions.errorMessage(e);
+      return Left(ServerFailure(message: errorMessage));
+    }
+  }
+
+  // log out admin
+  Future<Either<Failure, bool>> logOutAdmin() async {
+    try {
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      Map<String, dynamic> response = await httpRequestHelper.getRequest(
+        path: ApiEndPoint.logoutAdminEndPoint,
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        builder: (data) => data,
+      );
+      // debugPrint("response admin logout: $response");
+      // debugPrint("response admin logout: ${response['data']["message"]}");
+      if (response['success'] == false) {
+        return Left(
+          ServerFailure(
+            message: response['data']['message'].toString(),
+          ),
+        );
+      }
+      await helperFunctions.deleteValue(key: "access_token");
+      adminController.resetAdmin();
+      return Right(response['data']);
+    } catch (e) {
+      debugPrint(e.toString());
+      final errorMessage = HttpExceptions.errorMessage(e);
+      return Left(ServerFailure(message: errorMessage));
+    }
+  }
+
+  // delete admin
+  Future<Either<Failure, bool>> deleteAdmin({required String id}) async {
+    try {
+      String? accessToken = await helperFunctions.readValue(key: "access_token");
+      Map<String, dynamic> response = await httpRequestHelper.deleteRequest(
+        path: ApiEndPoint.deleteAdminEndPoint(id: id),
+        headers: {
+          HttpHeaders.cookieHeader: "$accessToken",
+        },
+        builder: (data) => data,
+      );
+      // debugPrint("Response from helper post data: $response");
+      if (!response['success']) {
+        return Left(
+          ServerFailure(
+            message: response['data']['message'].toString(),
+          ),
+        );
+      }
+      return Right(response['data']);
     } catch (e) {
       debugPrint(e.toString());
       final errorMessage = HttpExceptions.errorMessage(e);

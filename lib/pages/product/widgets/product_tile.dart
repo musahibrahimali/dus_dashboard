@@ -9,51 +9,20 @@ class ProductTile extends StatelessWidget {
   final ProductModel product;
   final bool showDeleteButton;
   final VoidCallback? onTap;
+  final VoidCallback? onAddToCart;
+  final VoidCallback? onRemoveCart;
+  final bool showDetails;
+  final bool showControls;
   const ProductTile({
     super.key,
     required this.product,
     this.showDeleteButton = false,
     this.onTap,
+    this.showDetails = false,
+    this.showControls = false,
+    this.onAddToCart,
+    this.onRemoveCart,
   });
-
-  /// get the color based on the string
-  _getColor(String color) {
-    // return colors for the product based on the color string
-    switch (color.toLowerCase()) {
-      case "red":
-        return Colors.red;
-      case "blue":
-        return Colors.blue;
-      case "green":
-        return Colors.green;
-      case "yellow":
-        return Colors.yellow;
-      case "orange":
-        return Colors.orange;
-      case "purple":
-        return Colors.purple;
-      case "pink":
-        return Colors.pink;
-      case "cyan":
-        return Colors.cyan;
-      case "teal":
-        return Colors.teal;
-      case "amber":
-        return Colors.amber;
-      case "lime":
-        return Colors.lime;
-      case "brown":
-        return Colors.brown;
-      case "grey":
-        return Colors.grey;
-      case "white":
-        return Colors.white;
-      case "black":
-        return Colors.black;
-      default:
-        return brandSurface;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +37,7 @@ class ProductTile extends StatelessWidget {
     /// for each item in the colors of the product print them
     for (var color in product.colors!) {
       if (!color.contains(",")) {
-        colors.add(_getColor(color));
+        colors.add(helperFunctions.getColor(color));
       }
     }
 
@@ -83,31 +52,33 @@ class ProductTile extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 6.0,
-        shadowColor: brandColors.goldContainer?.withOpacity(0.6),
-        color: brandColors.goldContainer,
+        shadowColor: brandColors.brandSurface?.withOpacity(0.6),
+        color: Theme.of(context).colorScheme.background,
         child: Stack(
           children: <Widget>[
             /// expanded image
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(0),
-                topLeft: Radius.circular(0),
-                topRight: Radius.circular(0),
+                bottomLeft: Radius.circular(0.0),
+                bottomRight: Radius.circular(0.0),
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(0.0),
                 child: CachedNetworkImage(
                   // width: 38.0,
                   // height: 38.0,
-                  imageUrl: product.images.isNotEmpty ? product.images[0] : "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+                  imageUrl: product.images.isNotEmpty
+                      ? product.images[0]
+                      : "https://res.cloudinary.com/dynasty-urban-style/image/upload/v1701686619/defaults/placeholder_image_resized_vf7n7a.jpg",
                   fit: BoxFit.cover,
                   placeholder: (BuildContext context, String url) => Container(
                     // width: 38.0,
                     // height: 38.0,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(Assets.imagesDynastyEngraved),
+                        image: AssetImage(Assets.imagesProductPlaceholderImage),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -118,7 +89,7 @@ class ProductTile extends StatelessWidget {
                       // height: 38.0,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(Assets.imagesDynastyEngraved),
+                          image: AssetImage(Assets.imagesProductPlaceholderImage),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -154,7 +125,7 @@ class ProductTile extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 4, 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                     decoration: BoxDecoration(
                       color: brandColors.goldContainer,
                       borderRadius: const BorderRadius.only(
@@ -175,61 +146,92 @@ class ProductTile extends StatelessWidget {
 
             /// details
             Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 12.0,
+              bottom: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 12.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
                   ),
-                  decoration: BoxDecoration(
-                    color: brandColors.goldContainer,
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      /// title
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
+                ),
+                child: Column(
+                  children: <Widget>[
+                    /// title
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        /// name of product
+                        Container(
+                          padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 0, 0),
+                          child: CustomText(
+                            product.name,
+                            verticalMargin: 0.0,
+                            horizontalMargin: 0.0,
+                            maxLines: 2,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        /// number in stock
+                        if (showDetails)
                           Container(
-                            padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
-                            child: Text(
-                              product.name,
-                              style: Theme.of(context).textTheme.titleLarge,
+                            padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 0, 0),
+                            child: Row(
+                              children: <Widget>[
+                                const Icon(
+                                  LineAwesomeIcons.cubes,
+                                  size: 25.0,
+                                ),
+                                const Gap(5.0),
+                                Text(
+                                  "${product.numInStock}",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                      ],
+                    ),
 
-                      const Gap(10.0),
+                    const Gap(10.0),
 
-                      /// colors and sizes
+                    /// colors and sizes
+                    if (showDetails)
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                               child: Wrap(
-                                spacing: 5.0,
-                                runSpacing: 5.0,
+                                spacing: 3.0,
+                                runSpacing: 3.0,
                                 children: <Widget>[
                                   for (var color in colors)
                                     Container(
-                                      width: 15.0,
-                                      height: 15.0,
+                                      height: 20.0,
+                                      width: 20.0,
                                       decoration: BoxDecoration(
                                         color: color,
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        border: Border.all(
+                                          color: Colors.grey.shade300,
+                                          width: 2.0,
+                                        ),
+                                        shape: BoxShape.rectangle,
                                       ),
                                     ),
                                 ],
@@ -244,10 +246,29 @@ class ProductTile extends StatelessWidget {
                                 runSpacing: 4.0,
                                 children: <Widget>[
                                   for (var size in sizes)
-                                    Chip(
-                                      label: Text(
-                                        size,
-                                        style: Theme.of(context).textTheme.bodySmall,
+                                    Card(
+                                      elevation: 5.0,
+                                      color: brandColors.brandSurface,
+                                      shadowColor: brandColors.brandSurface?.withOpacity(0.3),
+                                      child: Container(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0,
+                                          vertical: 5.0,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: Center(
+                                          child: CustomText(
+                                            size,
+                                            fontSize: 10.0,
+                                            color: brandColors.onBrandSurface,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                 ],
@@ -257,19 +278,24 @@ class ProductTile extends StatelessWidget {
                         ],
                       ),
 
-                      /// price and rating
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
-                            child: Text(
-                              '${product.price.currency} ${product.price.amount}',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
+                    const Gap(10.0),
+
+                    /// price and rating
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 0, 0),
+                          child: CustomText(
+                            '${product.price.currency} ${product.price.amount}',
+                            verticalMargin: 0.0,
+                            horizontalMargin: 0.0,
+                            fontSize: 12,
                           ),
+                        ),
+                        if (showDetails)
                           RatingBar.builder(
                             initialRating: product.rating!.toDouble(),
                             minRating: 0,
@@ -286,11 +312,25 @@ class ProductTile extends StatelessWidget {
                               debugPrint(rating.toString());
                             },
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ))
+                        if (showControls)
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: onAddToCart,
+                                child: const Icon(LineAwesomeIcons.plus_circle),
+                              ),
+                              InkWell(
+                                onTap: onRemoveCart,
+                                child: const Icon(LineAwesomeIcons.minus_circle),
+                              ),
+                            ],
+                          )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

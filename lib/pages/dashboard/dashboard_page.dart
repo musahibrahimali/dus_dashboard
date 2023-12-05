@@ -1,9 +1,7 @@
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intersperse/intersperse.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class DashBoardPage extends StatefulWidget {
   const DashBoardPage({super.key});
@@ -13,6 +11,9 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _showSales = false;
+
   @override
   void initState() {
     /// fetch admins, customers, products, employees
@@ -21,138 +22,88 @@ class _DashBoardPageState extends State<DashBoardPage> {
     helperMethods.getCustomers();
     helperMethods.getEmployees();
     helperMethods.getProducts();
+    helperMethods.getSales();
+
+    _showSales = false;
 
     super.initState();
   }
 
   @override
+  void dispose() {
+    _showSales = false;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ResponsiveBreakpointsData responsive = ResponsiveBreakpoints.of(context);
-
+    CustomColors brandColors = Theme.of(context).extension<CustomColors>()!;
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 10.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              PageHeader(
-                title: appStrings.dashboardTitle.toUpperCase(),
-                description: appStrings.dashboardSummary,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 10.0,
               ),
-              const Gap(16.0),
-              if (responsive.isMobile)
-                ...<SummaryCard>[
-                  const SummaryCard(title: 'Total Sales', value: 'GH¢ 0.0'),
-                  const SummaryCard(title: 'Sales Rate', value: '52.3%'),
-                  SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
-                  SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
-                  SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
-                  SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
-                ].map<Widget>((SummaryCard card) => card).intersperse(const Gap(16.0)).toList()
-              else
-                Row(
-                  children: <SummaryCard>[
-                    const SummaryCard(title: 'Total Sales', value: '\$125,000'),
-                    const SummaryCard(title: 'Sales Rate', value: '52.3%'),
-                    SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
-                    SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
-                    SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
-                    SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
-                  ].map<Widget>((SummaryCard card) => Expanded(child: card)).intersperse(const Gap(16.0)).toList(),
-                ),
-              const Gap(16.0),
-              const Expanded(
-                child: MainChart(),
+              decoration: BoxDecoration(
+                color: brandColors.brandSurface,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 5.0,
+                    spreadRadius: 5.0,
+                  ),
+                ],
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  PageHeader(
+                    title: appStrings.dashboardTitle.toUpperCase(),
+                    description: appStrings.dashboardSummary,
+                    color: brandColors.onBrandSurface,
+                  ),
 
-              /// Bottom card
-              Card(
-                shadowColor: Colors.black12,
-                child: Row(
-                  children: <Widget>[
-                    /// Total sales this month
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          const Gap(16.0),
-                          Text(
-                            appStrings.monthSalesTitle,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const Gap(8.0),
-                          Text(
-                            '\$125,000',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Gap(16.0),
-                        ],
+                  /// container on the right side of the app bar
+                  Row(
+                    children: <Widget>[
+                      /// list view icon
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _showSales = !_showSales;
+                          });
+                        },
+                        icon: Icon(
+                          LineAwesomeIcons.list,
+                          size: 30.0,
+                          color: brandColors.onBrandSurface,
+                        ),
                       ),
-                    ),
-
-                    /// Profit this month
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          const Gap(16.0),
-                          Text(
-                            appStrings.monthProfitTitle,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const Gap(8.0),
-                          Text(
-                            '\$125,000',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Gap(16.0),
-                        ],
-                      ),
-                    ),
-
-                    /// Percentage increase in sales
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          const Gap(16.0),
-                          Text(
-                            appStrings.percentageSalesTitle,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const Gap(8.0),
-                          Text(
-                            '52.3%',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const Gap(16.0),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                      const Gap(10.0),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const Gap(16.0),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  if (_showSales) {
+                    return const SalesListView();
+                  }
+                  return const SalesOverview();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

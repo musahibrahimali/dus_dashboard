@@ -8,17 +8,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 ServiceInitializers serviceInitializers = ServiceInitializers.instance;
 NotificationService notificationService = NotificationService.instance;
 AppStrings appStrings = AppStrings.instance;
+Validators validators = Validators.instance;
+
+/// helper instances
 HelperFunctions helperFunctions = HelperFunctions.instance;
 HelperMethods helperMethods = HelperMethods.instance;
 HttpRequestHelper httpRequestHelper = HttpRequestHelper.instance;
-Validators validators = Validators.instance;
 
 /// repo instances
 AdminRepo adminRepo = AdminRepo.instance;
 CustomerRepo customerRepo = CustomerRepo.instance;
 EmployeeRepo employeeRepo = EmployeeRepo.instance;
 ProductRepo productRepo = ProductRepo.instance;
-PaymentRepo paymentRepo = PaymentRepo.instance;
+SalesRepo salesRepo = SalesRepo.instance;
 
 /// controller instances
 AdminController adminController = AdminController.instance;

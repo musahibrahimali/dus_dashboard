@@ -50,6 +50,8 @@ dependencies:
   gradient_borders: ^1.0.0
   dynamic_color: ^1.6.8
 
+  window_manager: ^0.3.7
+
   flutter_form_builder: ^9.1.0
   form_builder_validators: ^9.0.0
   currency_text_input_formatter: ^2.1.10
@@ -69,8 +71,6 @@ dependencies:
   syncfusion_flutter_calendar: ^22.2.10
   syncfusion_flutter_datepicker: ^22.2.10
   syncfusion_flutter_datagrid: ^22.2.10
-  syncfusion_flutter_barcodes: ^22.2.10
-  syncfusion_flutter_datagrid_export: ^22.2.10
 
   flutter_web_plugins:
     sdk: flutter

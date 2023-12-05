@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductGridView extends StatefulWidget {
+  final bool showDeleteButton;
   const ProductGridView({
     super.key,
+    this.showDeleteButton = false,
   });
 
   @override
@@ -27,7 +29,8 @@ class _ProductGridViewState extends State<ProductGridView> {
               ProductModel product = productsController.filteredProducts[index];
               return ProductTile(
                 product: product,
-                showDeleteButton: productsController.showDeleteButton,
+                showDeleteButton: widget.showDeleteButton,
+                showDetails: true,
                 onTap: () {
                   ProductPageRoute(id: product.id).go(context);
                 },
@@ -36,7 +39,7 @@ class _ProductGridViewState extends State<ProductGridView> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               mainAxisSpacing: 20.0,
               crossAxisSpacing: 20.0,
-              crossAxisCount: constraint.maxWidth > 700 ? 4 : 2,
+              crossAxisCount: constraint.maxWidth > 700 ? 3 : 2,
               childAspectRatio: 1.0,
             ),
           ),

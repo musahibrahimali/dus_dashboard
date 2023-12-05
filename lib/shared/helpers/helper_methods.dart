@@ -8,6 +8,10 @@ class HelperMethods {
   static final _instance = HelperMethods._();
   static HelperMethods get instance => _instance;
 
+  /**
+   * Admin methods
+   * */
+
   /// register admin
   Future<dartz.Either<Failure, String>> registerAdmin({
     required String firstName,
@@ -56,6 +60,15 @@ class HelperMethods {
     return await adminRepo.getAdmin(id: id);
   }
 
+  /// delete admin
+  Future<dartz.Either<Failure, bool>> deleteAdmin({required String id}) async {
+    return await adminRepo.deleteAdmin(id: id);
+  }
+
+  /**
+   * Employee methods
+   * */
+
   /// get employee with id
   Future<dartz.Either<Failure, EmployeeModel>> createEmployee({
     required String firstName,
@@ -63,6 +76,7 @@ class HelperMethods {
     required String email,
     required String designation,
     required String phoneNumber,
+    PlatformFile? avatar,
   }) async {
     Map<String, dynamic> data = {
       "firstName": firstName,
@@ -71,7 +85,10 @@ class HelperMethods {
       "designation": designation,
       "phoneNumber": phoneNumber,
     };
-    return await employeeRepo.registerEmployee(data: data);
+    return await employeeRepo.registerEmployee(
+      data: data,
+      file: avatar,
+    );
   }
 
   /// get employee with id
@@ -109,7 +126,7 @@ class HelperMethods {
     required String attendanceId,
   }) async {
     Map<String, dynamic> data = {
-      "closeTime": DateTime.now(),
+      "closeTime": DateTime.now().toString(),
     };
     return await employeeRepo.clockOutEmployee(
       data: data,
@@ -128,6 +145,14 @@ class HelperMethods {
     return await employeeRepo.getEmployee(id: id);
   }
 
+  /// delete customer with id
+  Future<dartz.Either<Failure, bool>> deleteEmployee({required String id}) async {
+    return await employeeRepo.deleteEmployee(id: id);
+  }
+
+  /**
+   * Product methods
+   * */
   /// create product
   Future<dartz.Either<Failure, ProductModel>> createProduct({
     required String name,
@@ -210,6 +235,10 @@ class HelperMethods {
     return await productRepo.deleteProduct(id: id);
   }
 
+  /**
+   * Customer methods
+   * */
+
   /// get all the customers
   Future<dartz.Either<Failure, List<CustomerModel>>> getCustomers() async {
     return await customerRepo.getCustomers();
@@ -223,5 +252,84 @@ class HelperMethods {
   /// delete customer with id
   Future<dartz.Either<Failure, bool>> deleteCustomer({required String id}) async {
     return await customerRepo.deleteCustomer(id: id);
+  }
+
+  /**
+   * Sales Methods
+   * */
+
+  /// create sale
+  Future<dartz.Either<Failure, SaleModel>> createSale({
+    required String products,
+    required int quantity,
+    required String currency,
+    required double amount,
+    required String employee,
+  }) async {
+    Map<String, dynamic> data = {
+      "quantity": quantity.toString(),
+      "currency": currency,
+      "amount": amount.toString(),
+      "employeeId": employee,
+      "products": products,
+    };
+    return await salesRepo.createSale(data: data);
+  }
+
+  /// get all sales
+  Future<dartz.Either<Failure, List<SaleModel>>> getSales() async {
+    return await salesRepo.getSales();
+  }
+
+  /// get sale by id
+  Future<dartz.Either<Failure, SaleModel>> getSale({
+    required String id,
+  }) async {
+    return await salesRepo.getSaleById(id: id);
+  }
+
+  /// update sale
+  Future<dartz.Either<Failure, SaleModel>> updateSale({
+    required String id,
+    List<String>? products,
+    String? quantity,
+    String? currency,
+    String? amount,
+    String? employee,
+  }) async {
+    Map<String, dynamic> data = {
+      "quantity": quantity,
+      "currency": currency,
+      "amount": amount,
+      "employeeId": employee,
+      "products": products,
+    };
+
+    return await salesRepo.updateSale(data: data, id: id);
+  }
+
+  /// delete sale
+  Future<dartz.Either<Failure, bool>> deleteSale({required String id}) async {
+    return await salesRepo.deleteSale(id: id);
+  }
+
+  /// get sale for specified [EmployeeModel]
+  Future<dartz.Either<Failure, List<SaleModel>>> getEmployeeSales({required String id}) async {
+    return await salesRepo.getSalesByEmployee(employeeId: id);
+  }
+
+  /// get sale for today
+  Future<dartz.Either<Failure, List<SaleModel>>> getTodaySales() async {
+    return await salesRepo.getSalesForToday();
+  }
+
+  /// get sale for current month
+  Future<dartz.Either<Failure, List<SaleModel>>> getThisMonthSales() async {
+    return await salesRepo.getSalesForCurrentMonth();
+  }
+
+  /// get sale for specified [DateTime]
+  Future<dartz.Either<Failure, List<SaleModel>>> getThisDateSales({required DateTime date}) async {
+    return await salesRepo.getSalesForDate(date: date);
   }
 }
