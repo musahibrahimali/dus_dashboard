@@ -1,8 +1,8 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:dus_dashboard/index.dart';
-import 'package:dus_dashboard/pages/product/data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class ProductListView extends StatefulWidget {
   const ProductListView({super.key});
@@ -12,161 +12,205 @@ class ProductListView extends StatefulWidget {
 }
 
 class _ProductListViewState extends State<ProductListView> {
-  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-  bool _sortAscending = true;
-  int? _sortColumnIndex;
-  late ProductsDataSource _productsDataSource;
-  bool _initialized = false;
-  PaginatorController? _controller;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late ProductsDataSource _productDataSource;
+  List<ProductModel> _products = <ProductModel>[];
+  late DataGridController _productDataGridController;
+
+  bool _isProductSelected = false;
+  String _selectedProductId = "";
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_initialized) {
-      _productsDataSource = ProductsDataSource(context);
-      _controller = PaginatorController();
-      _initialized = true;
-    }
+  void initState() {
+    helperMethods.getProducts();
+    _products = productsController.products;
+    _productDataSource = ProductsDataSource(products: _products);
+    _productDataGridController = DataGridController();
+    _isProductSelected = false;
+    _selectedProductId = "";
+    super.initState();
   }
 
   @override
   void dispose() {
-    _productsDataSource.dispose();
+    _productDataGridController.dispose();
+    _productDataSource.dispose();
+    _isProductSelected = false;
+    _selectedProductId = "";
     super.dispose();
-  }
-
-  List<DataColumn> get _columns {
-    return <DataColumn>[
-      DataColumn(
-        tooltip: 'Product Number',
-        label: Text(
-          'id'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.name, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Name',
-        label: Text(
-          'name'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.name, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Description',
-        label: Text(
-          'description'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.name, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Class',
-        label: Text(
-          'class'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.depo, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Category',
-        label: Text(
-          'category'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.category, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Brand',
-        label: Text(
-          'brand'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.brand!, columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Number in Stock',
-        label: Text(
-          'Stock'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.numInStock.toString(), columnIndex, ascending),
-      ),
-      DataColumn(
-        tooltip: 'Product Rating',
-        label: Text(
-          'rating'.toUpperCase(),
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onSort: (columnIndex, ascending) => sort<String>((d) => d.rating.toString(), columnIndex, ascending),
-      ),
-    ];
-  }
-
-  void sort<T>(
-    Comparable<T> Function(ProductModel d) getField,
-    int columnIndex,
-    bool ascending,
-  ) {
-    _productsDataSource.sort<T>(getField, ascending);
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _sortAscending = ascending;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.only(bottom: 80.0),
-      child: PaginatedDataTable2(
-        availableRowsPerPage: const [2, 5, 10, 30, 100],
-        horizontalMargin: 20,
-        columnSpacing: 0,
-        wrapInCard: true,
-        renderEmptyRowsInTheEnd: false,
-        rowsPerPage: _rowsPerPage,
-        minWidth: 800,
-        fit: FlexFit.tight,
-        onRowsPerPageChanged: (value) {
-          _rowsPerPage = value!;
-        },
-        initialFirstRowIndex: 0,
-        onPageChanged: (rowIndex) {
-          // print(rowIndex / _rowsPerPage);
-        },
-        sortColumnIndex: _sortColumnIndex,
-        sortAscending: _sortAscending,
-        sortArrowAnimationDuration: const Duration(milliseconds: 0),
-        controller: _controller,
-        hidePaginator: false,
-        columns: _columns,
-        empty: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            color: Colors.grey[200],
-            child: const Text('No data'),
+    CustomColors brandColors = Theme.of(context).extension<CustomColors>()!;
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: 5.0,
+              vertical: 5.0,
+            ),
+            child: SfDataGridTheme(
+              data: SfDataGridThemeData(
+                headerColor: brandColors.brandSurface,
+                headerHoverColor: brandColors.goldContainer?.withOpacity(0.2),
+                rowHoverColor: Colors.grey.shade200,
+                rowHoverTextStyle: GoogleFonts.poppins(
+                  color: Colors.grey.shade900,
+                ),
+              ),
+              child: SfDataGrid(
+                source: _productDataSource,
+                controller: _productDataGridController,
+                isScrollbarAlwaysShown: true,
+                columnWidthMode: ColumnWidthMode.fill,
+                gridLinesVisibility: GridLinesVisibility.both,
+                headerGridLinesVisibility: GridLinesVisibility.both,
+                selectionMode: SelectionMode.single,
+                navigationMode: GridNavigationMode.row,
+                // showCheckboxColumn: true,
+                onSelectionChanged: (_, __) {
+                  setState(() {
+                    if (!_isProductSelected) {
+                      _isProductSelected = true;
+                    }
+                  });
+                  DataGridRow? selectedRow = _productDataGridController.selectedRow;
+                  List<DataGridCell<dynamic>>? cells = selectedRow?.getCells();
+                  cells?.forEach((DataGridCell<dynamic> cell) {
+                    if (cell.columnName == 'id') {
+                      // debugPrint("cells : ${cell.value}");
+                      setState(() {
+                        _selectedProductId = cell.value;
+                      });
+                    }
+                  });
+
+                  /// go to the product details page
+                  ProductPageRoute(id: _selectedProductId).go(context);
+                },
+                columns: <GridColumn>[
+                  GridColumn(
+                    columnName: 'id',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'id'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'name',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Product Name'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'description',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Details'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'class',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Class of Product'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'category',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Category'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'brand',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Brand'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'number',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Number In Stock'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridColumn(
+                    columnName: 'rating',
+                    label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Rating'.toUpperCase(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: brandColors.onBrandSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        source: _productsDataSource,
+        ],
       ),
     );
   }

@@ -23,48 +23,72 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                   centerTitle: false,
                   elevation: 10,
                   actions: <Widget>[
+                    Expanded(child: Container()),
+                    Expanded(child: Container()),
+                    Expanded(child: Container()),
+                    Expanded(child: Container()),
+                    Expanded(child: Container()),
+                    Expanded(child: Container()),
+
                     /// [DropdownButtonHideUnderline] is used to hide the underline of the dropdown button
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2<LanguageModel>(
-                        isExpanded: true,
-                        hint: Text(
-                          appController.defaultLanguage.language,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            color: Theme.of(context).hintColor,
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2<LanguageModel>(
+                          isExpanded: true,
+                          hint: Text(
+                            appController.defaultLanguage.language,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                          items: appController.kLanguages
+                              .map((LanguageModel item) => DropdownMenuItem<LanguageModel>(
+                                    value: item,
+                                    child: Row(
+                                      children: <Widget>[
+                                        // add image
+                                        Image.asset(
+                                          item.image,
+                                          width: 20.0,
+                                        ),
+                                        const Gap(10.0),
+                                        Text(
+                                          item.language,
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
+                          value: appController.defaultLanguage,
+                          onChanged: (LanguageModel? value) {
+                            appController.changeLanguage(value!);
+                          },
+                          buttonStyleData: const ButtonStyleData(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            height: double.infinity,
+                            width: 150.0,
+                          ),
+                          menuItemStyleData: const MenuItemStyleData(
+                            height: 40,
                           ),
                         ),
-                        items: appController.kLanguages
-                            .map((LanguageModel item) => DropdownMenuItem<LanguageModel>(
-                                  value: item,
-                                  child: Text(
-                                    item.language,
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: appController.defaultLanguage,
-                        onChanged: (LanguageModel? value) {
-                          appController.changeLanguage(value!);
-                        },
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          height: double.infinity,
-                          width: 150.0,
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                        ),
                       ),
                     ),
+
                     const Gap(10.0),
+
+                    /// active admin name
                     SelectionArea(
                       child: Text(
-                        adminController.activeAdmin?.userName ?? adminController.activeAdmin?.firstName ?? "anonymous",
+                        adminController.activeAdmin?.userName ?? adminController.activeAdmin?.firstName ?? "",
                       ),
                     ),
+
+                    /// admin options
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: PopupMenuButton<void>(
@@ -97,8 +121,24 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 leading: Icon(LineAwesomeIcons.alternate_sign_out),
                                 title: Text('Sign out'),
                               ),
-                              onTap: () {
+                              onTap: () async {
                                 // Sign out logic
+                                var response = await adminRepo.logOutAdmin();
+                                response.fold(
+                                  (l) => notificationService.showErrorNotification(
+                                    context: context,
+                                    title: "Error",
+                                    message: l.message.toString(),
+                                  ),
+                                  (r) {
+                                    notificationService.showSuccessNotification(
+                                      context: context,
+                                      title: "Success",
+                                      message: "Logged out successfully",
+                                    );
+                                    const AdminAuthRoute().go(context);
+                                  },
+                                );
                               },
                             ),
                         ],
@@ -108,7 +148,8 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: CachedNetworkImage(
                               width: 38.0,
                               height: 38.0,
-                              imageUrl: adminController.activeAdmin?.avatar ?? "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+                              imageUrl: adminController.activeAdmin?.avatar ??
+                                  "https://res.cloudinary.com/dynasty-urban-style/image/upload/v1701686160/defaults/account_afhqmj.png",
                               fit: BoxFit.cover,
                               placeholder: (BuildContext context, String url) => Container(
                                 width: 38.0,

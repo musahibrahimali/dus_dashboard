@@ -7,13 +7,16 @@ class MainChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData("Jan", 35, Colors.teal),
-      ChartData("Feb", 23, Colors.orange),
-      ChartData("Mar", 34, Colors.brown),
-      ChartData("Apr", 25, Colors.deepOrange),
-      ChartData("May", 40, Colors.purple),
+    /// chart data
+    final List<ChartData> chartData = <ChartData>[
+      ChartData(salesController.monthOneName, salesController.monthOneSales, Colors.teal),
+      ChartData(salesController.monthTwoName, salesController.monthTwoSales, Colors.orange),
+      ChartData(salesController.monthThreeName, salesController.monthThreeSales, Colors.brown),
+      ChartData(salesController.monthFourName, salesController.monthFourSales, Colors.deepOrange),
+      ChartData(salesController.monthFiveName, salesController.monthFiveSales, Colors.purple),
     ];
+
+    /// main chart
     return SfCartesianChart(
       primaryXAxis: CategoryAxis(),
       legend: const Legend(
@@ -22,7 +25,7 @@ class MainChart extends StatelessWidget {
         position: LegendPosition.bottom,
       ),
       series: <ChartSeries>[
-        // Initialize line series
+        /// Initialize line series
         ColumnSeries<ChartData, String>(
           name: appStrings.monthlySalesChartName,
           dataSource: chartData,
@@ -41,7 +44,11 @@ class MainChart extends StatelessWidget {
 }
 
 class ChartData {
-  ChartData(this.x, this.y, this.color);
+  ChartData(
+    this.x,
+    this.y,
+    this.color,
+  );
   final String x;
   final double y;
   final Color? color;

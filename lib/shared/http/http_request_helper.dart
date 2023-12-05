@@ -68,6 +68,7 @@ class HttpRequestHelper {
       headers: headers,
       encoding: encoding,
     );
+    // debugPrint("response: ${response.body}");
     try {
       if (response.ok) {
         String data = response.body;
@@ -87,7 +88,7 @@ class HttpRequestHelper {
         return builder(returnData);
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error from post: ${e.toString()}");
       final errorMessage = HttpExceptions.errorMessage(e);
       final failure = ServerFailure(message: errorMessage);
       dynamic decodedData = jsonDecode(failure.toString());
@@ -255,15 +256,6 @@ class HttpRequestHelper {
       if (files != null && files.isNotEmpty) {
         for (int i = 0; i < files.length; i++) {
           PlatformFile file = files[i];
-          // debugPrint("file : $file");
-          // Uint8List? bytes = file.bytes;
-          // images.add(
-          //   http.MultipartFile.fromBytes(
-          //     'images',
-          //     bytes!,
-          //     filename: file.name,
-          //   ),
-          // );
           images.add(
             await http.MultipartFile.fromPath(
               "images",
@@ -282,11 +274,6 @@ class HttpRequestHelper {
       if (headers != null || headers!.isNotEmpty) {
         request.headers.addAll(headers);
       }
-
-      // /// fields
-      // fields?.forEach((String key, dynamic value) {
-      //   request.fields[key] = value;
-      // });
 
       /// fields
       fields?.forEach((String key, dynamic value) {

@@ -4,9 +4,12 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomerPage extends StatelessWidget {
-  const CustomerPage({super.key, required this.user});
+  const CustomerPage({
+    super.key,
+    required this.customer,
+  });
 
-  final User user;
+  final CustomerModel customer;
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +19,16 @@ class CustomerPage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
-              user.name,
+              customer.firstName,
               style: theme.textTheme.headlineMedium!.copyWith(
                 fontWeight: FontWeight.w700,
               ),
             ),
-            Text('role: ${user.role}'),
+            Text('role: ${customer.role}'),
             SelectionArea(
-              child: Text('userId: ${user.userId}'),
+              child: Text('userId: ${customer.id}'),
             ),
             const Gap(16),
             ElevatedButton.icon(

@@ -1,6 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dus_dashboard/index.dart';
-import 'package:dus_dashboard/shared/services/index.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,7 +10,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ServiceInitializers.instance.initializeServices();
+
+  serviceInitializers.initializeServices();
 
   /// set url strategy
   usePathUrlStrategy();

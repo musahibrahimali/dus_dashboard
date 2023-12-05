@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dus_dashboard/index.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeRepo {
@@ -13,15 +14,19 @@ class EmployeeRepo {
   /// create employee
   Future<Either<Failure, EmployeeModel>> registerEmployee({
     required Map<String, dynamic> data,
+    PlatformFile? file,
   }) async {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");
-      Map<String, dynamic> response = await httpRequestHelper.postRequest(
+      Map<String, dynamic> response = await httpRequestHelper.multiPartRequest(
+        method: "POST",
         path: ApiEndPoint.createEmployeeEndpoint,
         headers: {
+          HttpHeaders.contentTypeHeader: "multipart/form-data",
           HttpHeaders.cookieHeader: "$accessToken",
         },
-        data: data,
+        fields: data,
+        files: file != null ? [file] : [],
         builder: (data) => data,
       );
       // debugPrint("Response from helper post data: $response");
@@ -206,7 +211,7 @@ class EmployeeRepo {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");
       Map<String, dynamic> response = await httpRequestHelper.deleteRequest(
-        path: ApiEndPoint.deleteAvatarEmployeeEndpoint(id: id),
+        path: ApiEndPoint.deleteEmployeeEndpoint(id: id),
         headers: {
           HttpHeaders.cookieHeader: "$accessToken",
         },
@@ -256,7 +261,7 @@ class EmployeeRepo {
   }
 
   /// get all attendance
-  Future<Either<Failure, AttendanceModel>> getAllAttendance() async {
+  Future<Either<Failure, List<AttendanceModel>>> getAllAttendance() async {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");
       Map<String, dynamic> response = await httpRequestHelper.getRequest(
@@ -273,7 +278,11 @@ class EmployeeRepo {
           ),
         );
       }
-      AttendanceModel attendanceModel = AttendanceModel.fromJson(response['data']);
+      List<AttendanceModel> attendanceModel = <AttendanceModel>[];
+      for (Map<String, dynamic> element in response['data']) {
+        AttendanceModel attendance = AttendanceModel.fromJson(element);
+        attendanceModel.add(attendance);
+      }
       return Right(attendanceModel);
     } catch (e) {
       debugPrint(e.toString());
@@ -287,7 +296,7 @@ class EmployeeRepo {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");
       Map<String, dynamic> response = await httpRequestHelper.getRequest(
-        path: ApiEndPoint.employeeAttendanceEndpoint(id: id),
+        path: ApiEndPoint.attendanceEndpoint(id: id),
         headers: {
           HttpHeaders.cookieHeader: "$accessToken",
         },

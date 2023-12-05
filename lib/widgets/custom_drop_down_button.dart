@@ -34,11 +34,19 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
         child: Obx(
           () => DropdownButton2<EmployeeModel>(
             isExpanded: true,
+            style: GoogleFonts.poppins(
+              fontSize: 16.0,
+              color: Theme.of(context).extension<CustomColors>()!.onBrandSurface,
+            ),
             hint: AutoSizeText(
               'Select Employee'.toUpperCase(),
-              style: GoogleFonts.montserrat(
-                color: Theme.of(context).hintColor,
+              style: GoogleFonts.poppins(
+                color: Theme.of(context).extension<CustomColors>()!.onBrandSurface,
               ),
+            ),
+            iconStyleData: IconStyleData(
+              iconEnabledColor: Theme.of(context).extension<CustomColors>()!.onBrandSurface,
+              iconDisabledColor: Theme.of(context).extension<CustomColors>()!.onBrandSurface,
             ),
             items: widget.items
                 .map(
@@ -48,6 +56,7 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
                       item.firstName,
                       style: GoogleFonts.montserrat(
                         fontSize: 14.0,
+                        color: Colors.grey.shade900,
                       ),
                     ),
                   ),
@@ -58,7 +67,7 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
               employeeController.changeSelectedUser(employee: value!);
             },
             buttonStyleData: ButtonStyleData(
-              height: 40,
+              height: 45,
               width: 200.0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
@@ -66,10 +75,10 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
               ),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.grey.shade400,
+                  color: Colors.white24,
                 ),
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(15.0),
+                  Radius.circular(8.0),
                 ),
               ),
             ),
@@ -81,9 +90,9 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
             ),
             dropdownSearchData: DropdownSearchData(
               searchController: employeeSearchController,
-              searchInnerWidgetHeight: 50,
+              searchInnerWidgetHeight: 55,
               searchInnerWidget: Container(
-                height: 50,
+                height: 55,
                 padding: const EdgeInsets.only(
                   top: 8,
                   bottom: 4,
@@ -95,6 +104,10 @@ class _EmployeeDropDownButtonState extends State<EmployeeDropDownButton> {
                   maxLines: null,
                   controller: employeeSearchController,
                   // cursorColor: BrandColors.kHideGray,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12.0,
+                    color: Colors.grey.shade900,
+                  ),
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ const routerSalesLocation = '/sales';
 const routerDashboardLocation = '/dashboard';
 const routerAuthAdminLocation = '/auth';
 const routerUsersLocation = '/users';
-const routerUserLocation = ':userId';
+const routerUserLocation = ':id';
 const routerEmployeesLocation = '/employees';
 const routerEmployeeLocation = ':id';
 const routerProductsLocation = '/products';
@@ -35,7 +34,7 @@ final router = GoRouter(
     TypedStatefulShellBranch(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<SalesRoute>(
-          path: routerSalesLocation,
+          path: routerInitialLocation,
         ),
       ],
     ),
@@ -44,7 +43,7 @@ final router = GoRouter(
     TypedStatefulShellBranch(
       routes: <TypedRoute<RouteData>>[
         TypedGoRoute<DashboardRoute>(
-          path: routerInitialLocation,
+          path: routerDashboardLocation,
         ),
       ],
     ),
@@ -169,14 +168,14 @@ class CustomersPageRoute extends GoRouteData {
 
 ///[CustomerPage] for individual user
 class CustomerPageRoute extends GoRouteData {
-  const CustomerPageRoute({required this.userId});
+  const CustomerPageRoute({required this.id});
 
-  final String userId;
+  final String id;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final user = dummyUsers.firstWhereOrNull((e) => e.userId == userId);
-    return user == null ? const NotFoundPage() : CustomerPage(user: user);
+    final customer = customerController.getCustomer(id: id);
+    return customer == null ? const NotFoundPage() : CustomerPage(customer: customer);
   }
 }
 
@@ -221,7 +220,7 @@ class EmployeePageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final employee = dummyUsers.firstWhereOrNull((e) => e.userId == id);
+    final employee = employeeController.getEmployee(id: id);
     return employee == null ? const NotFoundPage() : EmployeePage(employee: employee);
   }
 }

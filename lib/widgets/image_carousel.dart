@@ -42,7 +42,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     // height: 38.0,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(Assets.imagesDynastyEngraved),
+                        image: AssetImage(Assets.imagesProductPlaceholderImage),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -53,7 +53,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                       // height: 38.0,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(Assets.imagesDynastyEngraved),
+                          image: AssetImage(Assets.imagesProductPlaceholderImage),
                           fit: BoxFit.cover,
                         ),
                       ),

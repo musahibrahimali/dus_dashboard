@@ -16,7 +16,7 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/sales',
+              path: '/',
               factory: $SalesRouteExtension._fromState,
             ),
           ],
@@ -24,7 +24,7 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
         StatefulShellBranchData.$branch(
           routes: [
             GoRouteData.$route(
-              path: '/',
+              path: '/dashboard',
               factory: $DashboardRouteExtension._fromState,
             ),
           ],
@@ -50,7 +50,7 @@ RouteBase get $shellRouteData => StatefulShellRouteData.$route(
               factory: $CustomersPageRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
-                  path: ':userId',
+                  path: ':id',
                   factory: $CustomerPageRouteExtension._fromState,
                 ),
               ],
@@ -99,7 +99,7 @@ extension $SalesRouteExtension on SalesRoute {
   static SalesRoute _fromState(GoRouterState state) => const SalesRoute();
 
   String get location => GoRouteData.$location(
-        '/sales',
+        '/',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -117,7 +117,7 @@ extension $DashboardRouteExtension on DashboardRoute {
       const DashboardRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/dashboard',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -187,11 +187,11 @@ extension $CustomersPageRouteExtension on CustomersPageRoute {
 
 extension $CustomerPageRouteExtension on CustomerPageRoute {
   static CustomerPageRoute _fromState(GoRouterState state) => CustomerPageRoute(
-        userId: state.pathParameters['userId']!,
+        id: state.pathParameters['id']!,
       );
 
   String get location => GoRouteData.$location(
-        '/users/${Uri.encodeComponent(userId)}',
+        '/users/${Uri.encodeComponent(id)}',
       );
 
   void go(BuildContext context) => context.go(location);

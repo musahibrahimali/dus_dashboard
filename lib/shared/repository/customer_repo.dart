@@ -68,7 +68,7 @@ class CustomerRepo {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");
       Map<String, dynamic> response = await httpRequestHelper.getRequest(
-        path: ApiEndPoint.getEmployeesEndpoint,
+        path: ApiEndPoint.getCustomersEndPoint,
         headers: {
           HttpHeaders.cookieHeader: "$accessToken",
         },

@@ -38,6 +38,45 @@ class HelperFunctions {
     await launchUrl(uri);
   }
 
+  /// get the color based on the string
+  Color getColor(String color) {
+    // return colors for the product based on the color string
+    switch (color.toLowerCase()) {
+      case "red":
+        return Colors.red;
+      case "blue":
+        return Colors.blue;
+      case "green":
+        return Colors.green;
+      case "yellow":
+        return Colors.yellow;
+      case "orange":
+        return Colors.orange;
+      case "purple":
+        return Colors.purple;
+      case "pink":
+        return Colors.pink;
+      case "cyan":
+        return Colors.cyan;
+      case "teal":
+        return Colors.teal;
+      case "amber":
+        return Colors.amber;
+      case "lime":
+        return Colors.lime;
+      case "brown":
+        return Colors.brown;
+      case "grey":
+        return Colors.grey;
+      case "white":
+        return Colors.white;
+      case "black":
+        return Colors.black;
+      default:
+        return brandSurface;
+    }
+  }
+
   String currentYear() {
     // get the current year
     var currentYear = _now.year;
@@ -69,6 +108,27 @@ class HelperFunctions {
     // get the current year
     String currentDay = DateFormat('EEEE').format(_now);
     return currentDay;
+  }
+
+  // get month name with month number
+  String getMonthName({required int monthNumber}) {
+    const months = <String>[
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    // debugPrint("previousMonth: ${months[monthNumber]}");
+    return months[monthNumber];
   }
 
   /// get the hours between two times

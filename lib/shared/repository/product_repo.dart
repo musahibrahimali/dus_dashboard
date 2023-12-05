@@ -74,7 +74,7 @@ class ProductRepo {
     }
   }
 
-  /// get all products
+  /// get all [ProductModel]s from the server
   Future<Either<Failure, List<ProductModel>>> getProducts() async {
     try {
       String? accessToken = await helperFunctions.readValue(key: "access_token");

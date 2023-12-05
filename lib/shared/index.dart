@@ -4,6 +4,7 @@ export 'errors/index.dart';
 export 'extensions/index.dart';
 export 'helpers/index.dart';
 export 'http/index.dart';
+export 'models/index.dart';
 export 'repository/index.dart';
 export 'router/index.dart';
 export 'settings/index.dart';

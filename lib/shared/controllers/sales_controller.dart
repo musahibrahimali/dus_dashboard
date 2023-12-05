@@ -4,117 +4,150 @@ import 'package:get/get.dart';
 class SalesController extends GetxController {
   static final SalesController _instance = Get.find();
   static SalesController get instance => _instance;
-  final List<String> _padItems = <String>[
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "0",
-    "C",
-    "Delete",
-  ];
 
-  final List<String> _categories = <String>[
-    "Men",
-    "Women",
-    "Kids",
-  ];
+  final _sales = <SaleModel>[].obs;
+  final _activeSale = Rxn<SaleModel>();
 
-  final _basketProducts = <BasketProduct>[].obs;
-  final _selectedBasketProduct = Rxn<BasketProduct>();
-  final _totalPrice = "0.00".obs;
+  /// five months back data
+  final _monthOneName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 1).obs;
+  final _monthTwoName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 2).obs;
+  final _monthThreeName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 3).obs;
+  final _monthFourName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 4).obs;
+  final _monthFiveName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 5).obs;
 
-  updateSelectedProduct(BasketProduct product) {
-    _selectedBasketProduct.value = product;
+  /// five months back sales
+  final _monthOneSales = 0.0.obs;
+  final _monthTwoSales = 0.0.obs;
+  final _monthThreeSales = 0.0.obs;
+  final _monthFourSales = 0.0.obs;
+  final _monthFiveSales = 0.0.obs;
+
+  /// total number of sales
+  final _totalNumberOfSales = 0.obs;
+  final _totalNumberOfSalesThisMonth = 0.obs;
+
+  /// sales overview
+  final _totalSales = "GH¢ 0.0".obs;
+  final _thisMonthSales = "GH¢ 0.0".obs;
+  final _lastMonthSales = "GH¢ 0.0".obs;
+  final _thisMonthProfit = "GH¢ 0.0".obs;
+  final _salesRate = "0.0%".obs;
+  final _percentageSalesIncrease = "0.0%".obs;
+
+  addSales({required List<SaleModel> sales}) {
+    _sales.clear();
+
+    /// add all sales
+    _sales.addAll(sales);
+
+    /// update total number of sales
+    _totalNumberOfSales.value = _sales.length;
+
+    /// update total number of sales this month
+    _totalNumberOfSalesThisMonth.value = _sales.where((sale) => sale.createdAt.month == DateTime.now().month).length;
+
+    /// make calculations
+    makeCalculations();
+    update();
   }
 
-  clearSelectedProduct(BasketProduct product) {
-    _selectedBasketProduct.value = null;
-  }
-
-  addProduct(BasketProduct product) {
-    if (_basketProducts.isEmpty) {
-      _basketProducts.add(product);
-    } else {
-      try {
-        BasketProduct existingProduct = _basketProducts.firstWhere(
-          (BasketProduct basketProduct) => basketProduct.productId == product.productId,
-        );
-
-        final existingProductIndex = _basketProducts.indexWhere((BasketProduct p) => p.productId == product.productId);
-        if (existingProductIndex != -1) {
-          _basketProducts[existingProductIndex] = existingProduct.copyWith(quantity: existingProduct.quantity + 1);
-        } else {
-          _basketProducts.add(product);
-        }
-      } catch (e) {
-        _basketProducts.add(product);
+  updateMonthSales() {
+    // go through all sales and update the sales for each month
+    for (SaleModel sale in _sales) {
+      if (sale.createdAt.month == DateTime.now().month) {
+        _monthOneSales.value += sale.amount;
+      } else if (sale.createdAt.month == DateTime.now().month - 1) {
+        _monthTwoSales.value += sale.amount;
+      } else if (sale.createdAt.month == DateTime.now().month - 2) {
+        _monthThreeSales.value += sale.amount;
+      } else if (sale.createdAt.month == DateTime.now().month - 3) {
+        _monthFourSales.value += sale.amount;
+      } else if (sale.createdAt.month == DateTime.now().month - 4) {
+        _monthFiveSales.value += sale.amount;
       }
     }
-    calculateTotal();
   }
 
-  removeProduct(BasketProduct product) {
-    _basketProducts.remove(product);
-    calculateTotal();
+  updateActiveSale({required SaleModel sale}) {
+    _activeSale.value = sale;
+    update();
   }
 
-  changeNumber(String number) {
-    final selectedProduct = _selectedBasketProduct.value;
-    BasketProduct existingProduct = _basketProducts.firstWhere(
-      (BasketProduct basketProduct) => basketProduct.productId == selectedProduct?.productId,
-    );
+  makeCalculations() {
+    /// calculate the total sales this month and last month
+    double totalSales = 0.0;
+    double thisMonthSales = 0.0;
+    double lastMonthSales = 0.0;
+    double thisMonthProfit = 0.0;
+    double salesRate = 0.0;
+    double percentageSalesIncrease = 0.0;
 
-    final existingProductIndex = _basketProducts.indexWhere((BasketProduct p) => p.productId == selectedProduct?.productId);
-    if (existingProductIndex != -1) {
-      _basketProducts[existingProductIndex] = existingProduct.copyWith(quantity: existingProduct.quantity + int.parse(number));
+    for (SaleModel sale in _sales) {
+      totalSales += sale.amount;
+      if (sale.createdAt.month == DateTime.now().month) {
+        thisMonthSales += sale.amount;
+        thisMonthProfit += sale.amount;
+      } else if (sale.createdAt.month == DateTime.now().month - 1) {
+        lastMonthSales += sale.amount;
+      }
     }
-    if (selectedProduct != null) {
-      final updatedProduct = selectedProduct.copyWith(quantity: existingProduct.quantity + int.parse(number));
-      _selectedBasketProduct.value = updatedProduct;
+
+    /// calculate the sales rate
+    if (lastMonthSales > 0) {
+      salesRate = ((thisMonthSales - lastMonthSales) / lastMonthSales) * 100;
     }
-    calculateTotal();
+
+    // calculate percentage increase in sales
+    if (lastMonthSales > 0) {
+      percentageSalesIncrease = ((thisMonthSales - lastMonthSales) / lastMonthSales) * 100;
+    }
+
+    /// update the values
+    _totalSales.value = "GH¢ ${totalSales.toStringAsFixed(2)}";
+    _thisMonthSales.value = "GH¢ ${thisMonthSales.toStringAsFixed(2)}";
+    _lastMonthSales.value = "GH¢ ${lastMonthSales.toStringAsFixed(2)}";
+    _thisMonthProfit.value = "GH¢ ${thisMonthProfit.toStringAsFixed(2)}";
+    _salesRate.value = "${salesRate.toStringAsFixed(2)}%";
+    _percentageSalesIncrease.value = "${percentageSalesIncrease.toStringAsFixed(2)}%";
+    update();
   }
 
-  restoreQuantity() {
-    final selectedProduct = _selectedBasketProduct.value;
-    BasketProduct existingProduct = _basketProducts.firstWhere(
-      (BasketProduct basketProduct) => basketProduct.productId == selectedProduct?.productId,
-    );
-
-    final existingProductIndex = _basketProducts.indexWhere((BasketProduct p) => p.productId == selectedProduct?.productId);
-    if (existingProductIndex != -1) {
-      _basketProducts[existingProductIndex] = existingProduct.copyWith(quantity: 1);
-    }
-    if (selectedProduct != null) {
-      final updatedProduct = selectedProduct.copyWith(quantity: 1);
-      _selectedBasketProduct.value = updatedProduct;
-    }
-    calculateTotal();
+  reset() {
+    _sales.clear();
+    _activeSale.value = null;
+    _totalNumberOfSales.value = 0;
+    _totalNumberOfSalesThisMonth.value = 0;
+    _totalSales.value = "GH¢ 0.0";
+    _thisMonthSales.value = "GH¢ 0.0";
+    _lastMonthSales.value = "GH¢ 0.0";
+    _thisMonthProfit.value = "GH¢ 0.0";
+    _salesRate.value = "0.0%";
+    _percentageSalesIncrease.value = "0.0%";
+    update();
   }
 
-  clearBasket() {
-    _selectedBasketProduct.value = null;
-    _basketProducts.value = <BasketProduct>[];
-    _totalPrice.value = "0.00";
-  }
+  List<SaleModel> get sales => _sales;
+  SaleModel? get activeSale => _activeSale.value;
+  int get totalNumberOfSales => _totalNumberOfSales.value;
+  int get totalNumberOfSalesThisMonth => _totalNumberOfSalesThisMonth.value;
+  String get totalSales => _totalSales.value;
+  String get thisMonthSales => _thisMonthSales.value;
+  String get lastMonthSales => _lastMonthSales.value;
+  String get thisMonthProfit => _thisMonthProfit.value;
+  String get salesRate => _salesRate.value;
+  String get percentageSalesIncrease => _percentageSalesIncrease.value;
 
-  calculateTotal() {
-    double totalPrice = 0.0;
-    for (BasketProduct product in _basketProducts) {
-      totalPrice += double.parse(product.price) * product.quantity;
-    }
-    _totalPrice.value = totalPrice.toStringAsFixed(2);
-  }
+  /// five months back data
+  String get monthOneName => _monthOneName.value;
+  String get monthTwoName => _monthTwoName.value;
+  String get monthThreeName => _monthThreeName.value;
+  String get monthFourName => _monthFourName.value;
+  String get monthFiveName => _monthFiveName.value;
 
-  List<String> get padItems => _padItems;
-  BasketProduct? get activeBasketProduct => _selectedBasketProduct.value;
-  String get totalPrice => _totalPrice.value;
-  List<BasketProduct> get basketProducts => _basketProducts;
-  List<String> get categories => _categories;
+  /// five months back sales
+  double get monthOneSales => _monthOneSales.value;
+  double get monthTwoSales => _monthTwoSales.value;
+  double get monthThreeSales => _monthThreeSales.value;
+  double get monthFourSales => _monthFourSales.value;
+  double get monthFiveSales => _monthFiveSales.value;
 }
