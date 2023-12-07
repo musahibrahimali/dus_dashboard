@@ -456,6 +456,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
       dartz.Either<Failure, String> response = await adminRepo.logInAdmin(
         data: variables,
       );
+      debugPrint("response $response");
       if (!mounted) return;
       response.fold(
         (Failure failure) {
@@ -470,6 +471,7 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
           /// clear form
           _formKey.currentState?.reset();
           await helperFunctions.storeValue(key: "access_token", value: accessToken);
+          await helperMethods.getAdminProfile();
           if (!mounted) return;
           const DashboardRoute().go(context);
           notificationService.showSuccessNotification(

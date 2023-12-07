@@ -195,7 +195,7 @@ class _AddProductState extends State<AddProduct> {
                             ),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
-                              FormBuilderValidators.minLength(10, errorText: "The product description cannot be less than 10 words"),
+                              // FormBuilderValidators.minLength(10, errorText: "The product description cannot be less than 10 words"),
                             ]),
                           ),
 
@@ -343,7 +343,9 @@ class _AddProductState extends State<AddProduct> {
                                           child: Container(
                                             // height: 200.0,
                                             // width: 200.0,
-                                            color: _dragging ? brandColors.brandSurface?.withOpacity(0.4) : brandColors.brandSurfaceContainer?.withOpacity(0.3),
+                                            color: _dragging
+                                                ? brandColors.brandSurface?.withOpacity(0.4)
+                                                : brandColors.brandSurfaceContainer?.withOpacity(0.3),
                                             child: const Center(
                                               child: Text("Drop Images"),
                                             ),
@@ -449,6 +451,8 @@ class _AddProductState extends State<AddProduct> {
                             spacing: 10.0,
                             runSpacing: 10.0,
                             alignment: WrapAlignment.start,
+                            clipBehavior: Clip.antiAlias,
+                            padding: const EdgeInsets.all(0.0),
                             decoration: const InputDecoration(
                               labelText: 'Available Colors',
                               border: OutlineInputBorder(

@@ -27,7 +27,6 @@ class _ProductsPageState extends State<EmployeesPage> {
     _showListView = false;
 
     helperMethods.getEmployees();
-    employeeController.resetActiveAdmin();
 
     super.initState();
   }
