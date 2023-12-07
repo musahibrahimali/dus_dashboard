@@ -53,6 +53,8 @@ class EmployeeController extends GetxController {
 
   addEmployees({required List<EmployeeModel> employees}) {
     resetEmployeeList(); // clear the list before we add the user
+    _activeEmployee.value = null;
+    _selectedEmployee.value = null;
     _employees.addAll(employees);
     _filteredEmployees.addAll(employees);
   }

@@ -102,7 +102,7 @@ class AdminRepo {
         },
         builder: (data) => data,
       );
-      debugPrint("response $response");
+      // debugPrint("response $response");
       if (!response['success']) {
         return Left(
           ServerFailure(
@@ -111,7 +111,7 @@ class AdminRepo {
         );
       }
       AdminModel adminModel = AdminModel.fromJson(response['data']);
-      debugPrint("admin model $adminModel");
+      // debugPrint("admin model $adminModel");
       adminController.updateAdmin(adminModel);
       return Right(adminModel);
     } catch (e) {

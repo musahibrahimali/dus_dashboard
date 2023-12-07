@@ -39,18 +39,27 @@ class _ScaffoldWithNavigationRail extends StatelessWidget {
         appBar: const NavigationAppBar(),
         body: Row(
           children: <Widget>[
+            /// side navigation
             Column(
               children: <Widget>[
                 if (appController.isDrawerExpanded)
                   DrawerHeader(
-                    decoration: const BoxDecoration(border: Border()),
-                    margin: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(0.0),
+                    margin: const EdgeInsets.all(0.0),
+                    decoration: const BoxDecoration(
+                      // border: Border(),
+                      image: DecorationImage(
+                        image: AssetImage(Assets.imagesDynastyEngraved),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     child: Center(
                       child: Text(
                         appStrings.appTitle,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w900,
                           fontSize: 26.0,
+                          color: Colors.transparent,
                         ),
                       ),
                     ),
@@ -64,10 +73,10 @@ class _ScaffoldWithNavigationRail extends StatelessWidget {
 
                 /// bottom section
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    const ThemeModeButton.icon(),
+                    // const ThemeModeButton.icon(),
                     IconButton(
                       onPressed: () {
                         appController.updateExpanded(!appController.isDrawerExpanded);
@@ -80,11 +89,15 @@ class _ScaffoldWithNavigationRail extends StatelessWidget {
                 ),
               ],
             ),
+
+            /// vertical divider
             VerticalDivider(
               thickness: 1,
               width: 1,
               color: colorScheme.primary.withOpacity(0.2),
             ),
+
+            /// main content
             Expanded(child: navigationShell),
           ],
         ),
