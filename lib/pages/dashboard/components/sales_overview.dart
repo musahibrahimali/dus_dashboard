@@ -23,23 +23,70 @@ class _SalesOverviewState extends State<SalesOverview> {
         children: <Widget>[
           if (responsive.isMobile)
             ...<SummaryCard>[
-              SummaryCard(title: 'Total Sales', value: salesController.totalSales),
-              SummaryCard(title: 'Sales Rate', value: salesController.salesRate),
-              SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
-              SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
-              SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
-              SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
+              SummaryCard(
+                title: 'Capital',
+                value: "${appController.defaultLanguage.currency} ${productsController.totalProductAmount}",
+              ),
+              SummaryCard(
+                title: 'Total Sales',
+                value: "${appController.defaultLanguage.currency} ${salesController.totalSales}",
+              ),
+              SummaryCard(
+                title: 'Sales Rate',
+                value: salesController.salesRate,
+              ),
+              SummaryCard(
+                title: 'Total Products',
+                value: productsController.numberOfProducts.toString(),
+              ),
+              SummaryCard(
+                title: 'Total Customers',
+                value: customerController.numberOfCustomers.toString(),
+              ),
+              SummaryCard(
+                title: 'Total Admins',
+                value: adminController.numberOfAdmins.toString(),
+              ),
+              SummaryCard(
+                title: 'Total Employees',
+                value: employeeController.numberOfEmployees.toString(),
+              ),
             ].map<Widget>((SummaryCard card) => card).intersperse(const Gap(16.0)).toList()
           else
-            Row(
-              children: <SummaryCard>[
-                SummaryCard(title: 'Total Sales', value: salesController.totalSales),
-                SummaryCard(title: 'Sales Rate', value: salesController.salesRate),
-                SummaryCard(title: 'Total Products', value: productsController.numberOfProducts.toString()),
-                SummaryCard(title: 'Total Customers', value: customerController.numberOfCustomers.toString()),
-                SummaryCard(title: 'Total Admins', value: adminController.numberOfAdmins.toString()),
-                SummaryCard(title: 'Total Employees', value: employeeController.numberOfEmployees.toString()),
-              ].map<Widget>((SummaryCard card) => Expanded(child: card)).intersperse(const Gap(16.0)).toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: <SummaryCard>[
+                  SummaryCard(
+                    title: 'Product Capital',
+                    value: "${appController.defaultLanguage.currency} ${productsController.totalProductAmount}",
+                  ),
+                  SummaryCard(
+                    title: 'Total Sales',
+                    value: "${appController.defaultLanguage.currency} ${salesController.totalSales}",
+                  ),
+                  SummaryCard(
+                    title: 'Sales Rate',
+                    value: salesController.salesRate,
+                  ),
+                  SummaryCard(
+                    title: 'Total Products',
+                    value: productsController.numberOfProducts.toString(),
+                  ),
+                  SummaryCard(
+                    title: 'Total Customers',
+                    value: customerController.numberOfCustomers.toString(),
+                  ),
+                  SummaryCard(
+                    title: 'Total Admins',
+                    value: adminController.numberOfAdmins.toString(),
+                  ),
+                  SummaryCard(
+                    title: 'Total Employees',
+                    value: employeeController.numberOfEmployees.toString(),
+                  ),
+                ].map<Widget>((SummaryCard card) => Expanded(child: card)).intersperse(const Gap(16.0)).toList(),
+              ),
             ),
           const Gap(16.0),
           const Expanded(
@@ -65,7 +112,7 @@ class _SalesOverviewState extends State<SalesOverview> {
                       ),
                       const Gap(8.0),
                       Text(
-                        salesController.thisMonthSales,
+                        "${appController.defaultLanguage.currency} ${salesController.thisMonthSales}",
                         style: GoogleFonts.poppins(
                           fontSize: 24.0,
                           fontWeight: FontWeight.w600,
@@ -90,7 +137,7 @@ class _SalesOverviewState extends State<SalesOverview> {
                       ),
                       const Gap(8.0),
                       Text(
-                        salesController.thisMonthProfit,
+                        "${appController.defaultLanguage.currency} ${salesController.thisMonthProfit}",
                         style: GoogleFonts.poppins(
                           fontSize: 24.0,
                           fontWeight: FontWeight.w600,

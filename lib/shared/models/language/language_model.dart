@@ -8,6 +8,7 @@ class LanguageModel with _$LanguageModel {
   const factory LanguageModel({
     required String language,
     required String image,
+    required String currency,
   }) = _LanguageModel;
   factory LanguageModel.fromJson(Map<String, dynamic> json) => _$LanguageModelFromJson(json);
 }

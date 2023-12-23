@@ -22,6 +22,7 @@ LanguageModel _$LanguageModelFromJson(Map<String, dynamic> json) {
 mixin _$LanguageModel {
   String get language => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
+  String get currency => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $LanguageModelCopyWith<$Res> {
           LanguageModel value, $Res Function(LanguageModel) then) =
       _$LanguageModelCopyWithImpl<$Res, LanguageModel>;
   @useResult
-  $Res call({String language, String image});
+  $Res call({String language, String image, String currency});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$LanguageModelCopyWithImpl<$Res, $Val extends LanguageModel>
   $Res call({
     Object? language = null,
     Object? image = null,
+    Object? currency = null,
   }) {
     return _then(_value.copyWith(
       language: null == language
@@ -62,6 +64,10 @@ class _$LanguageModelCopyWithImpl<$Res, $Val extends LanguageModel>
       image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
+              as String,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -75,7 +81,7 @@ abstract class _$$_LanguageModelCopyWith<$Res>
       __$$_LanguageModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String language, String image});
+  $Res call({String language, String image, String currency});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$_LanguageModelCopyWithImpl<$Res>
   $Res call({
     Object? language = null,
     Object? image = null,
+    Object? currency = null,
   }) {
     return _then(_$_LanguageModel(
       language: null == language
@@ -101,6 +108,10 @@ class __$$_LanguageModelCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -108,7 +119,8 @@ class __$$_LanguageModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_LanguageModel implements _LanguageModel {
-  const _$_LanguageModel({required this.language, required this.image});
+  const _$_LanguageModel(
+      {required this.language, required this.image, required this.currency});
 
   factory _$_LanguageModel.fromJson(Map<String, dynamic> json) =>
       _$$_LanguageModelFromJson(json);
@@ -117,10 +129,12 @@ class _$_LanguageModel implements _LanguageModel {
   final String language;
   @override
   final String image;
+  @override
+  final String currency;
 
   @override
   String toString() {
-    return 'LanguageModel(language: $language, image: $image)';
+    return 'LanguageModel(language: $language, image: $image, currency: $currency)';
   }
 
   @override
@@ -130,12 +144,14 @@ class _$_LanguageModel implements _LanguageModel {
             other is _$_LanguageModel &&
             (identical(other.language, language) ||
                 other.language == language) &&
-            (identical(other.image, image) || other.image == image));
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.currency, currency) ||
+                other.currency == currency));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, language, image);
+  int get hashCode => Object.hash(runtimeType, language, image, currency);
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +170,8 @@ class _$_LanguageModel implements _LanguageModel {
 abstract class _LanguageModel implements LanguageModel {
   const factory _LanguageModel(
       {required final String language,
-      required final String image}) = _$_LanguageModel;
+      required final String image,
+      required final String currency}) = _$_LanguageModel;
 
   factory _LanguageModel.fromJson(Map<String, dynamic> json) =
       _$_LanguageModel.fromJson;
@@ -163,6 +180,8 @@ abstract class _LanguageModel implements LanguageModel {
   String get language;
   @override
   String get image;
+  @override
+  String get currency;
   @override
   @JsonKey(ignore: true)
   _$$_LanguageModelCopyWith<_$_LanguageModel> get copyWith =>

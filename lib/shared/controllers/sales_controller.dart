@@ -27,10 +27,10 @@ class SalesController extends GetxController {
   final _totalNumberOfSalesThisMonth = 0.obs;
 
   /// sales overview
-  final _totalSales = "GH¢ 0.0".obs;
-  final _thisMonthSales = "GH¢ 0.0".obs;
-  final _lastMonthSales = "GH¢ 0.0".obs;
-  final _thisMonthProfit = "GH¢ 0.0".obs;
+  final _totalSales = "0.0".obs;
+  final _thisMonthSales = "0.0".obs;
+  final _lastMonthSales = "0.0".obs;
+  final _thisMonthProfit = "0.0".obs;
   final _salesRate = "0.0%".obs;
   final _percentageSalesIncrease = "0.0%".obs;
 
@@ -103,10 +103,10 @@ class SalesController extends GetxController {
     }
 
     /// update the values
-    _totalSales.value = "GH¢ ${totalSales.toStringAsFixed(2)}";
-    _thisMonthSales.value = "GH¢ ${thisMonthSales.toStringAsFixed(2)}";
-    _lastMonthSales.value = "GH¢ ${lastMonthSales.toStringAsFixed(2)}";
-    _thisMonthProfit.value = "GH¢ ${thisMonthProfit.toStringAsFixed(2)}";
+    _totalSales.value = totalSales.toStringAsFixed(2);
+    _thisMonthSales.value = thisMonthSales.toStringAsFixed(2);
+    _lastMonthSales.value = lastMonthSales.toStringAsFixed(2);
+    _thisMonthProfit.value = thisMonthProfit.toStringAsFixed(2);
     _salesRate.value = "${salesRate.toStringAsFixed(2)}%";
     _percentageSalesIncrease.value = "${percentageSalesIncrease.toStringAsFixed(2)}%";
     update();
@@ -117,10 +117,10 @@ class SalesController extends GetxController {
     _activeSale.value = null;
     _totalNumberOfSales.value = 0;
     _totalNumberOfSalesThisMonth.value = 0;
-    _totalSales.value = "GH¢ 0.0";
-    _thisMonthSales.value = "GH¢ 0.0";
-    _lastMonthSales.value = "GH¢ 0.0";
-    _thisMonthProfit.value = "GH¢ 0.0";
+    _totalSales.value = "0.0";
+    _thisMonthSales.value = "0.0";
+    _lastMonthSales.value = "0.0";
+    _thisMonthProfit.value = "0.0";
     _salesRate.value = "0.0%";
     _percentageSalesIncrease.value = "0.0%";
     update();

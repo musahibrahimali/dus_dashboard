@@ -4,6 +4,9 @@ import 'package:dartz/dartz.dart';
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 
+/// Admin Repository
+/// [AdminRepo] is a class that handles all the admin related requests
+///
 class AdminRepo {
   AdminRepo._();
 
@@ -20,6 +23,7 @@ class AdminRepo {
         builder: (data) => data,
       );
       // debugPrint("Response from helper post data: $response");
+      /// if response is not successful return [ServerFailure]
       if (!response['success']) {
         return Left(
           ServerFailure(
@@ -27,6 +31,7 @@ class AdminRepo {
           ),
         );
       }
+      /// return [Right] with [String] access_token
       return Right(response['data']['access_token'].toString());
     } catch (e) {
       debugPrint(e.toString());
@@ -62,6 +67,9 @@ class AdminRepo {
     }
   }
 
+  /// update admin
+  /// [data] is a map of [String] and [dynamic]
+  /// [id] is a [String]
   Future<Either<Failure, AdminModel>> updateAdmin({
     required Map<String, dynamic> data,
     required String id,

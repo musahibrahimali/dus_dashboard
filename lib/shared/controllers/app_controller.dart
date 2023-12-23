@@ -19,14 +19,14 @@ class AppController extends GetxController {
   }
 
   static final List<LanguageModel> _languages = <LanguageModel>[
-    const LanguageModel(image: Assets.flagsUs, language: "English - US"),
-    const LanguageModel(image: Assets.flagsGb, language: "English - GB"),
-    const LanguageModel(image: Assets.flagsGh, language: "English - GH"),
+    const LanguageModel(image: Assets.flagsUs, language: "English - US", currency: "\$"),
+    const LanguageModel(image: Assets.flagsGb, language: "English - GB", currency: "€"),
+    const LanguageModel(image: Assets.flagsGh, language: "English - GH", currency: "GH₵"),
   ];
 
   // reset language to default
   void resetLanguage() {
-    _defaultLanguage.value = _languages[_languages.length - 1];
+    _defaultLanguage.value = _languages[0];
     update();
   }
 
