@@ -403,7 +403,7 @@ class _SalesViewState extends State<SalesView> {
                     dartz.Either<Failure, SaleModel> response = await helperMethods.createSale(
                       products: productsString,
                       quantity: quantity,
-                      currency: "GH¢",
+                      currency: appController.defaultLanguage.currency,
                       amount: total,
                       employee: employeeController.activeEmployee!.id,
                     );
@@ -521,10 +521,12 @@ class _SalesViewState extends State<SalesView> {
         ),
         DataCell(
           Text(
-            "GH¢ ${subTotal.toStringAsFixed(3)}",
+            "${appController.defaultLanguage.currency} ${subTotal.toStringAsFixed(2)}",
             overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: GoogleFonts.poppins(),
+            maxLines: 1,
+            style: GoogleFonts.poppins(
+              fontSize: 12.0,
+            ),
           ),
         ),
       ],
@@ -553,10 +555,12 @@ class _SalesViewState extends State<SalesView> {
         ),
         DataCell(
           Text(
-            "GH¢ ${total.toStringAsFixed(3)}",
+            "${appController.defaultLanguage.currency}  ${total.toStringAsFixed(2)}",
             overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: GoogleFonts.poppins(),
+            maxLines: 1,
+            style: GoogleFonts.poppins(
+              fontSize: 12.0,
+            ),
           ),
         ),
       ],

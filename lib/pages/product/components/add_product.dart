@@ -33,6 +33,7 @@ class _AddProductState extends State<AddProduct> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   bool _dragging = false;
+  bool _isCategoryOther = false;
 
   /// list of product [Image]s
   final List<XFile> _list = [];
@@ -91,6 +92,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   void initState() {
     _dragging = false;
+    _isCategoryOther = false;
     super.initState();
   }
 
@@ -99,6 +101,7 @@ class _AddProductState extends State<AddProduct> {
     /// if the user is editing a product
     /// populate the form fields with the product data
     if (widget.isEditing) {
+      // debugPrint("Product : ${widget.product}");
       _formKey.currentState?.fields['name']?.didChange(widget.product?.name);
       _formKey.currentState?.fields['description']?.didChange(widget.product?.description);
       _formKey.currentState?.fields['depo']?.didChange(widget.product?.depo);
@@ -116,6 +119,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   void dispose() {
     _dragging = false;
+    _isCategoryOther = false;
     super.dispose();
   }
 
@@ -274,41 +278,9 @@ class _AddProductState extends State<AddProduct> {
                             ),
                             child: Builder(
                               builder: (BuildContext context) {
-                                return (_list.isEmpty || widget.isEditing == false)
+                                return (_list.isEmpty && widget.isEditing == false)
                                     ? InkWell(
-                                        onTap: () async {
-                                          List<PlatformFile>? files = <PlatformFile>[];
-                                          try {
-                                            files = (await FilePicker.platform.pickFiles(
-                                              type: FileType.custom,
-                                              allowMultiple: true,
-                                              onFileLoading: (FilePickerStatus status) => debugPrint(
-                                                status.toString(),
-                                              ),
-                                              allowedExtensions: ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'heic'],
-                                            ))
-                                                ?.files;
-                                            debugPrint("Files : $files");
-                                            if (!mounted) return;
-                                          } on PlatformException catch (e) {
-                                            notificationService.showInfoNotification(
-                                              context: context,
-                                              title: "Info",
-                                              message: e.message.toString(),
-                                            );
-                                          } catch (e) {
-                                            notificationService.showInfoNotification(
-                                              context: context,
-                                              title: "Info",
-                                              message: "An error occurred loading the selected images",
-                                            );
-                                          }
-
-                                          setState(() {
-                                            /// add all the items in files to _list as XFile
-                                            _list.addAll(files!.map((PlatformFile file) => XFile(file.path!)));
-                                          });
-                                        },
+                                        onTap: () async => await _getFiles(),
                                         child: DropTarget(
                                           enable: true,
                                           onDragDone: (DropDoneDetails detail) {
@@ -352,7 +324,20 @@ class _AddProductState extends State<AddProduct> {
                                           ),
                                         ),
                                       )
-                                    : _buildFiles();
+                                    : Row(
+                                        children: <Widget>[
+                                          Expanded(child: _buildFiles()),
+                                          widget.isEditing
+                                              ? TextButton(
+                                                  onPressed: () async => await _getFiles(),
+                                                  child: const Icon(
+                                                    LineAwesomeIcons.plus_circle,
+                                                    size: 34.0,
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ],
+                                      );
                               },
                             ),
                           ),
@@ -390,24 +375,49 @@ class _AddProductState extends State<AddProduct> {
                           const Gap(10.0),
 
                           /// category field
-                          FormBuilderDropdown(
-                              name: 'category',
-                              decoration: const InputDecoration(
-                                labelText: 'Category',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(12.0),
+                          _isCategoryOther
+                              ? FormBuilderTextField(
+                                  name: 'category',
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.continueAction,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Category',
+                                    hintText: 'Enter Category',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12.0),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              items: _categories.map(
-                                (String category) {
-                                  return DropdownMenuItem<String>(
-                                    value: category,
-                                    child: Text(category),
-                                  );
-                                },
-                              ).toList()),
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(),
+                                  ]),
+                                )
+                              : FormBuilderDropdown(
+                                  name: 'category',
+                                  decoration: const InputDecoration(
+                                    labelText: 'Category',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12.0),
+                                      ),
+                                    ),
+                                  ),
+                                  items: _categories.map(
+                                    (String category) {
+                                      return DropdownMenuItem<String>(
+                                        value: category,
+                                        child: Text(category),
+                                        onTap: () {
+                                          if (category == 'Other') {
+                                            setState(() {
+                                              _isCategoryOther = true;
+                                            });
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ).toList()),
 
                           const Gap(10.0),
 
@@ -539,6 +549,40 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
     );
+  }
+
+  _getFiles() async {
+    List<PlatformFile>? files = <PlatformFile>[];
+    try {
+      files = (await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        onFileLoading: (FilePickerStatus status) => debugPrint(
+          status.toString(),
+        ),
+        allowedExtensions: ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'heic'],
+      ))
+          ?.files;
+      debugPrint("Files : $files");
+      if (!mounted) return;
+    } on PlatformException catch (e) {
+      notificationService.showInfoNotification(
+        context: context,
+        title: "Info",
+        message: e.message.toString(),
+      );
+    } catch (e) {
+      notificationService.showInfoNotification(
+        context: context,
+        title: "Info",
+        message: "An error occurred loading the selected images",
+      );
+    }
+
+    setState(() {
+      /// add all the items in files to _list as XFile
+      _list.addAll(files!.map((PlatformFile file) => XFile(file.path!)));
+    });
   }
 
   /// build and display image [File]s after the drop

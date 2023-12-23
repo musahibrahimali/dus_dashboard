@@ -13,6 +13,7 @@ class ProductsController extends GetxController {
   final _menProducts = 0.obs;
   final _womenProducts = 0.obs;
   final _kidsProducts = 0.obs;
+  final _totalProductAmount = "0.0".obs;
 
   searchProduct(String value) {
     if (value.isEmpty) {
@@ -84,6 +85,7 @@ class ProductsController extends GetxController {
     _womenProducts.value = 0;
     _menProducts.value = 0;
     _kidsProducts.value = 0;
+    double totalAmount = 0.0;
 
     /// Get and update the number of men, women and kid products
     for (ProductModel product in _allProducts) {
@@ -96,11 +98,15 @@ class ProductsController extends GetxController {
       if (product.depo.toLowerCase().contains("Women".toLowerCase())) {
         _womenProducts.value++;
       }
+      totalAmount += product.price.amount;
     }
+
+    _totalProductAmount.value = totalAmount.toStringAsFixed(2);
     update();
   }
 
   List<ProductModel> get products => _allProducts;
+  String get totalProductAmount => _totalProductAmount.value;
   int get numberOfProducts => _allProducts.length;
   int get numberOfKidProducts => _kidsProducts.value;
   int get numberOfMenProducts => _menProducts.value;
