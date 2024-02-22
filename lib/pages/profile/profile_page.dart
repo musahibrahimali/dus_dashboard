@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   List<PlatformFile>? _paths;
 
-  void pickFiles() async {
+  void _pickFiles() async {
     try {
       _paths = (await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -53,38 +56,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    ThemeData theme = Theme.of(context);
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blueGrey.shade200,
-        body: Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.imagesDynastyEngraved),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-            /// user profile
-            Positioned(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: theme.extension<CustomColors>()!.brandSurface,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20.00),
-                    bottomRight: Radius.circular(20.00),
-                  ),
-                ),
+        backgroundColor: theme.colorScheme.background,
+        body: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.0.h,
+            vertical: 0.0.h,
+          ),
+          child: Row(
+            children: <Widget>[
+              /// left side content
+              Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     /// profile picture
                     Container(
@@ -97,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: Stack(
                         alignment: Alignment.bottomRight,
-                        children: [
+                        children: <Widget>[
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
@@ -145,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           InkWell(
-                            onTap: pickFiles,
+                            onTap: _pickFiles,
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
@@ -186,8 +174,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: GoogleFonts.montserrat(
-                          color: Colors.grey.shade50,
-                          fontSize: 20.0,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 12.0.sp,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -206,52 +194,86 @@ class _ProfilePageState extends State<ProfilePage> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: GoogleFonts.montserrat(
-                          color: Colors.grey.shade50,
-                          fontSize: 14.0,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 4.0.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
+
+                    ListTile(
+                      onTap: () {},
+                      title: CustomText(
+                        "Change Password",
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 4.0.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      leading: Icon(
+                        LineAwesomeIcons.lock_open,
+                        size: 5.0.w,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        dartz.Either<Failure, bool> response = await helperMethods.deleteAdmin(id: adminController.activeAdmin!.id);
+
+                        if (!mounted) return;
+                        response.fold(
+                          (Failure error) {
+                            notificationService.showErrorNotification(
+                              context: context,
+                              title: "Error",
+                              message: error.message,
+                            );
+                          },
+                          (bool result) {
+                            const AdminAuthRoute().go(context);
+                            notificationService.showSuccessNotification(
+                              context: context,
+                              title: "Success",
+                              message: "Admin deleted successfully",
+                            );
+                          },
+                        );
+                      },
+                      title: CustomText(
+                        "Delete Account",
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 4.0.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      leading: Icon(
+                        LineAwesomeIcons.lock_open,
+                        size: 5.0.w,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+
+                    Gap(20.0.h),
                   ],
                 ),
               ),
-            ),
 
-            /// delete button
-            Positioned(
-              top: 20.0,
-              right: 10.0,
-              child: CustomButton(
-                width: MediaQuery.of(context).size.width * 0.14,
-                buttonColor: Colors.redAccent,
-                text: "Delete",
-                fontSize: 16.0,
-                onPressed: () async {
-                  var response = await helperMethods.deleteAdmin(id: adminController.activeAdmin!.id);
-
-                  if (!mounted) return;
-                  response.fold(
-                    (Failure l) {
-                      notificationService.showErrorNotification(
-                        context: context,
-                        title: "Error",
-                        message: l.message,
-                      );
-                    },
-                    (bool r) {
-                      context.pop();
-                      notificationService.showSuccessNotification(
-                        context: context,
-                        title: "Success",
-                        message: "Admin deleted successfully",
-                      );
-                    },
-                  );
-                  context.pop();
-                },
+              /// right side content
+              Expanded(
+                child: Container(
+                  color: Colors.red,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

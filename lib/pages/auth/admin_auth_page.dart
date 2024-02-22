@@ -89,9 +89,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       name: 'first_name',
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.continueAction,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'First Name',
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.user,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
                           ),
@@ -106,9 +110,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       name: 'last_name',
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.continueAction,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Last Name',
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.user,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
                           ),
@@ -123,9 +131,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       name: 'user_name',
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.continueAction,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'User Name',
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.user,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
                           ),
@@ -140,9 +152,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       name: 'phone_number',
                       keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.continueAction,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Phone Number',
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.phone,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
                           ),
@@ -165,9 +181,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       name: 'email',
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.continueAction,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Email',
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.envelope,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
                           ),
@@ -185,6 +205,10 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       textInputAction: TextInputAction.continueAction,
                       decoration: InputDecoration(
                         labelText: 'Password',
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.lock_open,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(12.0),
@@ -215,6 +239,10 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
                       textInputAction: TextInputAction.continueAction,
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
+                        prefixIcon: Icon(
+                          LineAwesomeIcons.lock_open,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         suffixIcon: (_formKey.currentState?.fields['confirm_password']?.hasError ?? false)
                             ? const Icon(LineAwesomeIcons.info_circle, color: Colors.red)
                             : const Icon(LineAwesomeIcons.check_circle, color: Colors.green),
@@ -310,9 +338,13 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
             name: 'email',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.continueAction,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                LineAwesomeIcons.envelope,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               labelText: 'Email',
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(12.0),
                 ),
@@ -330,6 +362,10 @@ class _AdminAuthPageState extends State<AdminAuthPage> {
             textInputAction: TextInputAction.continueAction,
             decoration: InputDecoration(
               labelText: 'Password',
+              prefixIcon: Icon(
+                LineAwesomeIcons.lock_open,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(12.0),

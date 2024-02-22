@@ -17,10 +17,10 @@ class ServiceInitializers {
   Future<void> setupDataLayers() async {
     Get.lazyPut(() => AppController());
     Get.lazyPut(() => AdminController());
+    Get.lazyPut(() => SalesController());
     Get.lazyPut(() => CustomerController());
     Get.lazyPut(() => EmployeeController());
     Get.lazyPut(() => ProductsController());
-    Get.lazyPut(() => SalesController());
     Get.lazyPut(() => StateController());
   }
 

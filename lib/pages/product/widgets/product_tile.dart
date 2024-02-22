@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -42,7 +44,7 @@ class ProductTile extends StatelessWidget {
     }
 
     /// for each item in the sizes of the product print them
-    for (var size in product.sizes!) {
+    for (String size in product.sizes!) {
       if (!size.contains(",")) {
         sizes.add(size);
       }
@@ -67,14 +69,14 @@ class ProductTile extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(0.0),
                 child: CachedNetworkImage(
-                  // width: 38.0,
+                  width: double.infinity,
                   // height: 38.0,
                   imageUrl: product.images.isNotEmpty
                       ? product.images[0]
                       : "https://res.cloudinary.com/dynasty-urban-style/image/upload/v1701686619/defaults/placeholder_image_resized_vf7n7a.jpg",
                   fit: BoxFit.cover,
                   placeholder: (BuildContext context, String url) => Container(
-                    // width: 38.0,
+                    width: double.infinity,
                     // height: 38.0,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -85,7 +87,7 @@ class ProductTile extends StatelessWidget {
                   ),
                   errorWidget: (BuildContext context, String url, dynamic dynamic) {
                     return Container(
-                      // width: 38.0,
+                      width: double.infinity,
                       // height: 38.0,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
@@ -106,7 +108,7 @@ class ProductTile extends StatelessWidget {
                 right: 0.0,
                 child: InkWell(
                   onTap: () async {
-                    var del = await helperMethods.deleteProduct(id: product.id);
+                    dartz.Either<Failure, bool> del = await helperMethods.deleteProduct(id: product.id);
                     del.fold(
                       (Failure l) {
                         notificationService.showErrorNotification(
@@ -178,7 +180,7 @@ class ProductTile extends StatelessWidget {
                             verticalMargin: 0.0,
                             horizontalMargin: 0.0,
                             maxLines: 2,
-                            fontSize: 16.0,
+                            fontSize: 3.0.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
