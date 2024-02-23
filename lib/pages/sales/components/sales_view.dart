@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -226,7 +227,7 @@ class _SalesViewState extends State<SalesView> {
                 ),
               ),
 
-              const Gap(10.0),
+              Gap(10.0.h),
               const BrandDivider(),
 
               /// products

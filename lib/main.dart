@@ -56,12 +56,12 @@ class App extends StatelessWidget {
               light: ThemeData(
                 useMaterial3: true,
                 colorScheme: lightScheme,
-                extensions: [lightCustomColors],
+                extensions: <ThemeExtension<dynamic>>[lightCustomColors],
               ),
               dark: ThemeData(
                 useMaterial3: true,
                 colorScheme: darkScheme,
-                extensions: [darkCustomColors],
+                extensions: <ThemeExtension<dynamic>>[darkCustomColors],
               ),
               initial: AdaptiveThemeMode.light,
               builder: (ThemeData theme, ThemeData darkTheme) {
@@ -80,12 +80,12 @@ class App extends StatelessWidget {
                     theme: ThemeData(
                       useMaterial3: true,
                       colorScheme: lightScheme,
-                      extensions: [lightCustomColors],
+                      extensions: <ThemeExtension<dynamic>>[lightCustomColors],
                     ),
                     darkTheme: ThemeData(
                       useMaterial3: true,
                       colorScheme: darkScheme,
-                      extensions: [darkCustomColors],
+                      extensions: <ThemeExtension<dynamic>>[darkCustomColors],
                     ),
                     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
                       FormBuilderLocalizations.delegate,

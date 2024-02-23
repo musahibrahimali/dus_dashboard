@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -45,22 +46,22 @@ class ClassCard extends StatelessWidget {
             decoration: const BoxDecoration(
               color: Colors.transparent,
             ),
-            width: width ?? (responsive.isDesktop ? 200 : 140),
-            height: height ?? 120,
+            width: width ?? (responsive.isDesktop ? 40.0.w : 30.0.w),
+            height: height ?? 110.0.h,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Icon(icon),
-                const Gap(3.0),
+                Gap(3.0.h),
                 Text(
                   title,
                   style: GoogleFonts.poppins(
-                    fontSize: 25.0,
+                    fontSize: 5.0.sp,
                   ),
                 ),
-                const Gap(3.0),
-                Text('$items items')
+                Gap(3.0.h),
+                Text('$items items'),
               ],
             ),
           ),

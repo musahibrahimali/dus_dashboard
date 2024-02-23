@@ -7,12 +7,18 @@ class ProfileTile extends StatelessWidget {
   final IconData? leadingIcon;
   final IconData? trailingIcon;
   final VoidCallback onTap;
+  final Color? titleColor;
+  final Color? leadingIconColor;
+  final Color? trailingIconColor;
   const ProfileTile({
     super.key,
     required this.title,
     this.leadingIcon,
     this.trailingIcon,
     required this.onTap,
+    this.titleColor,
+    this.leadingIconColor,
+    this.trailingIconColor,
   });
 
   @override
@@ -21,7 +27,7 @@ class ProfileTile extends StatelessWidget {
       onTap: onTap,
       title: CustomText(
         title,
-        color: Theme.of(context).colorScheme.onBackground,
+        color: titleColor ?? Theme.of(context).colorScheme.onBackground,
         fontSize: 4.0.sp,
         fontWeight: FontWeight.w700,
       ),
@@ -29,14 +35,14 @@ class ProfileTile extends StatelessWidget {
           ? Icon(
               leadingIcon,
               size: 5.0.w,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: leadingIconColor ?? Theme.of(context).colorScheme.onBackground,
             )
           : null,
       trailing: trailingIcon != null
           ? Icon(
               trailingIcon,
               size: 20,
-              color: Colors.black,
+              color: trailingIconColor ?? Theme.of(context).colorScheme.onBackground,
             )
           : null,
     );

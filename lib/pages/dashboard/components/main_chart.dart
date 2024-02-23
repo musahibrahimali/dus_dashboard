@@ -9,11 +9,31 @@ class MainChart extends StatelessWidget {
   Widget build(BuildContext context) {
     /// chart data
     final List<ChartData> chartData = <ChartData>[
-      ChartData(salesController.monthOneName, salesController.monthOneSales, Colors.teal),
-      ChartData(salesController.monthTwoName, salesController.monthTwoSales, Colors.orange),
-      ChartData(salesController.monthThreeName, salesController.monthThreeSales, Colors.brown),
-      ChartData(salesController.monthFourName, salesController.monthFourSales, Colors.deepOrange),
-      ChartData(salesController.monthFiveName, salesController.monthFiveSales, Colors.purple),
+      ChartData(
+        salesController.monthFiveName,
+        salesController.monthFiveSales,
+        Colors.purple,
+      ),
+      ChartData(
+        salesController.monthFourName,
+        salesController.monthFourSales,
+        Colors.deepOrange,
+      ),
+      ChartData(
+        salesController.monthThreeName,
+        salesController.monthThreeSales,
+        Colors.brown,
+      ),
+      ChartData(
+        salesController.monthTwoName,
+        salesController.monthTwoSales,
+        Colors.orange,
+      ),
+      ChartData(
+        salesController.monthOneName,
+        salesController.monthOneSales,
+        Colors.teal,
+      ),
     ];
 
     /// main chart

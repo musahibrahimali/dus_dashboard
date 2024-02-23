@@ -125,18 +125,18 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                               // Sign out logic
                               var response = await adminRepo.logOutAdmin();
                               response.fold(
-                                (l) => notificationService.showErrorNotification(
+                                (Failure error) => notificationService.showErrorNotification(
                                   context: context,
                                   title: "Error",
-                                  message: l.message.toString(),
+                                  message: error.message.toString(),
                                 ),
-                                (r) {
+                                (bool result) {
+                                  const AdminAuthRoute().go(context);
                                   notificationService.showSuccessNotification(
                                     context: context,
                                     title: "Success",
                                     message: "Logged out successfully",
                                   );
-                                  const AdminAuthRoute().go(context);
                                 },
                               );
                             },

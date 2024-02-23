@@ -77,6 +77,8 @@ dependencies:
   form_builder_image_picker: ^4.0.0
   flutter_screenutil: ^5.9.0
   simple_animations: ^5.0.2
+  flutter_animate: ^4.5.0
+  particles_flutter: ^0.1.4
 
 dev_dependencies:
   flutter_test:

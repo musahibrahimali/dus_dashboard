@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:dus_dashboard/index.dart';
+import 'package:dus_dashboard/pages/profile/ProfileTile.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,8 +77,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: <Widget>[
                     /// profile picture
                     Container(
-                      height: 132.00,
-                      width: 327.00,
                       margin: const EdgeInsets.only(
                         left: 10.00,
                         top: 24.00,
@@ -89,25 +88,28 @@ class _ProfilePageState extends State<ProfilePage> {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
-                              height: 100.00,
-                              width: 100.00,
+                              // height: 50.0.h,
+                              // width: 50.0.w,
                               margin: const EdgeInsets.only(
                                 left: 113.00,
                                 top: 10.00,
                                 right: 113.00,
                               ),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
                               child: Obx(
                                 () => ClipRRect(
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: CachedNetworkImage(
-                                    width: 38.0,
-                                    height: 38.0,
-                                    imageUrl: adminController.activeAdmin?.avatar ??
-                                        "https://res.cloudinary.com/dynasty-urban-style/image/upload/v1701686160/defaults/account_afhqmj.png",
+                                    width: 30.0.w,
+                                    height: 30.0.w,
+                                    imageUrl: adminController.activeAdmin?.avatar ?? defaultAvatarUrl,
                                     fit: BoxFit.cover,
                                     placeholder: (BuildContext context, String url) => Container(
-                                      width: 38.0,
-                                      height: 38.0,
+                                      width: 30.0.w,
+                                      height: 30.0.w,
                                       decoration: const BoxDecoration(
                                         image: DecorationImage(
                                           image: AssetImage(Assets.imagesAccount),
@@ -117,8 +119,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     errorWidget: (BuildContext context, String url, dynamic dynamic) {
                                       return Container(
-                                        width: 38.0,
-                                        height: 38.0,
+                                        width: 30.0.w,
+                                        height: 30.0.w,
                                         decoration: const BoxDecoration(
                                           image: DecorationImage(
                                             image: AssetImage(Assets.imagesAccount),
@@ -134,11 +136,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           InkWell(
                             onTap: _pickFiles,
+                            splashColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
-                                height: 30.00,
-                                width: 30.00,
+                                height: 25.0.h,
+                                width: 8.0.w,
                                 margin: const EdgeInsets.only(
                                   left: 183.00,
                                   top: 10.00,
@@ -201,26 +205,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
 
-                    ListTile(
+                    ProfileTile(
+                      title: "Change Password",
                       onTap: () {},
-                      title: CustomText(
-                        "Change Password",
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 4.0.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      leading: Icon(
-                        LineAwesomeIcons.lock_open,
-                        size: 5.0.w,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                        color: Colors.black,
-                      ),
+                      leadingIcon: LineAwesomeIcons.lock_open,
                     ),
-                    ListTile(
+                    ProfileTile(
                       onTap: () async {
                         dartz.Either<Failure, bool> response = await helperMethods.deleteAdmin(id: adminController.activeAdmin!.id);
 
@@ -243,22 +233,31 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         );
                       },
-                      title: CustomText(
-                        "Delete Account",
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 4.0.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      leading: Icon(
-                        LineAwesomeIcons.lock_open,
-                        size: 5.0.w,
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                        color: Colors.black,
-                      ),
+                      title: "Delete Account",
+                      leadingIcon: LineAwesomeIcons.lock_open,
+                    ),
+                    ProfileTile(
+                      title: "Logout",
+                      onTap: () async {
+                        // Sign out logic
+                        dartz.Either<Failure, bool> response = await adminRepo.logOutAdmin();
+                        response.fold(
+                          (Failure error) => notificationService.showErrorNotification(
+                            context: context,
+                            title: "Error",
+                            message: error.message.toString(),
+                          ),
+                          (bool result) {
+                            const AdminAuthRoute().go(context);
+                            notificationService.showSuccessNotification(
+                              context: context,
+                              title: "Success",
+                              message: "Logged out successfully",
+                            );
+                          },
+                        );
+                      },
+                      leadingIcon: LineAwesomeIcons.alternate_sign_out,
                     ),
 
                     Gap(20.0.h),
@@ -267,9 +266,11 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               /// right side content
-              Expanded(
-                child: Container(
-                  color: Colors.red,
+              const Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    AnimatedBackground(),
+                  ],
                 ),
               ),
             ],

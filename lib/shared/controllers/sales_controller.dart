@@ -9,11 +9,31 @@ class SalesController extends GetxController {
   final _activeSale = Rxn<SaleModel>();
 
   /// five months back data
-  final _monthOneName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 1).obs;
-  final _monthTwoName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 2).obs;
-  final _monthThreeName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 3).obs;
-  final _monthFourName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 4).obs;
-  final _monthFiveName = helperFunctions.getMonthName(monthNumber: DateTime.now().month - 5).obs;
+  final _monthOneName = helperFunctions
+      .getMonthName(
+        monthNumber: (DateTime.now().month - 1) < 0 ? 12 + (DateTime.now().month - 1) : DateTime.now().month - 1,
+      )
+      .obs;
+  final _monthTwoName = helperFunctions
+      .getMonthName(
+        monthNumber: (DateTime.now().month - 2) < 0 ? 12 + (DateTime.now().month - 2) : DateTime.now().month - 2,
+      )
+      .obs;
+  final _monthThreeName = helperFunctions
+      .getMonthName(
+        monthNumber: (DateTime.now().month - 3) < 0 ? 12 + (DateTime.now().month - 3) : DateTime.now().month - 3,
+      )
+      .obs;
+  final _monthFourName = helperFunctions
+      .getMonthName(
+        monthNumber: (DateTime.now().month - 4) < 0 ? 12 + (DateTime.now().month - 4) : DateTime.now().month - 4,
+      )
+      .obs;
+  final _monthFiveName = helperFunctions
+      .getMonthName(
+        monthNumber: (DateTime.now().month - 5) < 0 ? 12 + (DateTime.now().month - 5) : DateTime.now().month - 5,
+      )
+      .obs;
 
   /// five months back sales
   final _monthOneSales = 0.0.obs;
@@ -52,17 +72,35 @@ class SalesController extends GetxController {
   }
 
   updateMonthSales() {
+    int thisMonth = DateTime.now().month;
+    int lastMonth = DateTime.now().month - 1;
+    int twoMonthsBack = DateTime.now().month - 2;
+    int threeMonthsBack = DateTime.now().month - 3;
+    int fourMonthsBack = DateTime.now().month - 4;
+    if (lastMonth < 1) {
+      lastMonth = 12 + lastMonth;
+    }
+    if (twoMonthsBack < 1) {
+      twoMonthsBack = 12 + twoMonthsBack;
+    }
+    if (threeMonthsBack < 1) {
+      threeMonthsBack = 12 + threeMonthsBack;
+    }
+    if (fourMonthsBack < 1) {
+      fourMonthsBack = 12 + fourMonthsBack;
+    }
+
     // go through all sales and update the sales for each month
     for (SaleModel sale in _sales) {
-      if (sale.createdAt.month == DateTime.now().month) {
+      if (sale.createdAt.month == thisMonth) {
         _monthOneSales.value += sale.amount;
-      } else if (sale.createdAt.month == DateTime.now().month - 1) {
+      } else if (sale.createdAt.month == lastMonth) {
         _monthTwoSales.value += sale.amount;
-      } else if (sale.createdAt.month == DateTime.now().month - 2) {
+      } else if (sale.createdAt.month == twoMonthsBack) {
         _monthThreeSales.value += sale.amount;
-      } else if (sale.createdAt.month == DateTime.now().month - 3) {
+      } else if (sale.createdAt.month == threeMonthsBack) {
         _monthFourSales.value += sale.amount;
-      } else if (sale.createdAt.month == DateTime.now().month - 4) {
+      } else if (sale.createdAt.month == fourMonthsBack) {
         _monthFiveSales.value += sale.amount;
       }
     }
@@ -82,12 +120,19 @@ class SalesController extends GetxController {
     double salesRate = 0.0;
     double percentageSalesIncrease = 0.0;
 
+    /// month config
+    int thisMonth = DateTime.now().month;
+    int lastMonth = DateTime.now().month - 1;
+    if (lastMonth < 1) {
+      lastMonth = 12 + lastMonth;
+    }
+
     for (SaleModel sale in _sales) {
       totalSales += sale.amount;
-      if (sale.createdAt.month == DateTime.now().month) {
+      if (sale.createdAt.month == thisMonth) {
         thisMonthSales += sale.amount;
         thisMonthProfit += sale.amount;
-      } else if (sale.createdAt.month == DateTime.now().month - 1) {
+      } else if (sale.createdAt.month == lastMonth) {
         lastMonthSales += sale.amount;
       }
     }

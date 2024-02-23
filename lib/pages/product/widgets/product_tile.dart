@@ -179,9 +179,10 @@ class ProductTile extends StatelessWidget {
                             product.name,
                             verticalMargin: 0.0,
                             horizontalMargin: 0.0,
-                            maxLines: 2,
+                            maxLines: 4,
                             fontSize: 3.0.sp,
                             fontWeight: FontWeight.w600,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
 
@@ -224,8 +225,8 @@ class ProductTile extends StatelessWidget {
                                 children: <Widget>[
                                   for (var color in colors)
                                     Container(
-                                      height: 20.0,
-                                      width: 20.0,
+                                      height: 4.0.w,
+                                      width: 4.0.w,
                                       decoration: BoxDecoration(
                                         color: color,
                                         borderRadius: BorderRadius.circular(8.0),
@@ -246,6 +247,7 @@ class ProductTile extends StatelessWidget {
                               child: Wrap(
                                 spacing: 4.0,
                                 runSpacing: 4.0,
+                                alignment: WrapAlignment.end,
                                 children: <Widget>[
                                   for (var size in sizes)
                                     Card(

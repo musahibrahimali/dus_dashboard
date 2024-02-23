@@ -36,3 +36,6 @@ Future<SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
 
 /// Create storage
 const FlutterSecureStorage storage = FlutterSecureStorage();
+
+/// default avatar url
+String get defaultAvatarUrl => "https://res.cloudinary.com/dynasty-urban-style/image/upload/v1701686160/defaults/account_afhqmj.png";

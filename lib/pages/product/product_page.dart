@@ -1,5 +1,7 @@
 import 'package:dus_dashboard/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -36,6 +38,7 @@ class _ProductPageState extends State<ProductPage> {
         product: widget.product,
       );
     }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -65,8 +68,10 @@ class _ProductPageState extends State<ProductPage> {
                     flex: 4,
                     child: Card(
                       shadowColor: brandColors.goldContainer?.withOpacity(0.3),
+                      color: Theme.of(context).colorScheme.background,
+                      surfaceTintColor: brandColors.goldContainer,
                       child: Container(
-                        height: 300.0,
+                        height: 240.0.h,
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         child: ImageCarousel(
@@ -82,8 +87,11 @@ class _ProductPageState extends State<ProductPage> {
                   Expanded(
                     flex: 3,
                     child: Card(
+                      shadowColor: brandColors.goldContainer?.withOpacity(0.3),
+                      color: Theme.of(context).colorScheme.background,
+                      surfaceTintColor: brandColors.goldContainer,
                       child: Container(
-                        height: 300.0,
+                        height: 240.0.h,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
                           vertical: 20.0,
@@ -118,8 +126,8 @@ class _ProductPageState extends State<ProductPage> {
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 5.0,
                                       ),
-                                      height: 30.0,
-                                      width: 30.0,
+                                      height: 20.0.h,
+                                      width: 6.0.w,
                                       decoration: BoxDecoration(
                                         color: helperFunctions.getColor(color),
                                         borderRadius: BorderRadius.circular(8.0),
@@ -154,8 +162,8 @@ class _ProductPageState extends State<ProductPage> {
                                       color: brandColors.brandSurface,
                                       shadowColor: brandColors.brandSurface?.withOpacity(0.3),
                                       child: Container(
-                                        width: 80.0,
-                                        height: 50.0,
+                                        width: 15.0.w,
+                                        height: 40.0.h,
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0,
                                           vertical: 5.0,
@@ -167,7 +175,7 @@ class _ProductPageState extends State<ProductPage> {
                                         child: Center(
                                           child: CustomText(
                                             size,
-                                            fontSize: 16.0,
+                                            fontSize: 8.0.sp,
                                             color: brandColors.onBrandSurface,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -178,21 +186,24 @@ class _ProductPageState extends State<ProductPage> {
                                 ],
                               ),
                             ),
-                            const Gap(20.0),
+                            Gap(20.0.h),
                           ],
                         ),
                       ),
                     ),
                   ),
 
-                  const Gap(16.0),
+                  Gap(16.0.h),
 
                   /// rating, review stock number
                   Expanded(
                     flex: 2,
                     child: Card(
+                      shadowColor: brandColors.goldContainer?.withOpacity(0.3),
+                      color: Theme.of(context).colorScheme.background,
+                      surfaceTintColor: brandColors.goldContainer,
                       child: Container(
-                        height: 300.0,
+                        height: 240.0.h,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
                           vertical: 20.0,
@@ -205,12 +216,28 @@ class _ProductPageState extends State<ProductPage> {
                             Row(
                               children: <Widget>[
                                 const CustomText(
-                                  "Rating: ",
+                                  "Rating ",
                                   fontWeight: FontWeight.w700,
                                 ),
-                                CustomText(
-                                  "${widget.product.rating}",
-                                  fontWeight: FontWeight.w700,
+                                RatingBar(
+                                  itemSize: 5.0.w,
+                                  allowHalfRating: true,
+                                  initialRating: widget.product.rating ?? 1.0,
+                                  ratingWidget: RatingWidget(
+                                    full: const Icon(
+                                      LineAwesomeIcons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    half: const Icon(
+                                      LineAwesomeIcons.star_half,
+                                      color: Colors.amber,
+                                    ),
+                                    empty: const Icon(
+                                      LineAwesomeIcons.star,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  onRatingUpdate: (update) {},
                                 ),
                               ],
                             ),
@@ -220,7 +247,7 @@ class _ProductPageState extends State<ProductPage> {
                             Row(
                               children: <Widget>[
                                 const CustomText(
-                                  "Reviews: ",
+                                  "Reviews ",
                                   fontWeight: FontWeight.w700,
                                 ),
                                 CustomText(
@@ -236,7 +263,7 @@ class _ProductPageState extends State<ProductPage> {
                             Row(
                               children: <Widget>[
                                 const CustomText(
-                                  "In Stock: ",
+                                  "In Stock ",
                                   fontWeight: FontWeight.w700,
                                 ),
                                 CustomText(
@@ -252,10 +279,13 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ],
               ),
-              const Gap(16),
+              Gap(16.0.h),
 
               Expanded(
                 child: Card(
+                  shadowColor: brandColors.goldContainer?.withOpacity(0.3),
+                  color: Theme.of(context).colorScheme.background,
+                  surfaceTintColor: brandColors.goldContainer,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12.0,
@@ -269,7 +299,7 @@ class _ProductPageState extends State<ProductPage> {
                             CustomText(
                               widget.product.name,
                               fontWeight: FontWeight.w700,
-                              fontSize: 24.0,
+                              fontSize: 10.0.sp,
                             ),
                             const Gap(8.0),
                             const Divider(),
@@ -278,7 +308,7 @@ class _ProductPageState extends State<ProductPage> {
                               widget.product.description,
                               maxLines: 150,
                               fontWeight: FontWeight.normal,
-                              fontSize: 18.0,
+                              fontSize: 5.0.sp,
                               textAlign: TextAlign.justify,
                             ),
                           ],
@@ -287,7 +317,8 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ),
                 ),
-              )
+              ),
+              Gap(10.0.h),
             ],
           ),
         ),

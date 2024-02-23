@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:dartz/dartz.dart' as dartz;
-import 'package:desktop_drop/desktop_drop.dart';
 import 'package:dus_dashboard/index.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -32,11 +32,11 @@ class _AddProductState extends State<AddProduct> {
   /// form key
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  bool _dragging = false;
   bool _isCategoryOther = false;
 
   /// list of product [Image]s
-  final List<XFile> _list = [];
+  final List<XFile> _list = <XFile>[];
+  final List<String> _imageUrlList = <String>[];
 
   /// the currencies the price of the [ProductModel] can be in
   final List<String> _currencies = <String>[
@@ -91,54 +91,68 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   void initState() {
-    _dragging = false;
     _isCategoryOther = false;
+
+    /// if the user is editing a product
+    /// populate the form fields with the product data
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
+      if (widget.isEditing && widget.product != null) {
+        _populateFormFields();
+      }
+    });
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    /// if the user is editing a product
-    /// populate the form fields with the product data
-    if (widget.isEditing) {
-      // debugPrint("Product : ${widget.product}");
-      _formKey.currentState?.fields['name']?.didChange(widget.product?.name);
-      _formKey.currentState?.fields['description']?.didChange(widget.product?.description);
-      _formKey.currentState?.fields['depo']?.didChange(widget.product?.depo);
-      _formKey.currentState?.fields['price']?.didChange(widget.product?.price.amount.toString());
-      _formKey.currentState?.fields['currency']?.didChange(widget.product?.price.currency);
-      _formKey.currentState?.fields['brand']?.didChange(widget.product?.brand);
-      _formKey.currentState?.fields['category']?.didChange(widget.product?.category);
-      _formKey.currentState?.fields['sizes']?.didChange(widget.product?.sizes);
-      _formKey.currentState?.fields['colors']?.didChange(widget.product?.colors);
-      _formKey.currentState?.fields['number_in_stock']?.didChange(widget.product?.numInStock.toString());
+  void _populateFormFields() {
+    final fields = _formKey.currentState?.fields;
+
+    // debugPrint("Product : ${widget.product}");
+    fields?['name']?.didChange(widget.product?.name);
+    fields?['description']?.didChange(widget.product?.description);
+    fields?['depo']?.didChange(widget.product?.depo);
+    fields?['price']?.didChange(widget.product?.price.amount.toString());
+    fields?['currency']?.didChange(widget.product?.price.currency);
+    fields?['brand']?.didChange(widget.product?.brand);
+    fields?['category']?.didChange(widget.product?.category);
+    fields?['sizes']?.didChange(widget.product?.sizes);
+    fields?['colors']?.didChange(widget.product?.colors);
+    fields?['number_in_stock']?.didChange(widget.product?.numInStock.toString());
+    for (String image in widget.product!.images) {
+      _imageUrlList.add(image);
     }
-    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    _dragging = false;
     _isCategoryOther = false;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    CustomColors brandColors = Theme.of(context).extension<CustomColors>()!;
-
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       margin: const EdgeInsets.symmetric(
         horizontal: 20.0,
         vertical: 25.0,
       ),
-      child: Card(
-        elevation: 5.0,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: FormBuilder(
-            key: _formKey,
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: BorderRadius.circular(12.0.r),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+              blurRadius: 10.0,
+              spreadRadius: 2.0,
+              offset: const Offset(0.0, 0.0),
+            ),
+          ],
+        ),
+        child: FormBuilder(
+          key: _formKey,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +165,7 @@ class _AddProductState extends State<AddProduct> {
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.5,
                 ),
-                const Gap(20.0),
+                Gap(20.0.h),
 
                 /// form
                 Row(
@@ -181,7 +195,7 @@ class _AddProductState extends State<AddProduct> {
                               FormBuilderValidators.required(),
                             ]),
                           ),
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// product description
                           FormBuilderTextField(
@@ -203,7 +217,7 @@ class _AddProductState extends State<AddProduct> {
                             ]),
                           ),
 
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// price row
                           Row(
@@ -233,7 +247,7 @@ class _AddProductState extends State<AddProduct> {
                                       },
                                     ).toList()),
                               ),
-                              const Gap(10.0),
+                              Gap(10.0.h),
 
                               ///amount
                               Expanded(
@@ -259,92 +273,122 @@ class _AddProductState extends State<AddProduct> {
                             ],
                           ),
 
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
-                          /// images
-                          Container(
-                            height: 200.0,
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 0.0,
-                              vertical: 0.0,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0.0),
-                              border: Border.all(
-                                color: Colors.grey.shade200,
-                                width: 0.5,
+                          Column(
+                            children: <Widget>[
+                              FormBuilderImagePicker(
+                                name: "images",
+                                availableImageSources: const [ImageSourceOption.gallery],
+                                maxImages: 10,
+                                decoration: const InputDecoration(
+                                  labelText: "Product Images",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(12.0),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Builder(
-                              builder: (BuildContext context) {
-                                return (_list.isEmpty && widget.isEditing == false)
-                                    ? InkWell(
-                                        onTap: () async => await _getFiles(),
-                                        child: DropTarget(
-                                          enable: true,
-                                          onDragDone: (DropDoneDetails detail) {
-                                            /// check if all images are of type ['png', 'jpg', 'jpeg', 'heic']
-                                            /// if not, remove the file from the list
-                                            List<XFile> tempList = <XFile>[];
-                                            for (XFile file in detail.files) {
-                                              if (file.path.endsWith('.png') ||
-                                                  file.path.endsWith('.PNG') ||
-                                                  file.path.endsWith('.jpg') ||
-                                                  file.path.endsWith('.JPG') ||
-                                                  file.path.endsWith('.jpeg') ||
-                                                  file.path.endsWith('.JPEG') ||
-                                                  file.path.endsWith('.heic')) {
-                                                tempList.add(file);
-                                              }
-                                            }
-                                            setState(() {
-                                              _list.addAll(tempList);
-                                            });
-                                          },
-                                          onDragEntered: (DropEventDetails detail) {
-                                            setState(() {
-                                              _dragging = true;
-                                            });
-                                          },
-                                          onDragExited: (DropEventDetails detail) {
-                                            setState(() {
-                                              _dragging = false;
-                                            });
-                                          },
-                                          child: Container(
-                                            // height: 200.0,
-                                            // width: 200.0,
-                                            color: _dragging
-                                                ? brandColors.brandSurface?.withOpacity(0.4)
-                                                : brandColors.brandSurfaceContainer?.withOpacity(0.3),
-                                            child: const Center(
-                                              child: Text("Drop Images"),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Row(
-                                        children: <Widget>[
-                                          Expanded(child: _buildFiles()),
-                                          widget.isEditing
-                                              ? TextButton(
-                                                  onPressed: () async => await _getFiles(),
-                                                  child: const Icon(
-                                                    LineAwesomeIcons.plus_circle,
-                                                    size: 34.0,
+                              if (widget.isEditing) Gap(10.0.h),
+                              if (widget.isEditing)
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const BouncingScrollPhysics(),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.0.r),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                                        width: 0.5,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        // map through the images
+                                        for (String image in _imageUrlList)
+                                          Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(12.0.r),
+                                                  child: CachedNetworkImage(
+                                                    width: 50.0.w,
+                                                    height: 150.0.h,
+                                                    imageUrl: image,
+                                                    fit: BoxFit.cover,
+                                                    placeholder: (BuildContext context, String url) => Container(
+                                                      width: 60.0.w,
+                                                      height: 150.0.h,
+                                                      decoration: const BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(Assets.imagesProductPlaceholderImage),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    errorWidget: (BuildContext context, String url, dynamic dynamic) {
+                                                      return Container(
+                                                        width: 60.0.w,
+                                                        height: 150.0.h,
+                                                        decoration: const BoxDecoration(
+                                                          image: DecorationImage(
+                                                            image: AssetImage(Assets.imagesProductPlaceholderImage),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
                                                   ),
-                                                )
-                                              : Container(),
-                                        ],
-                                      );
-                              },
-                            ),
+                                                ),
+                                              ),
+
+                                              /// delete button
+                                              Positioned(
+                                                top: 8.0,
+                                                right: 2.0.w,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      // remove the image from the list
+                                                      _imageUrlList.remove(image);
+                                                      // delete image from the server
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                        bottomLeft: Radius.circular(0.0.r),
+                                                        bottomRight: Radius.circular(0.0.r),
+                                                        topLeft: Radius.circular(0.0.r),
+                                                        topRight: Radius.circular(12.0.r),
+                                                      ),
+                                                      color: Theme.of(context).colorScheme.background.withOpacity(0.4),
+                                                    ),
+                                                    child: Icon(
+                                                      LineAwesomeIcons.times,
+                                                      color: Theme.of(context).colorScheme.onBackground,
+                                                      size: 30.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    const Gap(20.0),
+                    Gap(20.0.h),
 
                     /// second column
                     Expanded(
@@ -372,7 +416,7 @@ class _AddProductState extends State<AddProduct> {
                                 },
                               ).toList()),
 
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// category field
                           _isCategoryOther
@@ -419,7 +463,7 @@ class _AddProductState extends State<AddProduct> {
                                     },
                                   ).toList()),
 
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// brand
                           FormBuilderTextField(
@@ -453,7 +497,7 @@ class _AddProductState extends State<AddProduct> {
                             ),
                             validator: FormBuilderValidators.compose([]),
                           ),
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// colors
                           FormBuilderFilterChip(
@@ -479,7 +523,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                             ],
                           ),
-                          const Gap(10.0),
+                          Gap(10.0.h),
 
                           /// Sizes
                           FormBuilderFilterChip(
@@ -508,7 +552,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ],
                 ),
-                const Gap(50.0),
+                Gap(40.0.h),
 
                 /// submit button
                 Row(
@@ -516,29 +560,29 @@ class _AddProductState extends State<AddProduct> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     CustomButton(
-                      height: 55.0,
-                      width: MediaQuery.of(context).size.width * 0.18,
+                      height: 60.0.h,
+                      width: 100.w,
                       buttonColor: Theme.of(context).colorScheme.primary,
                       onPressed: () => _addProduct(),
                       shadowColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
                       child: CustomText(
                         'Submit'.toUpperCase(),
                         color: Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 24.0,
+                        fontSize: 8.0.sp,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 2.5,
                       ),
                     ),
-                    const Gap(20.0),
+                    if (widget.isEditing) Gap(20.0.h),
                     if (widget.isEditing)
                       CustomButton(
-                        height: 55.0,
-                        width: MediaQuery.of(context).size.width * 0.18,
+                        height: 60.0.h,
+                        width: 100.w,
                         onPressed: () {
                           context.pop();
                         },
-                        text: "Cancel",
-                        fontSize: 24.0,
+                        text: "Cancel".toUpperCase(),
+                        fontSize: 8.0.sp,
                         buttonColor: Colors.redAccent,
                       ),
                   ],
@@ -551,156 +595,124 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  _getFiles() async {
-    List<PlatformFile>? files = <PlatformFile>[];
-    try {
-      files = (await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: true,
-        onFileLoading: (FilePickerStatus status) => debugPrint(
-          status.toString(),
-        ),
-        allowedExtensions: ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'heic'],
-      ))
-          ?.files;
-      debugPrint("Files : $files");
-      if (!mounted) return;
-    } on PlatformException catch (e) {
-      notificationService.showInfoNotification(
-        context: context,
-        title: "Info",
-        message: e.message.toString(),
-      );
-    } catch (e) {
-      notificationService.showInfoNotification(
-        context: context,
-        title: "Info",
-        message: "An error occurred loading the selected images",
-      );
-    }
-
-    setState(() {
-      /// add all the items in files to _list as XFile
-      _list.addAll(files!.map((PlatformFile file) => XFile(file.path!)));
-    });
-  }
-
   /// build and display image [File]s after the drop
-  Widget _buildFiles() => GridView.count(
-        crossAxisCount: 2,
-        children: widget.isEditing
-            ? List.generate(widget.product!.images.length, (int index) {
-                return Stack(
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(0.0),
-                        bottomRight: Radius.circular(0.0),
-                        topLeft: Radius.circular(0.0),
-                        topRight: Radius.circular(0.0),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(0.0),
-                        child: CachedNetworkImage(
-                          // width: 38.0,
-                          // height: 38.0,
-                          imageUrl: widget.product!.images[index],
-                          fit: BoxFit.cover,
-                          placeholder: (BuildContext context, String url) => Container(
-                            // width: 38.0,
-                            // height: 38.0,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(Assets.imagesProductPlaceholderImage),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (BuildContext context, String url, dynamic dynamic) {
-                            return Container(
-                              // width: 38.0,
-                              // height: 38.0,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(Assets.imagesProductPlaceholderImage),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-
-                    /// delete button
-                    Positioned(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            widget.product!.images.remove(widget.product!.images[index]);
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0.0),
-                            color: Theme.of(context).extension<CustomColors>()!.goldContainer,
-                          ),
-                          child: const Icon(
-                            LineAwesomeIcons.alternate_trash,
-                            color: Colors.redAccent,
-                            size: 30.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              })
-            : List.generate(_list.length, (int index) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 0.5,
-                        ),
-                      ),
-                      child: Image.file(
-                        File(_list[index].path),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    /// delete button
-                    Positioned(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _list.remove(_list[index]);
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0.0),
-                            color: Theme.of(context).extension<CustomColors>()!.goldContainer,
-                          ),
-                          child: const Icon(
-                            LineAwesomeIcons.alternate_trash,
-                            color: Colors.redAccent,
-                            size: 30.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-      );
+  // Widget _buildFiles() => Expanded(
+  //       child: GridView.count(
+  //         crossAxisCount: 2,
+  //         children: widget.isEditing
+  //             ? List.generate(widget.product!.images.length, (int index) {
+  //                 return Stack(
+  //                   children: <Widget>[
+  //                     ClipRRect(
+  //                       borderRadius: const BorderRadius.only(
+  //                         bottomLeft: Radius.circular(0.0),
+  //                         bottomRight: Radius.circular(0.0),
+  //                         topLeft: Radius.circular(0.0),
+  //                         topRight: Radius.circular(0.0),
+  //                       ),
+  //                       child: ClipRRect(
+  //                         borderRadius: BorderRadius.circular(0.0),
+  //                         child: CachedNetworkImage(
+  //                           // width: 38.0,
+  //                           // height: 38.0,
+  //                           imageUrl: widget.product!.images[index],
+  //                           fit: BoxFit.cover,
+  //                           placeholder: (BuildContext context, String url) => Container(
+  //                             // width: 38.0,
+  //                             // height: 38.0,
+  //                             decoration: const BoxDecoration(
+  //                               image: DecorationImage(
+  //                                 image: AssetImage(Assets.imagesProductPlaceholderImage),
+  //                                 fit: BoxFit.cover,
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           errorWidget: (BuildContext context, String url, dynamic dynamic) {
+  //                             return Container(
+  //                               // width: 38.0,
+  //                               // height: 38.0,
+  //                               decoration: const BoxDecoration(
+  //                                 image: DecorationImage(
+  //                                   image: AssetImage(Assets.imagesProductPlaceholderImage),
+  //                                   fit: BoxFit.cover,
+  //                                 ),
+  //                               ),
+  //                             );
+  //                           },
+  //                         ),
+  //                       ),
+  //                     ),
+  //
+  //                     /// delete button
+  //                     Positioned(
+  //                       child: InkWell(
+  //                         onTap: () {
+  //                           setState(() {
+  //                             widget.product!.images.remove(widget.product!.images[index]);
+  //                           });
+  //                         },
+  //                         child: Container(
+  //                           padding: const EdgeInsets.all(5.0),
+  //                           decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(0.0),
+  //                             color: Theme.of(context).extension<CustomColors>()!.goldContainer,
+  //                           ),
+  //                           child: const Icon(
+  //                             LineAwesomeIcons.alternate_trash,
+  //                             color: Colors.redAccent,
+  //                             size: 30.0,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 );
+  //               })
+  //             : List.generate(_list.length, (int index) {
+  //                 return Stack(
+  //                   children: <Widget>[
+  //                     Container(
+  //                       margin: const EdgeInsets.all(5.0),
+  //                       decoration: BoxDecoration(
+  //                         borderRadius: BorderRadius.circular(12.0),
+  //                         border: Border.all(
+  //                           color: Colors.grey.shade200,
+  //                           width: 0.5,
+  //                         ),
+  //                       ),
+  //                       child: Image.file(
+  //                         File(_list[index].path),
+  //                         fit: BoxFit.cover,
+  //                       ),
+  //                     ),
+  //
+  //                     /// delete button
+  //                     Positioned(
+  //                       child: InkWell(
+  //                         onTap: () {
+  //                           setState(() {
+  //                             _list.remove(_list[index]);
+  //                           });
+  //                         },
+  //                         child: Container(
+  //                           padding: const EdgeInsets.all(5.0),
+  //                           decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(0.0),
+  //                             color: Theme.of(context).extension<CustomColors>()!.goldContainer,
+  //                           ),
+  //                           child: const Icon(
+  //                             LineAwesomeIcons.alternate_trash,
+  //                             color: Colors.redAccent,
+  //                             size: 30.0,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 );
+  //               }),
+  //       ),
+  //     );
 
   /// Add a [ProductModel] to the database
   _addProduct() async {
@@ -719,6 +731,15 @@ class _AddProductState extends State<AddProduct> {
     try {
       dartz.Either<Failure, ProductModel> response;
       if (widget.isEditing) {
+        // get the images from the image picker
+        dynamic images = _formKey.currentState?.fields['images']?.value;
+        if (images != null) {
+          List<XFile> imageList = images;
+          setState(() {
+            _list.addAll(imageList);
+          });
+        }
+
         /// edit the product
         response = await helperMethods.updateProduct(
           id: widget.product!.id,
@@ -743,6 +764,16 @@ class _AddProductState extends State<AddProduct> {
           }).toList(),
         );
       } else {
+        // get the images from the image picker
+        dynamic images = _formKey.currentState?.fields['images']?.value;
+        // debugPrint(images.toString());
+        if (images != null) {
+          List<XFile> imageList = images;
+          setState(() {
+            _list.addAll(imageList);
+          });
+        }
+
         response = await helperMethods.createProduct(
           name: _formKey.currentState?.fields['name']?.value,
           description: _formKey.currentState?.fields['description']?.value,
