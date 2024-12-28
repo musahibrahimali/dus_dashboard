@@ -11,7 +11,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   serviceInitializers.initializeServices();
 
   /// set url strategy
